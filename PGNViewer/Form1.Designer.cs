@@ -29,30 +29,33 @@
         private void InitializeComponent()
         {
             this.GameList = new System.Windows.Forms.ListView();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.PGNText = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // GameList
             // 
             this.GameList.Location = new System.Drawing.Point(12, 27);
+            this.GameList.MultiSelect = false;
             this.GameList.Name = "GameList";
-            this.GameList.Size = new System.Drawing.Size(154, 223);
+            this.GameList.Size = new System.Drawing.Size(298, 388);
             this.GameList.TabIndex = 0;
             this.GameList.UseCompatibleStateImageBehavior = false;
             this.GameList.View = System.Windows.Forms.View.List;
+            this.GameList.SelectedIndexChanged += new System.EventHandler(this.GameList_SelectedIndexChanged);
             // 
-            // textBox1
+            // boardDisplay
             // 
-            this.textBox1.Location = new System.Drawing.Point(173, 27);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(209, 223);
-            this.textBox1.TabIndex = 1;
+            this.boardDisplay.Location = new System.Drawing.Point(316, 27);
+            this.boardDisplay.Multiline = true;
+            this.boardDisplay.Name = "boardDisplay";
+            this.boardDisplay.Size = new System.Drawing.Size(256, 223);
+            this.boardDisplay.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -60,7 +63,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(480, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(854, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -83,17 +86,31 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // PGNText
+            // 
+            this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PGNText.Location = new System.Drawing.Point(316, 256);
+            this.PGNText.Multiline = true;
+            this.PGNText.Name = "PGNText";
+            this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.PGNText.Size = new System.Drawing.Size(525, 159);
+            this.PGNText.TabIndex = 3;
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 262);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(854, 427);
+            this.Controls.Add(this.PGNText);
+            this.Controls.Add(this.boardDisplay);
             this.Controls.Add(this.GameList);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "PGNViewer";
             this.Text = "PGN Viewer";
+            this.Load += new System.EventHandler(this.PGNViewer_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -104,11 +121,12 @@
         #endregion
 
         private System.Windows.Forms.ListView GameList;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox boardDisplay;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox PGNText;
     }
 }
 

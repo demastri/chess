@@ -15,8 +15,13 @@ namespace ChessPosition
         public Square src;
         public Square dest;
 
-        public Ply( )
+        public Ply()
         {
+        }
+        public Ply( Square s, Square d)
+        {
+            src = new Square(s);
+            dest = new Square(d);
         }
     }
 }
