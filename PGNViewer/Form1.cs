@@ -73,6 +73,7 @@ namespace PGNViewer
             DrawBoard();
         }
 
+        Game curGame = null;
         private void DrawBoard()
         {
             string emptyBoard =
@@ -87,19 +88,30 @@ namespace PGNViewer
                 + "à+ + + + %" + Environment.NewLine    // a-rank with rank ID
                 + "/èéêëìíîï)" + Environment.NewLine;    // bottom line w/fileID
 
-            string thisBoard;
-            thisBoard = PokePiece(emptyBoard, 8, 5, new Piece(PlayerEnum.Black, Piece.PieceType.King) );
-            thisBoard = PokePiece(thisBoard, 1, 5, new Piece(PlayerEnum.White, Piece.PieceType.King));
-            thisBoard = PokePiece(thisBoard, 2, 1, new Piece(PlayerEnum.White, Piece.PieceType.Pawn) );
-            thisBoard = PokePiece(thisBoard, 2, 2, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-            thisBoard = PokePiece(thisBoard, 2, 7, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-            thisBoard = PokePiece(thisBoard, 2, 8, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-            thisBoard = PokePiece(thisBoard, 7, 1, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
-            thisBoard = PokePiece(thisBoard, 7, 8, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
-
+            string thisBoard = emptyBoard;
+            if( curGame != null ) {
+                foreach (Square sq in curGame.CurrentPosition.board.Keys) 
+                {
+                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, curGame.CurrentPosition.board[sq] );
+                }
+            }
+            else
+            {
+                if (false)
+                {
+                    thisBoard = PokePiece(emptyBoard, 8, 5, new Piece(PlayerEnum.Black, Piece.PieceType.King));
+                    thisBoard = PokePiece(thisBoard, 1, 5, new Piece(PlayerEnum.White, Piece.PieceType.King));
+                    thisBoard = PokePiece(thisBoard, 2, 1, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
+                    thisBoard = PokePiece(thisBoard, 2, 2, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
+                    thisBoard = PokePiece(thisBoard, 2, 7, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
+                    thisBoard = PokePiece(thisBoard, 2, 8, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
+                    thisBoard = PokePiece(thisBoard, 7, 1, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
+                    thisBoard = PokePiece(thisBoard, 7, 8, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
+                }
+            }
             boardDisplay.Text = thisBoard;
         }
-        private string PokePiece(string refStr, int rank, int file, Piece pc ) // rank/file ranged 1-8
+        private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
         {
             int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - rank)) + (file);
 
@@ -122,7 +134,30 @@ namespace PGNViewer
             if (GameList.SelectedIndices.Count == 0)
                 PGNText.Text = "";
             else
+            {
                 PGNText.Text = GameRef[GameList.SelectedIndices[0]].PGNSource;
+                curGame = GameRef[GameList.SelectedIndices[0]];
+                curGame.ResetPosition();
+            }
+            DrawBoard();
+        }
+
+        private void ResetGameButton_Click(object sender, EventArgs e)
+        {
+            curGame.ResetPosition();
+            DrawBoard();
+        }
+
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            curGame.BackPosition();
+            DrawBoard();
+        }
+
+        private void FwdButton_Click(object sender, EventArgs e)
+        {
+            curGame.AdvancePosition();
+            DrawBoard();
         }
     }
 }

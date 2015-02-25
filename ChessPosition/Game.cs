@@ -57,7 +57,10 @@ namespace ChessPosition
                     outGame.PGNSource += l + Environment.NewLine;
                 }
                 if (!inGameState && outGame != null)
+                {
+                    outGame.ResetPosition();
                     return outGame;
+                }
             }
             return null;
         }
@@ -71,61 +74,27 @@ namespace ChessPosition
             RatingBlack = RatingWhite = NoRating;
         }
 
-        public void MakeMove(Ply p)
+       
+        int curPly;
+        public void ResetPosition()
         {
-            /// advance game state - include castle rights, rep, ep and progress counters
-            /// 
-            /// in most cases this is simply move the piece from the src sq to the dest sq
-            /// if there's a piece on the target square, it needs to be removed
-            /// ### if the piece is a K or R, update castle rights (and castle if appropriate)
-            /// ### if the piece is a P, check for both an ep capture on this move and update ep state
-            /// ### note the newly arrived at position in the repetition count
-            /// ### update the progress counters as appropriate
-
-            Piece srcPiece = CurrentPosition.board[p.src];
-            Piece destPiece = CurrentPosition.board.ContainsKey(p.dest) ? CurrentPosition.board[p.dest] : null;
-
-            if (OnMove != srcPiece.color)
-                System.Console.WriteLine("Moving the wrong color piece...");
-            if (destPiece != null && OnMove == srcPiece.color)
-                System.Console.WriteLine("Taking the wrong color piece...");
-            
-            CurrentPosition.board.Remove(p.src);
-            CurrentPosition.board[p.dest] = srcPiece;
-
-            if (srcPiece.piece == Piece.PieceType.King)
-            {
-                if (srcPiece.color == PlayerEnum.White)
-                {
-                    CurrentPosition.castleRights = (byte)(CurrentPosition.castleRights & ~(byte)Position.CastleRights.KS_White);
-                    CurrentPosition.castleRights = (byte)(CurrentPosition.castleRights & ~(byte)Position.CastleRights.QS_White);
-                }
-                else
-                {
-                    CurrentPosition.castleRights = (byte)(CurrentPosition.castleRights & ~(byte)Position.CastleRights.KS_Black);
-                    CurrentPosition.castleRights = (byte)(CurrentPosition.castleRights & ~(byte)Position.CastleRights.QS_Black);
-                }
-                if (Math.Abs(p.src.col - p.dest.col) == 2)  // castling...
-                {
-                    Square.Rank rank = srcPiece.color == PlayerEnum.White ? Square.Rank.R1 : Square.Rank.R8;
-                    Square.File file = p.dest.col == (byte)Square.File.FC ? Square.File.FA : Square.File.FH;
-                    Piece castleRook = null;
-                    if( CurrentPosition.board.ContainsKey( new Square( rank, Square.File.FA ) ) ) 
-                    {
-                        castleRook = CurrentPosition.board[new Square(rank, Square.File.FA)];
-                    }
-                }
-            }
-            if (srcPiece.piece == Piece.PieceType.Rook)
-            {
-            }
-            if (srcPiece.piece == Piece.PieceType.Pawn)
-            {
-            }
-
-            OnMove = (OnMove == PlayerEnum.White ? PlayerEnum.Black : PlayerEnum.White);
+            CurrentPosition = new Position();
+            curPly = 0;
         }
+        public void AdvancePosition()
+        {
+            if (curPly < Plies.Count)
+                CurrentPosition.MakeMove(Plies[curPly++], ref OnMove);
 
+        }
+        public void BackPosition()
+        {
+            // hack...### something weird happens on a takeback - a neighboring P can disappear - some kind of goofy ep thing
+            int targetPly = curPly-1;
+            ResetPosition();
+            for (int i = 0; i < targetPly; i++)
+                AdvancePosition();
+        }
 
         private static List<string> ratingTags = new List<string>() { "WhiteElo", "BlackElo", "WhiteUSCF", "BlackUSCF" };
         private void HandleTag(string s)
@@ -175,7 +144,7 @@ namespace ChessPosition
         }
 
 
-        private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x" };
+        private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
         private static List<string> endMarkers = new List<string>() { "1-0", "0-1", "1/2-1/2" };
         private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
         private static Dictionary<char, Piece.PieceType> PieceMapping = new Dictionary<char, Piece.PieceType>()
@@ -207,18 +176,31 @@ namespace ChessPosition
                 }
                 else // it's a move notation, start with short algebraic...
                 {
-                    if (castleMarkers.Contains(token))
+                    string locString = token;
+
+                    for (int i = 0; i < moveDecorators.Count; i++)
+                    {
+                        int thisIndex = locString.IndexOf(moveDecorators[i]);
+                        if (thisIndex >= 0)
+                        {
+                            // trim off the decorator
+                            locString = locString.Substring(0, thisIndex) + locString.Substring(thisIndex + moveDecorators[i].Length);
+                            i--;
+                        }
+                    }
+
+                    if (castleMarkers.Contains(locString))
                     {
                         // src / dest squares should be easy here
                         curPly.Number = curPlyNumber;
                         Square.Rank Krank = curPlyNumber % 2 == 1 ? Square.Rank.R1 : Square.Rank.R8;
-                        if (token == castleMarkers[0]) // K-Side
+                        if (locString == castleMarkers[0]) // K-Side
                         {
                             curPly.src = new Square(Krank, Square.File.FE);
                             curPly.dest = new Square(Krank, Square.File.FG);
                             Plies.Add(curPly);
                         }
-                        if (token == castleMarkers[1]) // Q-Side
+                        if (locString == castleMarkers[1]) // Q-Side
                         {
                             curPly.src = new Square(Krank, Square.File.FE);
                             curPly.dest = new Square(Krank, Square.File.FC);
@@ -227,33 +209,31 @@ namespace ChessPosition
                     }
                     else
                     {
-                        string locString = token;
                         Piece curPiece = new Piece(curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black, Piece.PieceType.Pawn);
-                        if (char.IsUpper(token[0]))  // it's a piece designator, other than a P
+                        Piece promoPiece = null;
+                        
+                        if (char.IsUpper(locString[0]))  // it's a piece designator, other than a P
                         {
-                            if (!PieceMapping.ContainsKey(token[0]))
+                            if (!PieceMapping.ContainsKey(locString[0]))
                             {
                                 // should handle the error more gracefully than this ...
                                 System.Console.WriteLine("Couldn't properly process this move string: " + token);
                                 continue;
                             }
-                            curPiece.piece = PieceMapping[token[0]];
+                            curPiece.piece = PieceMapping[locString[0]];
                             locString = locString.Substring(1); // trim off the piece identifier
+                        }
+
+                        if( char.IsUpper( locString[ locString.Length-1 ] ) )   // it's a promotion designator...
+                        {
+                            promoPiece = new Piece(curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black, PieceMapping[locString[locString.Length - 1]]);
+                            locString = locString.Substring( 0, locString.Length-1 ); // trim off the promotionidentifier
                         }
 
                         // the rest of the move string designates the targetsquare, and potentially a source hint
                         // N2d4, Ree6, Re2e6, cd6, cd, cde.p., cd6e.p., d5, e8Q e8=Q e8(Q) potentially with a + or # afterwards
-                        for (int i = 0; i < moveDecorators.Count; i++)
-                        {
-                            int thisIndex = locString.IndexOf(moveDecorators[i]);
-                            if (thisIndex >= 0)
-                            {
-                                // trim off the decorator
-                                locString = locString.Substring(0, thisIndex) + locString.Substring(thisIndex + moveDecorators[i].Length);
-                                i--;
-                            }
-                        }
-
+                        // move decorators removed above since O-O could be O-O+....
+                    
                         // find src and dest squares...
                         Square TargetSquare = new Square();
                         Square SourceSquare = new Square();
@@ -270,8 +250,7 @@ namespace ChessPosition
                                     options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, Square.Rank.NONE, Square.File.NONE);
                                     if (options.Count != 1)
                                         System.Console.WriteLine("couldn't unambiguously process move <no pc for target> " + token);
-
-                                    Plies.Add(curPly = new Ply(options[0], TargetSquare));
+                                    Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                                 }
                                 else
                                 {
@@ -292,28 +271,28 @@ namespace ChessPosition
                                         if (CurrentPosition.board.ContainsKey(TargetSquare))
                                         {
                                             options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, Square.Rank.NONE, (Square.File)colConstraint);
-                                            if (options.Count > 1 || (options.Count>0 && SourceSquare != null) )
+                                            if (options.Count > 1 || (options.Count > 0 && SourceSquare != null))
                                                 System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token);
                                             if (options.Count == 1)
                                                 SourceSquare = options[0];
                                         }
                                     }
-                                    if( SourceSquare == null )
+                                    if (SourceSquare == null)
                                         System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token);
                                     else
-                                        Plies.Add(curPly=new Ply(SourceSquare, TargetSquare));
+                                        Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                                 }
                                 break;
                             case 3:
-                                rowConstraint = (byte)(Char.IsLetter(locString[0]) ? (locString[0] - '1') : (byte)Square.Rank.NONE);
-                                colConstraint = (byte)(Char.IsDigit(locString[0]) ? (locString[0] - 'a') : (byte)Square.File.NONE);
+                                colConstraint = (byte)(Char.IsLetter(locString[0]) ? (locString[0] - 'a') : (byte)Square.File.NONE);
+                                rowConstraint = (byte)(Char.IsDigit(locString[0]) ? (locString[0] - '1') : (byte)Square.Rank.NONE);
                                 TargetSquare.col = (byte)(locString[1] - 'a');
                                 TargetSquare.row = (byte)(locString[2] - '1');
                                 options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, (Square.Rank)rowConstraint, (Square.File)colConstraint);
                                 // at this point, there is a restriction on either row or col to validate
                                 if (options.Count != 1)
                                     System.Console.WriteLine("couldn't unambiguously process partially constrained move  " + token);
-                                Plies.Add(curPly=new Ply(options[0], TargetSquare));
+                                Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                                 break;
                             case 4:
                                 SourceSquare.col = (byte)(locString[0] - 'a');
@@ -321,14 +300,13 @@ namespace ChessPosition
                                 TargetSquare.col = (byte)(locString[2] - 'a');
                                 TargetSquare.row = (byte)(locString[3] - '1');
                                 options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, (Square.Rank)SourceSquare.row, (Square.File)SourceSquare.col);
-                                if( !options.Contains( SourceSquare ) || options.Count != 1 )
+                                if (!options.Contains(SourceSquare) || options.Count != 1)
                                     System.Console.WriteLine("couldn't find specified piece for move  " + token);
-                                Plies.Add(curPly=new Ply(SourceSquare, TargetSquare));
+                                Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                                 break;
                         }
                     }
-
-                    MakeMove(curPly);
+                    CurrentPosition.MakeMove(curPly, ref OnMove);
                     curPlyNumber++;
                 }
             }

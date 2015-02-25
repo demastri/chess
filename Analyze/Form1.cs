@@ -48,7 +48,7 @@ namespace Analyze
                     {
                         refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
                         PlayerEnum onMove = g.OnMove;
-                        g.MakeMove(p);
+                        g.CurrentPosition.MakeMove(p, ref g.OnMove);
                         if (totalAnalysis[g.CurrentPosition.Hash] == null)
                             totalAnalysis[g.CurrentPosition.Hash] = engine.GenerateAnalysis(g.CurrentPosition);
                         newAnalysis = totalAnalysis[g.CurrentPosition.Hash];

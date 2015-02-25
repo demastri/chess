@@ -35,6 +35,9 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.PGNText = new System.Windows.Forms.TextBox();
+            this.ResetGameButton = new System.Windows.Forms.Button();
+            this.BackButton = new System.Windows.Forms.Button();
+            this.FwdButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,11 +101,44 @@
             this.PGNText.Size = new System.Drawing.Size(525, 159);
             this.PGNText.TabIndex = 3;
             // 
+            // ResetGameButton
+            // 
+            this.ResetGameButton.Location = new System.Drawing.Point(578, 227);
+            this.ResetGameButton.Name = "ResetGameButton";
+            this.ResetGameButton.Size = new System.Drawing.Size(30, 23);
+            this.ResetGameButton.TabIndex = 4;
+            this.ResetGameButton.Text = "<<";
+            this.ResetGameButton.UseVisualStyleBackColor = true;
+            this.ResetGameButton.Click += new System.EventHandler(this.ResetGameButton_Click);
+            // 
+            // BackButton
+            // 
+            this.BackButton.Location = new System.Drawing.Point(614, 227);
+            this.BackButton.Name = "BackButton";
+            this.BackButton.Size = new System.Drawing.Size(30, 23);
+            this.BackButton.TabIndex = 5;
+            this.BackButton.Text = "<";
+            this.BackButton.UseVisualStyleBackColor = true;
+            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
+            // 
+            // FwdButton
+            // 
+            this.FwdButton.Location = new System.Drawing.Point(650, 227);
+            this.FwdButton.Name = "FwdButton";
+            this.FwdButton.Size = new System.Drawing.Size(30, 23);
+            this.FwdButton.TabIndex = 6;
+            this.FwdButton.Text = ">";
+            this.FwdButton.UseVisualStyleBackColor = true;
+            this.FwdButton.Click += new System.EventHandler(this.FwdButton_Click);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 427);
+            this.Controls.Add(this.FwdButton);
+            this.Controls.Add(this.BackButton);
+            this.Controls.Add(this.ResetGameButton);
             this.Controls.Add(this.PGNText);
             this.Controls.Add(this.boardDisplay);
             this.Controls.Add(this.GameList);
@@ -127,6 +163,9 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox PGNText;
+        private System.Windows.Forms.Button ResetGameButton;
+        private System.Windows.Forms.Button BackButton;
+        private System.Windows.Forms.Button FwdButton;
     }
 }
 
