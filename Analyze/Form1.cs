@@ -44,20 +44,23 @@ namespace Analyze
                 while ((g = Game.ReadGame(tr)) != null)
                 {
                     UpdateGameDigest(g.RatingWhite, g.RatingBlack, g.Plies.Last().MoveNumber);
-                    foreach (Ply p in g.Plies)
+                    g.ResetPosition();
+                    while (!g.EndOfGame)
                     {
                         refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-                        PlayerEnum onMove = g.OnMove;
-                        g.CurrentPosition.MakeMove(p, ref g.OnMove);
+
+                        g.AdvancePosition();
+
                         if (totalAnalysis[g.CurrentPosition.Hash] == null)
                             totalAnalysis[g.CurrentPosition.Hash] = engine.GenerateAnalysis(g.CurrentPosition);
                         newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
 
                         decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
 
-                        WriteMoveResult(onMove, p.MoveNumber, 
-                            onMove==PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
-                            onMove==PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
+                        int MoveNumber = (g.curPly / 2) + 1;
+                        WriteMoveResult(g.OnMove, MoveNumber,
+                            g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
+                            g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
                             delta);
                     }
                 }

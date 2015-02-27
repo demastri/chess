@@ -52,9 +52,10 @@ namespace ChessPosition
             /// ---------0123456789012345678901234567890123456789
             
             // ### test me...
-            hashValue = new char[hashLength];
+            hashValue = new char[hashLength+1];
             for (int i = 0; i < hashLength; i++)
                 hashValue[i] = refZeroVal;
+            hashValue[hashLength] = '\0';
 
             /// load the bits for occupied squares
             /// load the castle and ep rights
@@ -160,5 +161,19 @@ namespace ChessPosition
             int bitOffset = loc % bitsPerChar;
             return ((hashValue[charIndex] - refZeroVal) & (0x01 << bitOffset)) != 0;
         }
+
+        //public override int GetHashCode()
+        //{
+        //   return hashValue.ToString();
+        //}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PositionHash);
+        }
+        public bool Equals(PositionHash obj)
+        {
+            return obj != null && obj.hashValue.ToString() == this.hashValue.ToString();
+        }
+
     }
 }

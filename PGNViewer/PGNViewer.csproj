@@ -84,6 +84,10 @@
       <Project>{8eb129af-b6ea-4f1c-a011-5d6e4c91ead6}</Project>
       <Name>ChessPosition</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{1f22ef48-ecbb-4c1a-8f43-32fe5a7981b7}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

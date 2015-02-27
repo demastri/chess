@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace ChessPosition
 {
@@ -17,17 +18,12 @@ namespace ChessPosition
         public byte castleRights;   // bits 0-4 -> WK WQ BK BQ
         public Square epLoc;        // the ep col is the file, for convenience the row is the square "behind" the P (the capture sq)
 
-        // these values are NOT included in the hash
-        Dictionary<PositionHash, int> repetitions;
-        int progressCounter;
 
         public Position()
         {
             board = new Dictionary<Square, Piece>();
             castleRights = 0x0f;
             epLoc = new Square(0x0f, 0x0f);
-            repetitions = new Dictionary<PositionHash, int>();
-            progressCounter = 0;
             board.Add(new Square(Square.Rank.R1, Square.File.FA), new Piece(PlayerEnum.White, Piece.PieceType.Rook));
             board.Add(new Square(Square.Rank.R1, Square.File.FB), new Piece(PlayerEnum.White, Piece.PieceType.Knight));
             board.Add(new Square(Square.Rank.R1, Square.File.FC), new Piece(PlayerEnum.White, Piece.PieceType.Bishop));
@@ -75,8 +71,6 @@ namespace ChessPosition
             board = new Dictionary<Square, Piece>(p.board);
             epLoc = new Square(p.epLoc);
             castleRights = p.castleRights;
-            repetitions = new Dictionary<PositionHash, int>(p.repetitions);
-            progressCounter = p.progressCounter;
         }
         public List<Square> FindPieceWithTarget(Piece p, Square s, Square.Rank rowConstraint, Square.File colConstraint)
         {
@@ -92,7 +86,7 @@ namespace ChessPosition
                         Ply testPly = new Ply(ss, s, p);    // i think promo piece is irrelevant here, if the piece is pinned, it doesn't matter what it promotes to...
                         PlayerEnum testPlr = p.color;
                         possPos.MakeMove(testPly, ref testPlr);
-                        if( !possPos.IsCheck( testPlr ) )
+                        if (!possPos.IsCheck(testPlr))
                             options.Add(ss);
                     }
                 }
@@ -104,19 +98,19 @@ namespace ChessPosition
         {
             // find the opposing king
             Square attackSq = null;
-            foreach( Square s in board.Keys )
+            foreach (Square s in board.Keys)
                 if (board[s].piece == Piece.PieceType.King && board[s].color != attack)    // got him
                 {
                     attackSq = s;
                     break;
                 }
             // see if any pieces can move there...
-            foreach( Square s in board.Keys )
-                if( board[s].color == attack && CouldMoveThere( s, attackSq, board[s] ) )
+            foreach (Square s in board.Keys)
+                if (board[s].color == attack && CouldMoveThere(s, attackSq, board[s]))
                     return true;
             return false;
         }
-        
+
         private bool CouldMoveThere(Square source, Square dest, Piece pc)
         {
             if (source == dest) // can't move to the same square
@@ -131,7 +125,7 @@ namespace ChessPosition
                     // castle moves
                     // if the right is there, and there are no pieces intervening
                     // if castlerights exist, the K and R for that side have to be in the right spot...
-                    if (pc.color == PlayerEnum.White && (castleRights & (byte)CastleRights.KS_White) != 0 && dest == new Square( Square.Rank.R1, Square.File.FG) )
+                    if (pc.color == PlayerEnum.White && (castleRights & (byte)CastleRights.KS_White) != 0 && dest == new Square(Square.Rank.R1, Square.File.FG))
                     {
                         if (!board.ContainsKey(new Square(Square.Rank.R1, Square.File.FF))
                             && !board.ContainsKey(new Square(Square.Rank.R1, Square.File.FG)))
@@ -228,7 +222,7 @@ namespace ChessPosition
                     Square epTargetSq = new Square((Square.Rank)(source.row), (Square.File)(epLoc.col));
                     if (epLoc.col != 0x0f && source.row + moveDir == dest.row
                         && (source.col + 1 == dest.col || source.col - 1 == dest.col)
-                        && dest == epLoc 
+                        && dest == epLoc
                         && !board.ContainsKey(epLoc)
                         && board.ContainsKey(epTargetSq) && board[epTargetSq].color != pc.color && board[epTargetSq].piece == Piece.PieceType.Pawn)
                         return true;
@@ -245,8 +239,6 @@ namespace ChessPosition
             /// if there's a piece on the target square, it needs to be removed
             /// if the piece is a K or R, update castle rights (and castle if appropriate)
             /// if the piece is a P, check for both an ep capture on this move and update ep state - also promotion
-            /// ### note the newly arrived at position in the repetition count
-            /// ### update the progress counters as appropriate
 
             Piece srcPiece = board[p.src];
             Piece destPiece = board.ContainsKey(p.dest) ? board[p.dest] : null;
@@ -337,6 +329,55 @@ namespace ChessPosition
             }
 
             localOnMove = (localOnMove == PlayerEnum.White ? PlayerEnum.Black : PlayerEnum.White);
+        }
+
+        public string ToFEN(PlayerEnum onMove, byte castle, Square ep, int progress, int moveNbr)
+        {
+            string outString = "8/8/8/8/8/8/8/8 "
+                + (onMove == PlayerEnum.White ? "w " : "b ")
+                + (((castle & (byte)CastleRights.KS_White) != 0) ? "K" : "")
+                + (((castle & (byte)CastleRights.QS_White) != 0) ? "Q" : "")
+                + (((castle & (byte)CastleRights.KS_Black) != 0) ? "k" : "")
+                + (((castle & (byte)CastleRights.QS_Black) != 0) ? "q" : "")
+                + (castle == 0 ? "- " : " ")
+                + (ep.col == (byte)Square.File.NONE ? "- " : ((ep.col + 'a').ToString() + (ep.row + '1').ToString() + " "))
+                + progress.ToString() + " "
+                + moveNbr.ToString();
+
+            foreach (Square s in board.Keys)
+            {
+                Piece pc = board[s];
+                // find the spot for the single digit where this to be inserted 
+                // n-> aPb, n-> aP, n-> Pb, n-> P
+                int strIndex = 0;
+                for (int i = 7; i > s.row; i--)
+                    strIndex = outString.IndexOf('/', strIndex) + 1;
+                int fileIndex = -1;
+                char c;
+                strIndex--;
+                while (fileIndex < s.col)
+                {
+                    c = outString[++strIndex];
+                    if (!Char.IsDigit(c))
+                        ++fileIndex;
+                    else
+                        fileIndex += (c - '0');
+                }
+                // at this point the char pointed to by strindex is >= the intended col
+                int curWidth = outString[strIndex] - '0';
+                int leftPad = s.col - ((fileIndex + 1) - curWidth);
+                char thisChar = pc.ToString()[0];
+                thisChar = (pc.color == PlayerEnum.White ? Char.ToUpper(thisChar) : Char.ToLower(thisChar));
+                int rightPad = fileIndex - s.col;
+
+                outString = Utilities.Utils.SwapChar(outString, strIndex, thisChar);
+                if (leftPad > 0)
+                    outString = Utilities.Utils.InsertChar(outString, strIndex, (char)(leftPad + '0'));
+                if (rightPad > 0)
+                    outString = Utilities.Utils.InsertChar(outString, strIndex + (leftPad > 0 ? 2 : 1), (char)(rightPad + '0'));
+
+            }
+            return outString;
         }
 
     }

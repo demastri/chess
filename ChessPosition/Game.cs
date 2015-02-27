@@ -24,6 +24,11 @@ namespace ChessPosition
         public static int Unrated = -1;
         public static int NoRating = -2;
 
+        public int curPly;
+        // these values are NOT included in the hash, since they're defined here...
+        Dictionary<PositionHash, int> repetitions;
+        private int progressCounter;
+
         public static Game ReadGame(StreamReader r)
         {
             // this pulls a text based PGN game from a stream
@@ -67,29 +72,50 @@ namespace ChessPosition
 
         public Game()
         {
-            CurrentPosition = new Position(Position.StartPosition);
             Plies = new List<Ply>();
-            OnMove = PlayerEnum.White;
+            repetitions = new Dictionary<PositionHash, int>();
+
+            ResetPosition();
             PGNSource = "";
             RatingBlack = RatingWhite = NoRating;
         }
 
-       
-        int curPly;
         public void ResetPosition()
         {
-            CurrentPosition = new Position();
+            OnMove = PlayerEnum.White;
+            CurrentPosition = new Position(Position.StartPosition);
             curPly = 0;
+            progressCounter = 0;
         }
-        public void AdvancePosition()
+        public bool AdvancePosition()
         {
+            /// advance game state - include castle rights, rep, ep and progress counters
+            /// note the newly arrived at position in the repetition count ### test
+            /// update the progress counters as appropriate
             if (curPly < Plies.Count)
+            {
+                int prePcCount = CurrentPosition.board.Count;
+                bool wasApawn = CurrentPosition.board[Plies[curPly].src].piece == Piece.PieceType.Pawn;
                 CurrentPosition.MakeMove(Plies[curPly++], ref OnMove);
-
+                bool wasAcapture = prePcCount != CurrentPosition.board.Count; // it was a capture
+                if ( wasApawn || wasAcapture )
+                    progressCounter = 0;
+                else
+                    progressCounter++;
+                PositionHash thisHash = new PositionHash( CurrentPosition);
+                if (repetitions.ContainsKey(thisHash))
+                    repetitions[thisHash]++;
+                else
+                    repetitions.Add(thisHash, 0);
+                return true;
+            }
+            return false;
         }
+        public bool EndOfGame { get { return curPly >= Plies.Count; } }
         public void BackPosition()
         {
-            // hack...### something weird happens on a takeback - a neighboring P can disappear - some kind of goofy ep thing
+            // hack... something weird happened on a takeback - a neighboring P can disappear
+            // some kind of goofy ep thing, think it was related to not setting OnMove properly on a reset
             int targetPly = curPly-1;
             ResetPosition();
             for (int i = 0; i < targetPly; i++)
@@ -141,6 +167,11 @@ namespace ChessPosition
                     RatingBlack = Convert.ToInt32(val);
                     break;
             }
+        }
+
+        public string ToFEN()
+        {
+            return CurrentPosition.ToFEN(OnMove, CurrentPosition.castleRights, CurrentPosition.epLoc, progressCounter, curPly/2+1);
         }
 
 

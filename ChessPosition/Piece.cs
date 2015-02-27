@@ -35,5 +35,20 @@ namespace ChessPosition
         {
             return !(lhs == rhs);
         }
+
+        private static Dictionary<Piece.PieceType, string> PieceMapping = new Dictionary<PieceType,string>()
+        {
+            { Piece.PieceType.Rook, "R" },
+            { Piece.PieceType.Knight, "N" },
+            { Piece.PieceType.Bishop, "B" },
+            { Piece.PieceType.Queen, "Q" },
+            { Piece.PieceType.King, "K" },
+            { Piece.PieceType.Pawn, "P" }
+        };
+
+        override public string ToString()
+        {
+            return PieceMapping[piece];
+        }
     }
 }

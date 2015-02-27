@@ -38,6 +38,7 @@
             this.ResetGameButton = new System.Windows.Forms.Button();
             this.BackButton = new System.Windows.Forms.Button();
             this.FwdButton = new System.Windows.Forms.Button();
+            this.FENText = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,11 +95,11 @@
             this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.PGNText.Location = new System.Drawing.Point(316, 256);
+            this.PGNText.Location = new System.Drawing.Point(316, 282);
             this.PGNText.Multiline = true;
             this.PGNText.Name = "PGNText";
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.PGNText.Size = new System.Drawing.Size(525, 159);
+            this.PGNText.Size = new System.Drawing.Size(525, 133);
             this.PGNText.TabIndex = 3;
             // 
             // ResetGameButton
@@ -131,11 +132,23 @@
             this.FwdButton.UseVisualStyleBackColor = true;
             this.FwdButton.Click += new System.EventHandler(this.FwdButton_Click);
             // 
+            // FENText
+            // 
+            this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FENText.Location = new System.Drawing.Point(316, 256);
+            this.FENText.Name = "FENText";
+            this.FENText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.FENText.Size = new System.Drawing.Size(525, 20);
+            this.FENText.TabIndex = 7;
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 427);
+            this.Controls.Add(this.FENText);
             this.Controls.Add(this.FwdButton);
             this.Controls.Add(this.BackButton);
             this.Controls.Add(this.ResetGameButton);
@@ -166,6 +179,7 @@
         private System.Windows.Forms.Button ResetGameButton;
         private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.Button FwdButton;
+        private System.Windows.Forms.TextBox FENText;
     }
 }
 

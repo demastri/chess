@@ -110,6 +110,8 @@ namespace PGNViewer
                 }
             }
             boardDisplay.Text = thisBoard;
+
+            FENText.Text = curGame.ToFEN();
         }
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
         {
@@ -120,13 +122,7 @@ namespace PGNViewer
             if (color == 1)
                 pcChar = Char.ToUpper(pcChar);  // upper case is on a dark square...
 
-            return PokeChar(refStr, locToPoke, pcChar);
-        }
-        private string PokeChar(string refStr, int loc, char pokeChar)
-        {
-            if (loc >= refStr.Length)
-                return refStr + pokeChar;
-            return refStr.Substring(0, loc) + pokeChar + refStr.Substring(loc + 1);
+            return Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
         }
 
         private void GameList_SelectedIndexChanged(object sender, EventArgs e)
