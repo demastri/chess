@@ -44,6 +44,8 @@
             // 
             // GameList
             // 
+            this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.GameList.Location = new System.Drawing.Point(12, 27);
             this.GameList.MultiSelect = false;
             this.GameList.Name = "GameList";
@@ -58,6 +60,7 @@
             this.boardDisplay.Location = new System.Drawing.Point(316, 27);
             this.boardDisplay.Multiline = true;
             this.boardDisplay.Name = "boardDisplay";
+            this.boardDisplay.ReadOnly = true;
             this.boardDisplay.Size = new System.Drawing.Size(256, 223);
             this.boardDisplay.TabIndex = 1;
             // 
@@ -95,11 +98,13 @@
             this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.PGNText.HideSelection = false;
             this.PGNText.Location = new System.Drawing.Point(316, 282);
             this.PGNText.Multiline = true;
             this.PGNText.Name = "PGNText";
+            this.PGNText.ReadOnly = true;
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.PGNText.Size = new System.Drawing.Size(525, 133);
+            this.PGNText.Size = new System.Drawing.Size(526, 133);
             this.PGNText.TabIndex = 3;
             // 
             // ResetGameButton
@@ -139,6 +144,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FENText.Location = new System.Drawing.Point(316, 256);
             this.FENText.Name = "FENText";
+            this.FENText.ReadOnly = true;
             this.FENText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.FENText.Size = new System.Drawing.Size(525, 20);
             this.FENText.TabIndex = 7;

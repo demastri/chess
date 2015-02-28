@@ -113,6 +113,34 @@ namespace PGNViewer
 
             FENText.Text = curGame.ToFEN();
         }
+
+        private void HighlightPGNMove()
+        {
+            if (PGNText.Text == "")
+                return;
+            int closeTag = 0;
+            do
+            {
+                closeTag = PGNText.Text.IndexOf(']', closeTag + 1);
+            } while (PGNText.Text.IndexOf(']', closeTag+1) > 0);
+
+            int thisPly = curGame.curPly - 1;
+            if (thisPly < 0)
+                PGNText.Select(closeTag + 2, 0);
+            else
+            {
+                int moveTag = PGNText.Text.IndexOf(((thisPly / 2) + 1).ToString() + ".", closeTag);
+                if (thisPly % 2 == 1)
+                    moveTag = PGNText.Text.IndexOf(' ', moveTag) + 1;
+                int endTag = PGNText.Text.IndexOf(' ', moveTag + 1);
+                string targetmove = PGNText.Text.Substring(moveTag, endTag - moveTag);
+                if (targetmove.IndexOf(Environment.NewLine) >= 0)
+                    endTag -= (endTag - moveTag) - targetmove.IndexOf(Environment.NewLine);
+                FENText.Text += " <" + targetmove + ">";
+                PGNText.Select(moveTag, endTag - moveTag);
+            }
+        }
+
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
         {
             int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - rank)) + (file);
@@ -136,24 +164,28 @@ namespace PGNViewer
                 curGame.ResetPosition();
             }
             DrawBoard();
+            HighlightPGNMove();
         }
 
         private void ResetGameButton_Click(object sender, EventArgs e)
         {
             curGame.ResetPosition();
             DrawBoard();
+            HighlightPGNMove();
         }
 
         private void BackButton_Click(object sender, EventArgs e)
         {
             curGame.BackPosition();
             DrawBoard();
+            HighlightPGNMove();
         }
 
         private void FwdButton_Click(object sender, EventArgs e)
         {
             curGame.AdvancePosition();
             DrawBoard();
+            HighlightPGNMove();
         }
     }
 }
