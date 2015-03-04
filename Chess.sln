@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "PipesCommsExample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "PipesCommsExamples\Client\Client.csproj", "{ADC9B49F-4D36-44D4-AD53-FC41231450CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessWrappers", "PipesCommsExamples\ProcessWrappers\ProcessWrappers.csproj", "{2009788C-625D-45F7-AF04-DC21EC78D0E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2009788C-625D-45F7-AF04-DC21EC78D0E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2009788C-625D-45F7-AF04-DC21EC78D0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2009788C-625D-45F7-AF04-DC21EC78D0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2009788C-625D-45F7-AF04-DC21EC78D0E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,5 +58,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3552091B-1726-4640-9197-5F676FA6EE01} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
+		{2009788C-625D-45F7-AF04-DC21EC78D0E5} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 	EndGlobalSection
 EndGlobal
