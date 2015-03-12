@@ -14,6 +14,7 @@ namespace ChessPosition
         public PositionHash Hash { get { return new PositionHash(this); } }
 
         // these values are included in the hash
+        public PlayerEnum onMove;
         public Dictionary<Square, Piece> board;
         public byte castleRights;   // bits 0-4 -> WK WQ BK BQ
         public Square epLoc;        // the ep col is the file, for convenience the row is the square "behind" the P (the capture sq)
@@ -24,6 +25,8 @@ namespace ChessPosition
             board = new Dictionary<Square, Piece>();
             castleRights = 0x0f;
             epLoc = new Square(0x0f, 0x0f);
+            onMove = PlayerEnum.White;
+            
             board.Add(new Square(Square.Rank.R1, Square.File.FA), new Piece(PlayerEnum.White, Piece.PieceType.Rook));
             board.Add(new Square(Square.Rank.R1, Square.File.FB), new Piece(PlayerEnum.White, Piece.PieceType.Knight));
             board.Add(new Square(Square.Rank.R1, Square.File.FC), new Piece(PlayerEnum.White, Piece.PieceType.Bishop));
@@ -71,6 +74,7 @@ namespace ChessPosition
             board = new Dictionary<Square, Piece>(p.board);
             epLoc = new Square(p.epLoc);
             castleRights = p.castleRights;
+            onMove = p.onMove;
         }
         public List<Square> FindPieceWithTarget(Piece p, Square s, Square.Rank rowConstraint, Square.File colConstraint)
         {
@@ -84,9 +88,8 @@ namespace ChessPosition
                     {
                         Position possPos = new Position(this);
                         Ply testPly = new Ply(ss, s, p);    // i think promo piece is irrelevant here, if the piece is pinned, it doesn't matter what it promotes to...
-                        PlayerEnum testPlr = p.color;
-                        possPos.MakeMove(testPly, ref testPlr);
-                        if (!possPos.IsCheck(testPlr))
+                        possPos.MakeMove(testPly);
+                        if (!possPos.IsCheck())
                             options.Add(ss);
                     }
                 }
@@ -94,19 +97,19 @@ namespace ChessPosition
             return options;
         }
 
-        private bool IsCheck(PlayerEnum attack)
+        private bool IsCheck()  // is the onMove King being attacked??
         {
             // find the opposing king
             Square attackSq = null;
             foreach (Square s in board.Keys)
-                if (board[s].piece == Piece.PieceType.King && board[s].color != attack)    // got him
+                if (board[s].piece == Piece.PieceType.King && board[s].color != onMove)    // got him
                 {
                     attackSq = s;
                     break;
                 }
             // see if any pieces can move there...
             foreach (Square s in board.Keys)
-                if (board[s].color == attack && CouldMoveThere(s, attackSq, board[s]))
+                if (board[s].color == onMove && CouldMoveThere(s, attackSq, board[s]))
                     return true;
             return false;
         }
@@ -231,7 +234,7 @@ namespace ChessPosition
             return false;
         }
 
-        public void MakeMove(Ply p, ref PlayerEnum localOnMove)
+        public void MakeMove(Ply p)
         {
             /// advance game state - include castle rights, rep, ep and progress counters
             /// 
@@ -243,9 +246,9 @@ namespace ChessPosition
             Piece srcPiece = board[p.src];
             Piece destPiece = board.ContainsKey(p.dest) ? board[p.dest] : null;
 
-            if (localOnMove != srcPiece.color)
+            if (onMove != srcPiece.color)
                 System.Console.WriteLine("Moving the wrong color piece...");
-            if (destPiece != null && localOnMove == destPiece.color)
+            if (destPiece != null && onMove == destPiece.color)
                 System.Console.WriteLine("Taking the wrong color piece...");
 
             board.Remove(p.src);
@@ -283,14 +286,14 @@ namespace ChessPosition
             }
             if (srcPiece.piece == Piece.PieceType.Rook) // clear castling rights as appropriate
             {
-                Square.Rank rank = (Square.Rank)(localOnMove == PlayerEnum.White ? Square.Rank.R1 : Square.Rank.R8);
+                Square.Rank rank = (Square.Rank)(onMove == PlayerEnum.White ? Square.Rank.R1 : Square.Rank.R8);
                 if ((Square.Rank)p.src.row == rank)
                     if ((Square.File)p.src.col == Square.File.FA)
                         castleRights = (byte)(castleRights & ~(byte)
-                            (localOnMove == PlayerEnum.White ? Position.CastleRights.QS_White : Position.CastleRights.QS_Black));
+                            (onMove == PlayerEnum.White ? Position.CastleRights.QS_White : Position.CastleRights.QS_Black));
                     else if ((Square.File)p.src.col == Square.File.FH)
                         castleRights = (byte)(castleRights & ~(byte)
-                            (localOnMove == PlayerEnum.White ? Position.CastleRights.KS_White : Position.CastleRights.KS_Black));
+                            (onMove == PlayerEnum.White ? Position.CastleRights.KS_White : Position.CastleRights.KS_Black));
 
             }
             if (srcPiece.piece == Piece.PieceType.Pawn) // ep and promotion (everything else is just regular...)
@@ -304,7 +307,7 @@ namespace ChessPosition
                 // handle this ep capture
                 if (p.dest == epLoc)
                 {
-                    Square capSq = new Square((byte)(epLoc.row + (localOnMove == PlayerEnum.White ? -1 : 1)), epLoc.col);
+                    Square capSq = new Square((byte)(epLoc.row + (onMove == PlayerEnum.White ? -1 : 1)), epLoc.col);
                     if (!board.ContainsKey(capSq))
                         System.Console.WriteLine("Can't find the ep capture piece...");
                     board.Remove(capSq);
@@ -314,7 +317,7 @@ namespace ChessPosition
                 if (Math.Abs(p.src.row - p.dest.row) == 2)   // it advanced two
                 {
                     epLoc.col = p.src.col;
-                    epLoc.row = (byte)(p.dest.row + (localOnMove == PlayerEnum.White ? -1 : 1));
+                    epLoc.row = (byte)(p.dest.row + (onMove == PlayerEnum.White ? -1 : 1));
                 }
                 else
                 {
@@ -328,19 +331,19 @@ namespace ChessPosition
                 epLoc.row = (byte)Square.Rank.NONE;
             }
 
-            localOnMove = (localOnMove == PlayerEnum.White ? PlayerEnum.Black : PlayerEnum.White);
+            onMove = (onMove == PlayerEnum.White ? PlayerEnum.Black : PlayerEnum.White);
         }
 
-        public string ToFEN(PlayerEnum onMove, byte castle, Square ep, int progress, int moveNbr)
+        public string ToFEN(int progress, int moveNbr)
         {
             string outString = "8/8/8/8/8/8/8/8 "
                 + (onMove == PlayerEnum.White ? "w " : "b ")
-                + (((castle & (byte)CastleRights.KS_White) != 0) ? "K" : "")
-                + (((castle & (byte)CastleRights.QS_White) != 0) ? "Q" : "")
-                + (((castle & (byte)CastleRights.KS_Black) != 0) ? "k" : "")
-                + (((castle & (byte)CastleRights.QS_Black) != 0) ? "q" : "")
-                + (castle == 0 ? "- " : " ")
-                + (ep.col == (byte)Square.File.NONE ? "- " : ((ep.col + 'a').ToString() + (ep.row + '1').ToString() + " "))
+                + (((castleRights & (byte)CastleRights.KS_White) != 0) ? "K" : "")
+                + (((castleRights & (byte)CastleRights.QS_White) != 0) ? "Q" : "")
+                + (((castleRights & (byte)CastleRights.KS_Black) != 0) ? "k" : "")
+                + (((castleRights & (byte)CastleRights.QS_Black) != 0) ? "q" : "")
+                + (castleRights == 0 ? "- " : " ")
+                + (epLoc.col == (byte)Square.File.NONE ? "- " : ((epLoc.col + 'a').ToString() + (epLoc.row + '1').ToString() + " "))
                 + progress.ToString() + " "
                 + moveNbr.ToString();
 

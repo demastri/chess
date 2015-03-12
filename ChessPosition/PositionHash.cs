@@ -17,6 +17,7 @@ namespace ChessPosition
         public PositionHash(Position p)
         {
             /// 64 bits for presence / absence of pieces
+            /// 1 bit onmove - white=0
             /// 4 bits for castle rights
             /// 4 bits for ep file (file of last p moved, 0x0f = no ep)
             /// string of huffman encoded pieces with color bit prepended
@@ -43,9 +44,11 @@ namespace ChessPosition
             /// include 50 move and position repetition info.  
             /// In this model, that's included in the game object, since it's game-specific context
 
-            int currentPieceOffset = 72;
-            int castleRightsOffset = 64;
-            int epOffset = 68;
+            int gridOffset = 0;
+            int onMoveOffset = 64;
+            int castleRightsOffset = 65;
+            int epOffset = 69;
+            int currentPieceOffset = 73;
 
             /// note, there are > 64 printable characters starting at ' ', so use anything close as 0...  '!' is one more and not whitespace
             /// ---------0         1         2         3
@@ -62,13 +65,15 @@ namespace ChessPosition
             /// iterate in order to load the piece squares
 
             for (int i = 0; i < 64; i++)
-                ClearBit(i);
+                ClearBit(gridOffset+i);
             foreach (Square sq in p.board.Keys)
             {
                 Piece pc = p.board[sq];
-                int bitLocation = 8 * sq.row + sq.col;
+                int bitLocation = gridOffset + 8 * sq.row + sq.col;
                 SetBit(bitLocation);
             }
+
+            SetBit(onMoveOffset + 0, (p.onMove != PlayerEnum.White));
 
             SetBit(castleRightsOffset + 0, (p.castleRights & 0x01) != 0);
             SetBit(castleRightsOffset + 1, (p.castleRights & 0x02) != 0);
@@ -162,17 +167,41 @@ namespace ChessPosition
             return ((hashValue[charIndex] - refZeroVal) & (0x01 << bitOffset)) != 0;
         }
 
-        //public override int GetHashCode()
-        //{
-        //   return hashValue.ToString();
-        //}
+        public override int GetHashCode()
+        {
+            string x = "";
+            for (int i = 0; i < hashValue.Length; i++)
+                x += GetHexString(hashValue[i]);
+            int y = x.GetHashCode();
+            return y;
+        }
+        private string GetHexString(char c)
+        {
+            int lc = ((c & 0x00f0) >> 4);
+            int rc = ((c & 0x000f)     );
+
+            return ((char)(lc < 10 ? lc + '0' : lc + 'A')).ToString() + ((char)(rc < 10 ? rc + '0' : rc + 'A')).ToString();
+
+        }
         public override bool Equals(object obj)
         {
             return Equals(obj as PositionHash);
         }
         public bool Equals(PositionHash obj)
         {
-            return obj != null && obj.hashValue.ToString() == this.hashValue.ToString();
+            return obj != null && obj.GetHashCode() == this.GetHashCode();
+        }
+        public static bool operator ==(PositionHash lhs, PositionHash rhs)
+        {
+            if (object.ReferenceEquals(null, lhs) && object.ReferenceEquals(null, rhs))
+                return true;
+            if (object.ReferenceEquals(null, lhs) || object.ReferenceEquals(null, rhs))
+                return false;
+            return lhs.GetHashCode() == rhs.GetHashCode();
+        }
+        public static bool operator !=(PositionHash lhs, PositionHash rhs)
+        {
+            return !(lhs == rhs);
         }
 
     }

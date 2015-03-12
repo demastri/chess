@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.GameList = new System.Windows.Forms.ListView();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -39,6 +40,12 @@
             this.BackButton = new System.Windows.Forms.Button();
             this.FwdButton = new System.Windows.Forms.Button();
             this.FENText = new System.Windows.Forms.TextBox();
+            this.EngineList = new System.Windows.Forms.ComboBox();
+            this.AnalysisText = new System.Windows.Forms.TextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.JumpBackButton = new System.Windows.Forms.Button();
+            this.JumpFwdButton = new System.Windows.Forms.Button();
+            this.JumpToEndButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,13 +120,13 @@
             this.ResetGameButton.Name = "ResetGameButton";
             this.ResetGameButton.Size = new System.Drawing.Size(30, 23);
             this.ResetGameButton.TabIndex = 4;
-            this.ResetGameButton.Text = "<<";
+            this.ResetGameButton.Text = "|<";
             this.ResetGameButton.UseVisualStyleBackColor = true;
             this.ResetGameButton.Click += new System.EventHandler(this.ResetGameButton_Click);
             // 
             // BackButton
             // 
-            this.BackButton.Location = new System.Drawing.Point(614, 227);
+            this.BackButton.Location = new System.Drawing.Point(650, 227);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(30, 23);
             this.BackButton.TabIndex = 5;
@@ -129,7 +136,7 @@
             // 
             // FwdButton
             // 
-            this.FwdButton.Location = new System.Drawing.Point(650, 227);
+            this.FwdButton.Location = new System.Drawing.Point(686, 227);
             this.FwdButton.Name = "FwdButton";
             this.FwdButton.Size = new System.Drawing.Size(30, 23);
             this.FwdButton.TabIndex = 6;
@@ -149,11 +156,74 @@
             this.FENText.Size = new System.Drawing.Size(525, 20);
             this.FENText.TabIndex = 7;
             // 
+            // EngineList
+            // 
+            this.EngineList.FormattingEnabled = true;
+            this.EngineList.Items.AddRange(new object[] {
+            "None",
+            "Stockfish",
+            "Crafty"});
+            this.EngineList.Location = new System.Drawing.Point(578, 27);
+            this.EngineList.Name = "EngineList";
+            this.EngineList.Size = new System.Drawing.Size(160, 21);
+            this.EngineList.TabIndex = 8;
+            this.EngineList.Text = "None";
+            this.EngineList.SelectedIndexChanged += new System.EventHandler(this.EngineList_SelectedIndexChanged);
+            // 
+            // AnalysisText
+            // 
+            this.AnalysisText.Location = new System.Drawing.Point(578, 54);
+            this.AnalysisText.Multiline = true;
+            this.AnalysisText.Name = "AnalysisText";
+            this.AnalysisText.ReadOnly = true;
+            this.AnalysisText.Size = new System.Drawing.Size(254, 167);
+            this.AnalysisText.TabIndex = 9;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // JumpBackButton
+            // 
+            this.JumpBackButton.Location = new System.Drawing.Point(614, 227);
+            this.JumpBackButton.Name = "JumpBackButton";
+            this.JumpBackButton.Size = new System.Drawing.Size(30, 23);
+            this.JumpBackButton.TabIndex = 10;
+            this.JumpBackButton.Text = "<<";
+            this.JumpBackButton.UseVisualStyleBackColor = true;
+            this.JumpBackButton.Click += new System.EventHandler(this.JumpBackButton_Click);
+            // 
+            // JumpFwdButton
+            // 
+            this.JumpFwdButton.Location = new System.Drawing.Point(722, 227);
+            this.JumpFwdButton.Name = "JumpFwdButton";
+            this.JumpFwdButton.Size = new System.Drawing.Size(30, 23);
+            this.JumpFwdButton.TabIndex = 11;
+            this.JumpFwdButton.Text = ">>";
+            this.JumpFwdButton.UseVisualStyleBackColor = true;
+            this.JumpFwdButton.Click += new System.EventHandler(this.JumpFwdButton_Click);
+            // 
+            // JumpToEndButton
+            // 
+            this.JumpToEndButton.Location = new System.Drawing.Point(758, 227);
+            this.JumpToEndButton.Name = "JumpToEndButton";
+            this.JumpToEndButton.Size = new System.Drawing.Size(30, 23);
+            this.JumpToEndButton.TabIndex = 12;
+            this.JumpToEndButton.Text = ">|";
+            this.JumpToEndButton.UseVisualStyleBackColor = true;
+            this.JumpToEndButton.Click += new System.EventHandler(this.JumpToEndButton_Click);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 427);
+            this.Controls.Add(this.JumpToEndButton);
+            this.Controls.Add(this.JumpFwdButton);
+            this.Controls.Add(this.JumpBackButton);
+            this.Controls.Add(this.AnalysisText);
+            this.Controls.Add(this.EngineList);
             this.Controls.Add(this.FENText);
             this.Controls.Add(this.FwdButton);
             this.Controls.Add(this.BackButton);
@@ -186,6 +256,12 @@
         private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.Button FwdButton;
         private System.Windows.Forms.TextBox FENText;
+        private System.Windows.Forms.ComboBox EngineList;
+        private System.Windows.Forms.TextBox AnalysisText;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button JumpBackButton;
+        private System.Windows.Forms.Button JumpFwdButton;
+        private System.Windows.Forms.Button JumpToEndButton;
     }
 }
 

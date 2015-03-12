@@ -17,6 +17,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "PipesCommsExample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessWrappers", "PipesCommsExamples\ProcessWrappers\ProcessWrappers.csproj", "{2009788C-625D-45F7-AF04-DC21EC78D0E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "engines", "engines", "{41E16555-A148-4949-8895-339C67D895B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{CB1ADB60-5F5A-4162-8D19-ADC8C9C71987}"
+	ProjectSection(SolutionItems) = preProject
+		Data\interesting.pgn = Data\interesting.pgn
+		Data\Nakamura 10 games.pgn = Data\Nakamura 10 games.pgn
+		Data\Nakamura.pgn = Data\Nakamura.pgn
+		Data\t61c.pgn = Data\t61c.pgn
+		Data\t62c.pgn = Data\t62c.pgn
+		Data\t63c.pgn = Data\t63c.pgn
+		Data\t64c.pgn = Data\t64c.pgn
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stockfish", "Stockfish", "{A982F146-7A74-45B0-9FDB-6E6B7268BE37}"
+	ProjectSection(SolutionItems) = preProject
+		Engines\Stockfish\Copying.txt = Engines\Stockfish\Copying.txt
+		Engines\Stockfish\stockfish_5_32bit.exe = Engines\Stockfish\stockfish_5_32bit.exe
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,5 +78,6 @@ Global
 		{3552091B-1726-4640-9197-5F676FA6EE01} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 		{2009788C-625D-45F7-AF04-DC21EC78D0E5} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
+		{A982F146-7A74-45B0-9FDB-6E6B7268BE37} = {41E16555-A148-4949-8895-339C67D895B3}
 	EndGlobalSection
 EndGlobal

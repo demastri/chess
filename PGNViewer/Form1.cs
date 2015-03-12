@@ -19,6 +19,8 @@ namespace PGNViewer
     public partial class PGNViewer : Form
     {
         List<Game> GameRef;
+        Engine AnalysisEngine;
+        Game curGame;
 
         public PGNViewer()
         {
@@ -29,19 +31,12 @@ namespace PGNViewer
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string PGNLoc = openFileDialog1.FileName;
-                if (PGNLoc != "" && File.Exists(PGNLoc))
+                string PGNFileLoc = openFileDialog1.FileName;
+                GameRef = Game.ReadPGNFile(PGNFileLoc);
+                GameList.Items.Clear();
+                foreach (Game g in GameRef)
                 {
-                    StreamReader tr = new StreamReader(PGNLoc);
-                    GameList.Items.Clear();
-                    GameRef = new List<Game>();
-
-                    Game g;
-                    while ((g = Game.ReadGame(tr)) != null)
-                    {
-                        GameList.Items.Add(g.GameDate + " " + g.PlayerWhite + "-" + g.PlayerBlack);
-                        GameRef.Add(g);
-                    }
+                    GameList.Items.Add(g.GameDate + " " + g.PlayerWhite + "-" + g.PlayerBlack);
                 }
             }
         }
@@ -49,6 +44,9 @@ namespace PGNViewer
         private void PGNViewer_Load(object sender, EventArgs e)
         {
             LoadFont();
+            curGame = null;
+            AnalysisEngine = null;
+            timer1.Start();
         }
 
         [DllImport("gdi32.dll")]
@@ -73,7 +71,6 @@ namespace PGNViewer
             DrawBoard();
         }
 
-        Game curGame = null;
         private void DrawBoard()
         {
             string emptyBoard =
@@ -89,10 +86,11 @@ namespace PGNViewer
                 + "/èéêëìíîï)" + Environment.NewLine;    // bottom line w/fileID
 
             string thisBoard = emptyBoard;
-            if( curGame != null ) {
-                foreach (Square sq in curGame.CurrentPosition.board.Keys) 
+            if (curGame != null)
+            {
+                foreach (Square sq in curGame.CurrentPosition.board.Keys)
                 {
-                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, curGame.CurrentPosition.board[sq] );
+                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, curGame.CurrentPosition.board[sq]);
                 }
             }
             else
@@ -122,23 +120,76 @@ namespace PGNViewer
             do
             {
                 closeTag = PGNText.Text.IndexOf(']', closeTag + 1);
-            } while (PGNText.Text.IndexOf(']', closeTag+1) > 0);
+            } while (PGNText.Text.IndexOf(']', closeTag + 1) > 0);
 
             int thisPly = curGame.curPly - 1;
+            bool isBlack = thisPly % 2 == 1;
             if (thisPly < 0)
-                PGNText.Select(closeTag + 2, 0);
+                PGNText.Select(closeTag + 3, 0);
             else
             {
-                int moveTag = PGNText.Text.IndexOf(((thisPly / 2) + 1).ToString() + ".", closeTag);
-                if (thisPly % 2 == 1)
-                    moveTag = PGNText.Text.IndexOf(' ', moveTag) + 1;
-                int endTag = PGNText.Text.IndexOf(' ', moveTag + 1);
-                string targetmove = PGNText.Text.Substring(moveTag, endTag - moveTag);
-                if (targetmove.IndexOf(Environment.NewLine) >= 0)
-                    endTag -= (endTag - moveTag) - targetmove.IndexOf(Environment.NewLine);
-                FENText.Text += " <" + targetmove + ">";
-                PGNText.Select(moveTag, endTag - moveTag);
+                closeTag += 3;
+                int tagStart = closeTag;
+                closeTag = FindUncommentedMoveNumber(PGNText.Text, closeTag, (thisPly / 2) + 1, ref tagStart);
+                closeTag = FindUncommentedToken(PGNText.Text, closeTag, ref tagStart);
+                if (isBlack)
+                    closeTag = FindUncommentedToken(PGNText.Text, closeTag, ref tagStart);
+                PGNText.Select(tagStart, closeTag - tagStart);
+                // find first index of movenbr in text that isn't in a comment
+                // find next uncommented token (white move)
+                // find next uncommented token (black move)
+
             }
+        }
+        private int FindUncommentedMoveNumber(string pgn, int start, int moveNbr, ref int tokenStart)
+        {
+            // ###n actually need to handle commentary and NAGs as well as comments...embedded ECO tags?
+            // the proper way to do this is to note the fact that tags can have embedded quoted values
+            // comments can appear anywhere outside ot tags, and tags can appear anywhere
+            // so, while parsing a PGN entry, we can return any number of items:
+            //  a tag, potentially with a key / value or ECO notation
+            //  a move number identifier
+            //  a move string
+            //  an embedded comment
+            //  a line ending comment
+            string target = moveNbr.ToString() + ".";
+            bool inComment = false;
+            for (int loc = start; loc < pgn.Length; loc++)
+            {
+                if (!inComment && pgn[loc] == '{')
+                    inComment = true;
+                if (inComment && pgn[loc] == '}')
+                    inComment = false;
+                if (!inComment && pgn[loc] == ',')
+                    loc = pgn.IndexOf(Environment.NewLine, loc);
+                if (!inComment && pgn.IndexOf(target, loc) == loc)
+                {
+                    tokenStart = loc;
+                    return loc + target.Length;
+                }
+            }
+            return -1;
+        }
+        private int FindUncommentedToken(string pgn, int start, ref int tokenStart)
+        {
+            bool inComment = false;
+            for (int loc = start; loc < pgn.Length; loc++)
+            {
+                if (!inComment && pgn[loc] == '{')
+                    inComment = true;
+                else if (inComment && pgn[loc] == '}')
+                    inComment = false;
+                else if (!inComment && pgn[loc] == ',')
+                    loc = pgn.IndexOf(Environment.NewLine, loc);
+                else if (!inComment && !Char.IsWhiteSpace(pgn[loc]))
+                {
+                    tokenStart = loc;
+                    int nlLoc = pgn.IndexOf(Environment.NewLine, tokenStart);
+                    int spLoc = pgn.IndexOf(' ', tokenStart);
+                    return nlLoc == -1 ? spLoc : (spLoc == -1 ? nlLoc : (nlLoc < spLoc ? nlLoc : spLoc));
+                }
+            }
+            return -1;
         }
 
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
@@ -165,20 +216,62 @@ namespace PGNViewer
             }
             DrawBoard();
             HighlightPGNMove();
+            UpdateAnalysis();
         }
+
+
+        private void EngineList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (AnalysisEngine != null)
+            {
+                AnalysisEngine.Quit();
+            }
+            AnalysisEngine = Engine.InitEngine(EngineList.Text);
+            UpdateAnalysis();
+            AnalysisEngine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
+        }
+
+        void AnalysisEngine_AnalysisUpdate()
+        {
+            if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
+                AnalysisText.Text = AnalysisEngine.curAnalysis.ToString();
+        }
+        private void UpdateAnalysis()
+        {
+            if (curGame != null && AnalysisEngine != null)
+            {
+                AnalysisEngine.Stop();
+                AnalysisEngine.SetPostion(curGame.ToFEN());
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (AnalysisEngine != null)
+                AnalysisEngine.CheckProgress();
+        }
+
 
         private void ResetGameButton_Click(object sender, EventArgs e)
         {
             curGame.ResetPosition();
             DrawBoard();
             HighlightPGNMove();
+            UpdateAnalysis();
         }
-
+        private void JumpBackButton_Click(object sender, EventArgs e)
+        {
+            curGame.BackPosition(5);
+            DrawBoard();
+            HighlightPGNMove();
+            UpdateAnalysis();
+        }
         private void BackButton_Click(object sender, EventArgs e)
         {
             curGame.BackPosition();
             DrawBoard();
             HighlightPGNMove();
+            UpdateAnalysis();
         }
 
         private void FwdButton_Click(object sender, EventArgs e)
@@ -186,6 +279,22 @@ namespace PGNViewer
             curGame.AdvancePosition();
             DrawBoard();
             HighlightPGNMove();
+            UpdateAnalysis();
         }
+        private void JumpFwdButton_Click(object sender, EventArgs e)
+        {
+            curGame.AdvancePosition(5);
+            DrawBoard();
+            HighlightPGNMove();
+            UpdateAnalysis();
+        }
+        private void JumpToEndButton_Click(object sender, EventArgs e)
+        {
+            curGame.AdvancePosition(curGame.Plies.Count);
+            DrawBoard();
+            HighlightPGNMove();
+            UpdateAnalysis();
+        }
+
     }
 }

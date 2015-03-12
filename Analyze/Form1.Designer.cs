@@ -28,24 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
             this.PGNLoc = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.FileStatsButton = new System.Windows.Forms.Button();
+            this.AnalysisButton = new System.Windows.Forms.Button();
+            this.TotalGamesLabel = new System.Windows.Forms.Label();
+            this.TotalPliesLabel = new System.Windows.Forms.Label();
+            this.TotalRatedLabel = new System.Windows.Forms.Label();
+            this.UniquePosLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(197, 227);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // PGNLoc
             // 
@@ -92,13 +88,74 @@
             this.openFileDialog1.DefaultExt = "pgn";
             this.openFileDialog1.Filter = "PGN FIles|*.pgn|All Files|*.*";
             // 
+            // FileStatsButton
+            // 
+            this.FileStatsButton.Location = new System.Drawing.Point(196, 53);
+            this.FileStatsButton.Name = "FileStatsButton";
+            this.FileStatsButton.Size = new System.Drawing.Size(75, 23);
+            this.FileStatsButton.TabIndex = 3;
+            this.FileStatsButton.Text = "File Stats";
+            this.FileStatsButton.UseVisualStyleBackColor = true;
+            this.FileStatsButton.Click += new System.EventHandler(this.FileStatsButton_Click);
+            // 
+            // AnalysisButton
+            // 
+            this.AnalysisButton.Location = new System.Drawing.Point(196, 82);
+            this.AnalysisButton.Name = "AnalysisButton";
+            this.AnalysisButton.Size = new System.Drawing.Size(75, 23);
+            this.AnalysisButton.TabIndex = 4;
+            this.AnalysisButton.Text = "Do Analysis";
+            this.AnalysisButton.UseVisualStyleBackColor = true;
+            this.AnalysisButton.Click += new System.EventHandler(this.AnalysisButton_Click);
+            // 
+            // TotalGamesLabel
+            // 
+            this.TotalGamesLabel.AutoSize = true;
+            this.TotalGamesLabel.Location = new System.Drawing.Point(12, 50);
+            this.TotalGamesLabel.Name = "TotalGamesLabel";
+            this.TotalGamesLabel.Size = new System.Drawing.Size(82, 13);
+            this.TotalGamesLabel.TabIndex = 5;
+            this.TotalGamesLabel.Text = "Total Games: ---";
+            // 
+            // TotalPliesLabel
+            // 
+            this.TotalPliesLabel.AutoSize = true;
+            this.TotalPliesLabel.Location = new System.Drawing.Point(12, 76);
+            this.TotalPliesLabel.Name = "TotalPliesLabel";
+            this.TotalPliesLabel.Size = new System.Drawing.Size(71, 13);
+            this.TotalPliesLabel.TabIndex = 6;
+            this.TotalPliesLabel.Text = "Total Plies: ---";
+            // 
+            // TotalRatedLabel
+            // 
+            this.TotalRatedLabel.AutoSize = true;
+            this.TotalRatedLabel.Location = new System.Drawing.Point(12, 63);
+            this.TotalRatedLabel.Name = "TotalRatedLabel";
+            this.TotalRatedLabel.Size = new System.Drawing.Size(78, 13);
+            this.TotalRatedLabel.TabIndex = 7;
+            this.TotalRatedLabel.Text = "Total Rated: ---";
+            // 
+            // UniquePosLabel
+            // 
+            this.UniquePosLabel.AutoSize = true;
+            this.UniquePosLabel.Location = new System.Drawing.Point(13, 87);
+            this.UniquePosLabel.Name = "UniquePosLabel";
+            this.UniquePosLabel.Size = new System.Drawing.Size(77, 13);
+            this.UniquePosLabel.TabIndex = 8;
+            this.UniquePosLabel.Text = "Unique Pos: ---";
+            // 
             // AnalyzeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.UniquePosLabel);
+            this.Controls.Add(this.TotalRatedLabel);
+            this.Controls.Add(this.TotalPliesLabel);
+            this.Controls.Add(this.TotalGamesLabel);
+            this.Controls.Add(this.AnalysisButton);
+            this.Controls.Add(this.FileStatsButton);
             this.Controls.Add(this.PGNLoc);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AnalyzeForm";
@@ -112,13 +169,18 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox PGNLoc;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
         private System.Windows.Forms.ToolStripMenuItem RunMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button FileStatsButton;
+        private System.Windows.Forms.Button AnalysisButton;
+        private System.Windows.Forms.Label TotalGamesLabel;
+        private System.Windows.Forms.Label TotalPliesLabel;
+        private System.Windows.Forms.Label TotalRatedLabel;
+        private System.Windows.Forms.Label UniquePosLabel;
     }
 }
 
