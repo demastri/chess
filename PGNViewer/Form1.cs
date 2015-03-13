@@ -13,7 +13,6 @@ using ChessPosition;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 
-
 namespace PGNViewer
 {
     public partial class PGNViewer : Form
@@ -93,20 +92,6 @@ namespace PGNViewer
                     thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, curGame.CurrentPosition.board[sq]);
                 }
             }
-            else
-            {
-                if (false)
-                {
-                    thisBoard = PokePiece(emptyBoard, 8, 5, new Piece(PlayerEnum.Black, Piece.PieceType.King));
-                    thisBoard = PokePiece(thisBoard, 1, 5, new Piece(PlayerEnum.White, Piece.PieceType.King));
-                    thisBoard = PokePiece(thisBoard, 2, 1, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-                    thisBoard = PokePiece(thisBoard, 2, 2, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-                    thisBoard = PokePiece(thisBoard, 2, 7, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-                    thisBoard = PokePiece(thisBoard, 2, 8, new Piece(PlayerEnum.White, Piece.PieceType.Pawn));
-                    thisBoard = PokePiece(thisBoard, 7, 1, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
-                    thisBoard = PokePiece(thisBoard, 7, 8, new Piece(PlayerEnum.Black, Piece.PieceType.Pawn));
-                }
-            }
             boardDisplay.Text = thisBoard;
 
             FENText.Text = curGame.ToFEN();
@@ -114,101 +99,47 @@ namespace PGNViewer
 
         private void HighlightPGNMove()
         {
-            if (PGNText.Text == "")
-                return;
-            int closeTag = 0;
-            do
-            {
-                closeTag = PGNText.Text.IndexOf(']', closeTag + 1);
-            } while (PGNText.Text.IndexOf(']', closeTag + 1) > 0);
-
             int thisPly = curGame.curPly - 1;
             bool isBlack = thisPly % 2 == 1;
-            if (thisPly < 0)
-                PGNText.Select(closeTag + 3, 0);
+            if (thisPly < 0 && PGNText.Text != null)
+                PGNText.Select(0, 0);
             else
             {
-                closeTag += 3;
-                int tagStart = closeTag;
-                closeTag = FindUncommentedMoveNumber(PGNText.Text, closeTag, (thisPly / 2) + 1, ref tagStart);
-                closeTag = FindUncommentedToken(PGNText.Text, closeTag, ref tagStart);
-                if (isBlack)
-                    closeTag = FindUncommentedToken(PGNText.Text, closeTag, ref tagStart);
-                PGNText.Select(tagStart, closeTag - tagStart);
-                // find first index of movenbr in text that isn't in a comment
-                // find next uncommented token (white move)
-                // find next uncommented token (black move)
-
-            }
-        }
-        private int FindUncommentedMoveNumber(string pgn, int start, int moveNbr, ref int tokenStart)
-        {
-            // ###n actually need to handle commentary and NAGs as well as comments...embedded ECO tags?
-            // the proper way to do this is to note the fact that tags can have embedded quoted values
-            // comments can appear anywhere outside ot tags, and tags can appear anywhere
-            // so, while parsing a PGN entry, we can return any number of items:
-            //  a tag, potentially with a key / value or ECO notation
-            //  a move number identifier
-            //  a move string
-            //  an embedded comment
-            //  a line ending comment
-            string target = moveNbr.ToString() + ".";
-            bool inComment = false;
-            for (int loc = start; loc < pgn.Length; loc++)
-            {
-                if (!inComment && pgn[loc] == '{')
-                    inComment = true;
-                if (inComment && pgn[loc] == '}')
-                    inComment = false;
-                if (!inComment && pgn[loc] == ',')
-                    loc = pgn.IndexOf(Environment.NewLine, loc);
-                if (!inComment && pgn.IndexOf(target, loc) == loc)
+                int moveNbr = (thisPly / 2) + 1;
+                bool haveMove = false;
+                bool nextPly = !isBlack;
+                PGNMoveString thisMove = null;
+                foreach (PGNToken t in curGame.PGNtokens)
                 {
-                    tokenStart = loc;
-                    return loc + target.Length;
+                    if (!haveMove && t.tokenType == PGNTokenType.MoveNumber && ((PGNMoveNumber)t).value == moveNbr)
+                        haveMove = true;
+                    else if (haveMove && t.tokenType == PGNTokenType.MoveNumber)
+                        ; // errror
+                    else if (haveMove && t.tokenType == PGNTokenType.MoveString)
+                        if (nextPly)
+                        {
+                            thisMove = (PGNMoveString)t;
+                            break;
+                        }
+                        else
+                            nextPly = true;
                 }
+                PGNText.Select(thisMove.startLocation, thisMove.value.Length);
             }
-            return -1;
         }
-        private int FindUncommentedToken(string pgn, int start, ref int tokenStart)
-        {
-            bool inComment = false;
-            for (int loc = start; loc < pgn.Length; loc++)
-            {
-                if (!inComment && pgn[loc] == '{')
-                    inComment = true;
-                else if (inComment && pgn[loc] == '}')
-                    inComment = false;
-                else if (!inComment && pgn[loc] == ',')
-                    loc = pgn.IndexOf(Environment.NewLine, loc);
-                else if (!inComment && !Char.IsWhiteSpace(pgn[loc]))
-                {
-                    tokenStart = loc;
-                    int nlLoc = pgn.IndexOf(Environment.NewLine, tokenStart);
-                    int spLoc = pgn.IndexOf(' ', tokenStart);
-                    return nlLoc == -1 ? spLoc : (spLoc == -1 ? nlLoc : (nlLoc < spLoc ? nlLoc : spLoc));
-                }
-            }
-            return -1;
-        }
-
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
         {
             int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - rank)) + (file);
-
-            int color = ((((rank - 1) % 2) == ((file - 1) % 2)) ? 1 : 0);   // 1 => b
-            char pcChar = Char.ToLower(pc.Chess7Char);
-            if (color == 1)
-                pcChar = Char.ToUpper(pcChar);  // upper case is on a dark square...
+            bool isWhite = (((((rank - 1) % 2) == ((file - 1) % 2)) ? 1 : 0) == 0);   // 1 => b
+            char pcChar = isWhite ? Char.ToLower(pc.ToChess7Char) : Char.ToUpper(pc.ToChess7Char);  // upper case is on a dark square...
 
             return Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
         }
 
         private void GameList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GameList.SelectedIndices.Count == 0)
-                PGNText.Text = "";
-            else
+            PGNText.Text = "";
+            if (GameList.SelectedIndices.Count == 1)
             {
                 PGNText.Text = GameRef[GameList.SelectedIndices[0]].PGNSource;
                 curGame = GameRef[GameList.SelectedIndices[0]];
@@ -238,10 +169,13 @@ namespace PGNViewer
         }
         private void UpdateAnalysis()
         {
-            if (curGame != null && AnalysisEngine != null)
+            if (AnalysisEngine != null)
             {
                 AnalysisEngine.Stop();
-                AnalysisEngine.SetPostion(curGame.ToFEN());
+                if (curGame != null)
+                {
+                    AnalysisEngine.SetPostion(curGame.ToFEN());
+                }
             }
         }
 
@@ -254,43 +188,36 @@ namespace PGNViewer
 
         private void ResetGameButton_Click(object sender, EventArgs e)
         {
-            curGame.ResetPosition();
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateAnalysis();
+            ChangePosition(0);
         }
         private void JumpBackButton_Click(object sender, EventArgs e)
         {
-            curGame.BackPosition(5);
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateAnalysis();
+            ChangePosition(-5);
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            curGame.BackPosition();
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateAnalysis();
+            ChangePosition(-1);
         }
 
         private void FwdButton_Click(object sender, EventArgs e)
         {
-            curGame.AdvancePosition();
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateAnalysis();
+            ChangePosition(1);
         }
         private void JumpFwdButton_Click(object sender, EventArgs e)
         {
-            curGame.AdvancePosition(5);
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateAnalysis();
+            ChangePosition(5);
         }
         private void JumpToEndButton_Click(object sender, EventArgs e)
         {
-            curGame.AdvancePosition(curGame.Plies.Count);
+            ChangePosition(curGame.Plies.Count);
+        }
+
+        private void ChangePosition(int rel)
+        {
+            if (rel == 0)
+                curGame.ResetPosition();
+            else
+                curGame.AdvancePosition(rel);
             DrawBoard();
             HighlightPGNMove();
             UpdateAnalysis();

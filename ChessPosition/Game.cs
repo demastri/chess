@@ -24,6 +24,8 @@ namespace ChessPosition
         public static int Unrated = -1;
         public static int NoRating = -2;
 
+        public List<PGNToken> PGNtokens;
+
         public int curPly;
         // these values are NOT included in the hash, since they're defined here...
         Dictionary<PositionHash, int> repetitions;
@@ -52,29 +54,30 @@ namespace ChessPosition
 
         public Game(StreamReader r) // read from PGN stream
         {
-            PGNGame nextTokenSet = new PGNGame(r);
+            PGNTokenizer nextTokenSet = new PGNTokenizer(r);
             if (nextTokenSet.tokens.Count > 0) // ok, we have one
             {
                 InitGame();
+                PGNtokens = nextTokenSet.tokens;
                 PGNSource = nextTokenSet.pgn;
-                foreach (PGNGame.PGNToken token in nextTokenSet.tokens)
+                foreach (PGNToken token in PGNtokens)
                 {
                     switch (token.tokenType)
                     {
-                        case PGNGame.TokenType.Tag:
-                            HandleTag((PGNGame.Tag)token);
+                        case PGNTokenType.Tag:
+                            HandleTag((PGNTag)token);
                             break;
-                        case PGNGame.TokenType.Invalid:
-                        case PGNGame.TokenType.MoveNumber:
-                        case PGNGame.TokenType.Comment:
-                        case PGNGame.TokenType.Terminator:
+                        case PGNTokenType.Invalid:
+                        case PGNTokenType.MoveNumber:
+                        case PGNTokenType.Comment:
+                        case PGNTokenType.Terminator:
                             // these can be skipped
                             break;
-                        case PGNGame.TokenType.MoveString:
-                            HandleMove((PGNGame.MoveString)token);
+                        case PGNTokenType.MoveString:
+                            HandleMove((PGNMoveString)token);
                             break;
                     }
-                    if (token.tokenType == PGNGame.TokenType.Terminator)
+                    if (token.tokenType == PGNTokenType.Terminator)
                     {
                         ResetPosition();
                         return;
@@ -92,6 +95,7 @@ namespace ChessPosition
         {
             Plies = new List<Ply>();
             repetitions = new Dictionary<PositionHash, int>();
+            PGNtokens = new List<PGNToken>();
 
             ResetPosition();
             PGNSource = "";
@@ -105,12 +109,18 @@ namespace ChessPosition
             curPly = 0;
             progressCounter = 0;
         }
+     
         public bool AdvancePosition()
         {
             return AdvancePosition(1);
         }
         public bool AdvancePosition(int nbrAhead)
         {
+            if (nbrAhead < 0)
+            {
+                BackPosition(-nbrAhead);
+                return true;
+            }
             /// advance game state - include castle rights, rep, ep and progress counters
             /// note the newly arrived at position in the repetition count ### test
             /// update the progress counters as appropriate
@@ -151,7 +161,7 @@ namespace ChessPosition
                 AdvancePosition();
         }
 
-        private void HandleTag(PGNGame.Tag t)
+        private void HandleTag(PGNTag t)
         {
             switch (t.key)
             {
@@ -193,22 +203,10 @@ namespace ChessPosition
             return CurrentPosition.ToFEN(progressCounter, curPly / 2 + 1);
         }
 
-
         private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
-        private static List<string> endMarkers = new List<string>() { "1-0", "0-1", "1/2-1/2", "*" };
-        private static List<string> gapMarkers = new List<string>() { "{}", "," };
         private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
-        private static Dictionary<char, Piece.PieceType> PieceMapping = new Dictionary<char, Piece.PieceType>()
-        {
-            { 'R', Piece.PieceType.Rook },
-            { 'N', Piece.PieceType.Knight },
-            { 'B', Piece.PieceType.Bishop },
-            { 'Q', Piece.PieceType.Queen },
-            { 'K', Piece.PieceType.King },
-            { 'P', Piece.PieceType.Pawn }
-        };
 
-        private void HandleMove(PGNGame.MoveString token)
+        private void HandleMove(PGNMoveString token)
         {
             int curPlyNumber = Plies.Count + 1;
             int curMoveNumber = (curPlyNumber - 1) / 2;
@@ -249,22 +247,25 @@ namespace ChessPosition
             {
                 Piece curPiece = new Piece(curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black, Piece.PieceType.Pawn);
                 Piece promoPiece = null;
+                Piece.PieceType thisPcType = Piece.PieceType.Invalid;
 
                 if (char.IsUpper(locString[0]))  // it's a piece designator, other than a P
                 {
-                    if (!PieceMapping.ContainsKey(locString[0]))
+                    thisPcType = Piece.FromChar(locString[0]);
+                    if (thisPcType == Piece.PieceType.Invalid)
                     {
                         // should handle the error more gracefully than this ...
                         System.Console.WriteLine("Couldn't properly process this move string: " + token);
                         return;
                     }
-                    curPiece.piece = PieceMapping[locString[0]];
+                    curPiece.piece = thisPcType;
                     locString = locString.Substring(1); // trim off the piece identifier
                 }
 
                 if (char.IsUpper(locString[locString.Length - 1]))   // it's a promotion designator...
                 {
-                    promoPiece = new Piece(curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black, PieceMapping[locString[locString.Length - 1]]);
+                    thisPcType = Piece.FromChar(locString[locString.Length - 1]);
+                    promoPiece = new Piece(curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black, thisPcType);
                     locString = locString.Substring(0, locString.Length - 1); // trim off the promotionidentifier
                 }
 

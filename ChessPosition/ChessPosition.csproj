@@ -44,7 +44,8 @@
     <Compile Include="Engines\Crafty.cs" />
     <Compile Include="Engines\Stockfish.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="PGNGame.cs" />
+    <Compile Include="PGNToken.cs" />
+    <Compile Include="PGNTokenizer.cs" />
     <Compile Include="Piece.cs" />
     <Compile Include="PlayerEnum.cs" />
     <Compile Include="Ply.cs" />
