@@ -16,6 +16,7 @@ namespace ChessPosition
         public delegate void AnalysisUpdateHandler();
         public event AnalysisUpdateHandler AnalysisUpdate;
 
+        public string lastEngineReply;
         public string lastAnalysisReply;
         public string lastResponse;
         public Analysis curAnalysis;
@@ -66,7 +67,7 @@ namespace ChessPosition
         public virtual void StartAnalysis(Game g)
         {
             // no idea how to instantiate this yet
-            SetPostion( g.CurrentPosition.ToFEN(0, 10));
+            SetPostion( g.ToFEN());
         }
         public virtual void SetPostion(string fenString)
         {
@@ -80,6 +81,7 @@ namespace ChessPosition
             while (thisHost.incoming.Count > 0)
             {
                 string s = thisHost.incoming[0];
+                lastEngineReply = s;
                 // ### this will be engine specific to turn string to analysis - for now display whatever you get
                 if (s != null && Analysis.isUCIstring(lastResponse = s))
                 {

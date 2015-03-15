@@ -11,8 +11,14 @@ namespace ChessPosition
         public char[] hashValue;
 
         char refZeroVal = '!';
-        static int hashLength = 40;
+        static int hashLength = 50;
         static int bitsPerChar = 6;
+
+        int gridOffset = 0;
+        int onMoveOffset = 64;
+        int castleRightsOffset = 65;
+        int epOffset = 69;
+        int currentPieceOffset = 77;
 
         public PositionHash(Position p)
         {
@@ -44,11 +50,6 @@ namespace ChessPosition
             /// include 50 move and position repetition info.  
             /// In this model, that's included in the game object, since it's game-specific context
 
-            int gridOffset = 0;
-            int onMoveOffset = 64;
-            int castleRightsOffset = 65;
-            int epOffset = 69;
-            int currentPieceOffset = 73;
 
             /// note, there are > 64 printable characters starting at ' ', so use anything close as 0...  '!' is one more and not whitespace
             /// ---------0         1         2         3
@@ -84,6 +85,12 @@ namespace ChessPosition
             SetBit(epOffset + 1, (p.epLoc.col & 0x02) != 0);
             SetBit(epOffset + 2, (p.epLoc.col & 0x04) != 0);
             SetBit(epOffset + 3, (p.epLoc.col & 0x08) != 0);
+            SetBit(epOffset + 4, (p.epLoc.row & 0x01) != 0);
+            SetBit(epOffset + 5, (p.epLoc.row & 0x02) != 0);
+            SetBit(epOffset + 6, (p.epLoc.row & 0x04) != 0);
+            SetBit(epOffset + 7, (p.epLoc.row & 0x08) != 0);
+
+            int thisPieceOffset = currentPieceOffset;
 
             for (byte i = 0; i < 64; i++)
             {
@@ -92,10 +99,10 @@ namespace ChessPosition
                     Piece thisPc = p.board[new Square((Square.Rank)(i / 8), (Square.File)(i % 8))];
                     string pcHash = Piece.Hash[(int)thisPc.piece];
 
-                    SetBit(currentPieceOffset++, thisPc.color == PlayerEnum.Black);
+                    SetBit(thisPieceOffset++, thisPc.color == PlayerEnum.Black);
                     for (int j = 0; j < pcHash.Length; j++)
                     {
-                        SetBit(currentPieceOffset++, pcHash[0] == '1');
+                        SetBit(thisPieceOffset++, pcHash[j] == '1');
                     }
                 }
             }
@@ -109,7 +116,7 @@ namespace ChessPosition
             Position outPos = new Position();
             outPos.board.Clear();
 
-            int currentPieceOffset = 72;
+            int currentRehydratePieceOffset = currentPieceOffset;
             // not used as mentioned above
             //int castleRightsOffset = 64;
             //int epOffset = 68;
@@ -118,12 +125,30 @@ namespace ChessPosition
             {
                 if (ReadBit(i))
                 {
-                    Piece thisPc = ReadPiece(ref currentPieceOffset);
+                    Piece thisPc = ReadPiece(ref currentRehydratePieceOffset);
                     outPos.board.Add( new Square((Square.Rank)(i / 8), (Square.File)(i % 8)), thisPc );
                 }
             }
 
+            outPos.onMove = ReadBit(onMoveOffset + 0) ? PlayerEnum.Black : PlayerEnum.White;
+
+            outPos.castleRights = GetByteFromBitOffset(castleRightsOffset, 4);
+
+            outPos.epLoc.col = GetByteFromBitOffset(epOffset, 4);
+            outPos.epLoc.row = GetByteFromBitOffset(epOffset+4, 4);
+
             return outPos;
+        }
+        byte GetByteFromBitOffset(int offset, int width)
+        {
+            byte outByte = 0;
+            for( int i=0; i<width; i++ )
+                if (ReadBit(offset + 0))
+                    outByte = (byte)(outByte | (0x01 << i));
+                else
+                    outByte = (byte)(outByte & ~(0x01 << i));
+
+            return outByte;
         }
 
         private Piece ReadPiece( ref int offset ) 

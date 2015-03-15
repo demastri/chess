@@ -36,6 +36,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stockfish", "Stockfish", "{
 		Engines\Stockfish\stockfish_5_32bit.exe = Engines\Stockfish\stockfish_5_32bit.exe
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crafty", "Crafty", "{1E77C457-5875-4592-9CC2-75F780C70516}"
+	ProjectSection(SolutionItems) = preProject
+		engines\crafty\book.bin = engines\crafty\book.bin
+		engines\crafty\book.lrn = engines\crafty\book.lrn
+		engines\crafty\books.bin = engines\crafty\books.bin
+		engines\crafty\Crafty-20.14.exe = engines\crafty\Crafty-20.14.exe
+		engines\crafty\crafty.rc = engines\crafty\crafty.rc
+		engines\crafty\default.bb = engines\crafty\default.bb
+		engines\crafty\default.wb = engines\crafty\default.wb
+		engines\crafty\engine.exe = engines\crafty\engine.exe
+		engines\crafty\game.001 = engines\crafty\game.001
+		engines\crafty\position.bin = engines\crafty\position.bin
+		engines\crafty\position.lrn = engines\crafty\position.lrn
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,5 +94,6 @@ Global
 		{ADC9B49F-4D36-44D4-AD53-FC41231450CD} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 		{2009788C-625D-45F7-AF04-DC21EC78D0E5} = {BE3FD0A3-D789-4BBE-9D7E-EB9D7BD9B485}
 		{A982F146-7A74-45B0-9FDB-6E6B7268BE37} = {41E16555-A148-4949-8895-339C67D895B3}
+		{1E77C457-5875-4592-9CC2-75F780C70516} = {41E16555-A148-4949-8895-339C67D895B3}
 	EndGlobalSection
 EndGlobal

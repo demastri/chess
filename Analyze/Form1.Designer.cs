@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.PGNLoc = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +41,9 @@
             this.TotalPliesLabel = new System.Windows.Forms.Label();
             this.TotalRatedLabel = new System.Windows.Forms.Label();
             this.UniquePosLabel = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.AnalysisIndexLabel = new System.Windows.Forms.Label();
+            this.lastAnalysisString = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,11 +148,36 @@
             this.UniquePosLabel.TabIndex = 8;
             this.UniquePosLabel.Text = "Unique Pos: ---";
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // AnalysisIndexLabel
+            // 
+            this.AnalysisIndexLabel.AutoSize = true;
+            this.AnalysisIndexLabel.Location = new System.Drawing.Point(13, 139);
+            this.AnalysisIndexLabel.Name = "AnalysisIndexLabel";
+            this.AnalysisIndexLabel.Size = new System.Drawing.Size(126, 13);
+            this.AnalysisIndexLabel.TabIndex = 9;
+            this.AnalysisIndexLabel.Text = "Current Analysis Index: ---";
+            // 
+            // lastAnalysisString
+            // 
+            this.lastAnalysisString.AutoSize = true;
+            this.lastAnalysisString.Location = new System.Drawing.Point(13, 240);
+            this.lastAnalysisString.Name = "lastAnalysisString";
+            this.lastAnalysisString.Size = new System.Drawing.Size(48, 13);
+            this.lastAnalysisString.TabIndex = 10;
+            this.lastAnalysisString.Text = "Analysis:";
+            // 
             // AnalyzeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.lastAnalysisString);
+            this.Controls.Add(this.AnalysisIndexLabel);
             this.Controls.Add(this.UniquePosLabel);
             this.Controls.Add(this.TotalRatedLabel);
             this.Controls.Add(this.TotalPliesLabel);
@@ -160,6 +189,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AnalyzeForm";
             this.Text = "BulkAnalyze";
+            this.Load += new System.EventHandler(this.AnalyzeForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -181,6 +211,9 @@
         private System.Windows.Forms.Label TotalPliesLabel;
         private System.Windows.Forms.Label TotalRatedLabel;
         private System.Windows.Forms.Label UniquePosLabel;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label AnalysisIndexLabel;
+        private System.Windows.Forms.Label lastAnalysisString;
     }
 }
 

@@ -18,6 +18,11 @@ namespace Analyze
 
         Dictionary<PositionHash, Analysis> totalAnalysis;
         Dictionary<PositionHash, int> repetitionCount;
+        Engine AnalysisEngine = null;
+        int curAnalysisPositionIndex = -1;
+        DateTime curAnalysisStartTime;
+        TimeSpan posAnalysisTimeLimit;
+        bool initAnalysis;
 
         public AnalyzeForm()
         {
@@ -44,6 +49,12 @@ namespace Analyze
         }
         void AnalysisEngine_AnalysisUpdate()
         {
+            if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
+                lastAnalysisString.Text = AnalysisEngine.curAnalysis.ToString();
+            else
+                if (AnalysisEngine != null )
+                    lastAnalysisString.Text = AnalysisEngine.lastEngineReply;
+
         }
         private void RunMenuItem_Click(object sender, EventArgs e)
         {
@@ -57,7 +68,7 @@ namespace Analyze
 
                 Dictionary<PositionHash, Analysis> totalAnalysis = new Dictionary<PositionHash, Analysis>();
                 // seed with start position
-                totalAnalysis[Position.StartPosition.Hash] = GenerateAnalysis(engine, Position.StartPosition);
+                totalAnalysis[Position.StartPosition.Hash] = null;  // StartAnalysisAsync(engine, Position.StartPosition);
                 Analysis refAnalysis;
                 Analysis newAnalysis;
 
@@ -72,7 +83,7 @@ namespace Analyze
                         g.AdvancePosition();
 
                         if (totalAnalysis[g.CurrentPosition.Hash] == null)
-                            totalAnalysis[g.CurrentPosition.Hash] = GenerateAnalysis(engine, g.CurrentPosition);
+                            totalAnalysis[g.CurrentPosition.Hash] = null; // StartAnalysisAsync(engine, g.CurrentPosition);
                         newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
 
                         decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
@@ -123,42 +134,13 @@ namespace Analyze
         private void AnalysisButton_Click(object sender, EventArgs e)
         {
             string EngineName = "Stockfish";
-            Engine engine = Engine.InitEngine(EngineName);
+            AnalysisEngine = Engine.InitEngine(EngineName);
 
-            engine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
+            AnalysisEngine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
 
             totalAnalysis = new Dictionary<PositionHash, Analysis>();
 
-            foreach (PositionHash ph in repetitionCount.Keys)   // initialized on file load
-            {
-                totalAnalysis[Position.StartPosition.Hash] = GenerateAnalysis(engine, ph.Rehydrate());
-            }
-
-            Analysis refAnalysis;
-            Analysis newAnalysis;
-            foreach (Game g in GameRef)
-            {
-                UpdateGameDigest(g.RatingWhite, g.RatingBlack, g.Plies.Last().MoveNumber);
-                g.ResetPosition();
-                while (!g.EndOfGame)
-                {
-                    refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-                    g.AdvancePosition();
-                    newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-
-                    decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
-                    bool blunder = delta >= 2.5m;
-                    if (blunder)
-                        Console.WriteLine("got one...");
-
-                    int MoveNumber = (g.curPly / 2) + 1;
-                    WriteMoveResult(g.OnMove, MoveNumber,
-                        g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
-                        g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
-                        delta);
-                }
-            }
-
+            initAnalysis = true;
         }
 
         private Dictionary<PositionHash, int> IdentifyUniquePositions()
@@ -203,14 +185,78 @@ namespace Analyze
             }
             return outCount;
         }
-        private Analysis GenerateAnalysis(Engine e, Position p)
+        private void StartAnalysisAsync(Position p)
         {
-            e.CheckProgress();
-            e.StartAnalysis(p);
-            System.Threading.Thread.Sleep(2000);
-            e.CheckProgress();
-            e.Stop();
-            return e.curAnalysis;
+            curAnalysisStartTime = DateTime.Now;
+            AnalysisEngine.CheckProgress();
+            AnalysisEngine.StartAnalysis(p);
+        }
+
+        private void AnalyzeForm_Load(object sender, EventArgs e)
+        {
+            curAnalysisPositionIndex = -1;
+            AnalysisEngine = null;
+            initAnalysis = false;
+            curAnalysisStartTime = DateTime.Now;
+            posAnalysisTimeLimit = new TimeSpan(0, 0, 0, 0, 2000);
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (initAnalysis)
+                curAnalysisPositionIndex = -1;
+
+            if (AnalysisEngine != null)
+                AnalysisEngine.CheckProgress();
+            TimeSpan curAnalysisTime = DateTime.Now - curAnalysisStartTime;
+            if (initAnalysis || (curAnalysisPositionIndex >= 0 && curAnalysisTime > posAnalysisTimeLimit))
+            {
+                if( !initAnalysis )
+                    StoreAnalysis();
+                if (++curAnalysisPositionIndex < repetitionCount.Count)
+                    StartAnalysisAsync(repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate());
+                else
+                {
+                    AnalyzeDeltas();
+                    curAnalysisPositionIndex = -1;
+                }
+            }
+            AnalysisIndexLabel.Text = "Current Analysis Index: " + curAnalysisPositionIndex.ToString();
+            initAnalysis = false;
+        }
+
+        private void StoreAnalysis()
+        {
+            totalAnalysis[repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate().Hash] = AnalysisEngine.curAnalysis;
+        }
+
+        private void AnalyzeDeltas()
+        {
+            Analysis refAnalysis;
+            Analysis newAnalysis;
+            foreach (Game g in GameRef)
+            {
+                UpdateGameDigest(g.RatingWhite, g.RatingBlack, g.Plies.Last().MoveNumber);
+                g.ResetPosition();
+                while (!g.EndOfGame)
+                {
+                    refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
+                    g.AdvancePosition();
+                    newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
+
+                    decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
+                    bool blunder = delta >= 2.5m;
+                    if (blunder)
+                        Console.WriteLine("got one...");
+
+                    int MoveNumber = (g.curPly / 2) + 1;
+                    WriteMoveResult(g.OnMove, MoveNumber,
+                        g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
+                        g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
+                        delta);
+                }
+            }
         }
     }
 }
