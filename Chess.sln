@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueConsumer", "QueueMgt\Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueCommon", "QueueMgt\QueueCommon\QueueCommon.csproj", "{2DFEAA97-E378-4005-8C70-DA85919C78C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisFarmConsole", "AnalysisFarmConsole\AnalysisFarmConsole.csproj", "{59306B2C-49C6-497B-A468-1E4BCE1906BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{2DFEAA97-E378-4005-8C70-DA85919C78C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DFEAA97-E378-4005-8C70-DA85919C78C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DFEAA97-E378-4005-8C70-DA85919C78C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59306B2C-49C6-497B-A468-1E4BCE1906BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59306B2C-49C6-497B-A468-1E4BCE1906BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59306B2C-49C6-497B-A468-1E4BCE1906BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59306B2C-49C6-497B-A468-1E4BCE1906BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

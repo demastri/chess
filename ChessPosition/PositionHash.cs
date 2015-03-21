@@ -150,7 +150,7 @@ namespace ChessPosition
         {
             byte outByte = 0;
             for( int i=0; i<width; i++ )
-                if (ReadBit(offset + 0))
+                if (ReadBit(offset + i))
                     outByte = (byte)(outByte | (0x01 << i));
                 else
                     outByte = (byte)(outByte & ~(0x01 << i));

@@ -13,22 +13,22 @@ namespace ChessPosition.Engines
 
         public Stockfish()
         {
-            engineLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
-            //engineLoc = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
-            myEngineProcess = new HostWrapper(engineLoc, true, ProcessControl);
+            //engineLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
+            engineLoc = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
+            myEngineProcess = new HostWrapper(engineLoc, true, ProcessControl, false);
 
             myEngineProcess.Start();
         }
-        public override void SetPostion(string fenString, EngineParameters ep)
+        public override void SetPostion(AnalysisRequest ar)
         {
-            base.SetPostion(fenString);
+            base.SetPostion(ar);
 
             myEngineProcess.WriteToClient("stop");
-            myEngineProcess.WriteToClient("position fen " + fenString);
-            if (ep.searchDepth > 0)
-                myEngineProcess.WriteToClient("go depth "+ep.searchDepth.ToString());
+            myEngineProcess.WriteToClient("position fen " + ar.FEN);
+            if (ar.param.searchDepth > 0)
+                myEngineProcess.WriteToClient("go depth "+ar.param.searchDepth.ToString());
             else
-                myEngineProcess.WriteToClient("go movetime " + ep.searchTimeMS.ToString());
+                myEngineProcess.WriteToClient("go movetime " + ar.param.searchTimeMS.ToString());
         }
         public override void SetPostion(string fenString)
         {
@@ -37,6 +37,10 @@ namespace ChessPosition.Engines
             myEngineProcess.WriteToClient("stop");
             myEngineProcess.WriteToClient("position fen " + fenString);
             myEngineProcess.WriteToClient("go depth 20");
+        }
+        public override void Status()
+        {
+            myEngineProcess.WriteToClient("uci");
         }
         public override void Stop()
         {

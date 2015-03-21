@@ -343,7 +343,7 @@ namespace ChessPosition
                 + (((castleRights & (byte)CastleRights.KS_Black) != 0) ? "k" : "")
                 + (((castleRights & (byte)CastleRights.QS_Black) != 0) ? "q" : "")
                 + (castleRights == 0 ? "- " : " ")
-                + (epLoc.col == (byte)Square.File.NONE ? "- " : ((epLoc.col + 'a').ToString() + (epLoc.row + '1').ToString() + " "))
+                + (epLoc.col == (byte)Square.File.NONE ? "- " : (epLoc.ToString() + " "))
                 + progress.ToString() + " "
                 + moveNbr.ToString();
 

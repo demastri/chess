@@ -67,8 +67,9 @@ namespace ChessPosition
         /// </summary>
 
         public delegate void AnalysisUpdateHandler(int analysisID);
+        public delegate void AnalysisCompleteHandler(Analysis analysis);
         public event AnalysisUpdateHandler AnalysisUpdateEvent;
-        public event AnalysisUpdateHandler AnalysisCompleteEvent;
+        public event AnalysisCompleteHandler AnalysisCompleteEvent;
 
         List<AnalysisRequest> queuedRequests = null;
         int requestIDSeed;
@@ -119,8 +120,10 @@ namespace ChessPosition
         }
         void ListenerCallback(byte[] result)
         {
-            // turn this into an analysis no
+            // turn this into an analysis message
             Console.WriteLine("Returned..." + System.Text.Encoding.Default.GetString(result));
+            Analysis ar = new Analysis(System.Text.Encoding.Default.GetString(result), true);
+            AnalysisCompleteEvent( ar );
         }
     }
 }

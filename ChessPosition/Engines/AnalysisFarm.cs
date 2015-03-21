@@ -16,14 +16,23 @@ namespace ChessPosition
         /// when any return, we should post the analysis back to the return queue
 
         List<Engine> engines;
+        private System.Timers.Timer EngineManager;
 
         RabbitMQWrapper myPositionQueue;
         RabbitMQWrapper myResultsQueue;
 
         List<AnalysisRequest> rawRequests;
+        int engineCount;
 
-        public AnalysisFarm()
+        public AnalysisFarm(int nbrEngines, System.ComponentModel.ISynchronizeInvoke syncObj)
         {
+            engineCount = nbrEngines;
+            InitTick(syncObj);
+        }
+        private void EngineTick(object sender, EventArgs e)
+        {
+            foreach (Engine en in engines)
+                en.CheckProgress();
         }
 
         public void Start()
@@ -31,20 +40,53 @@ namespace ChessPosition
             rawRequests = new List<AnalysisRequest>();
             InitEngines();
             InitQueues();
+            StartTick();
+        }
+
+        private void InitTick(System.ComponentModel.ISynchronizeInvoke syncObj)
+        {
+            EngineManager = new System.Timers.Timer(250);
+            EngineManager.SynchronizingObject = syncObj;
+            EngineManager.AutoReset = true;
+            EngineManager.Elapsed += EngineTick;
+        }
+        private void StartTick()
+        {
+            EngineManager.Start();
         }
 
         public void Shutdown()
+        { 
+            QuitEngines();
+            QuitQueues();
+        }
+        public void QuitEngines()
         {
-            myPositionQueue.CloseConnections();
-            myResultsQueue.CloseConnections();
+            foreach (Engine e in engines)
+                e.Quit();
+        }
+        public void QuitQueues()
+        {
+            try
+            {
+                myPositionQueue.CloseConnections();
+                myResultsQueue.CloseConnections();
+            }
+            catch (Exception e) { }
         }
 
         private void InitEngines()
         {
             engines = new List<Engine>();
-            Engine nextEngine = new Engines.Stockfish();
-            nextEngine.AnalysisCompleteEvent += AnalysisEngine_AnalysisComplete;
-            engines.Add(nextEngine);
+            Engine nextEngine;
+
+            for (int i = 0; i < engineCount; i++)
+            {
+                nextEngine = new Engines.Stockfish();
+                nextEngine.AnalysisCompleteEvent += AnalysisEngine_AnalysisComplete;
+                engines.Add(nextEngine);
+            }
+            //nextEngine.Status();
         }
         private void InitQueues()
         {
@@ -58,24 +100,29 @@ namespace ChessPosition
             // turn this into an analysis request, find an engine and go
             // ###requests will certainly outstrip our ability to process them
             Console.WriteLine("something happened: " + System.Text.Encoding.Default.GetString(result));
-            //myResultsQueue.PostMessage("Returning..." + System.Text.Encoding.Default.GetString(result));
 
             rawRequests.Add(new AnalysisRequest(System.Text.Encoding.Default.GetString(result)));
             ScheduleTask();
         }
         private void ScheduleTask()
         {
-            foreach (AnalysisRequest ar in rawRequests)
+            int scheduled = -1;
+            for (int i = 0; i < rawRequests.Count && scheduled < 0; i++)
             {
+                AnalysisRequest ar = rawRequests[i];
                 if (ar.Status == "Waiting")
                 {
-                    foreach (Engine e in engines)
+                    for (int j = 0; j < engines.Count; j++)
                     {
+                        Engine e = engines[j];
                         if (e.AnalysisComplete())
                         {
-                            rawRequests.RemoveAt(0);
+                            Console.WriteLine("Analysis started: " + ar.thisID);
+                            scheduled = i;
                             ar.Status = "In Process";
-                            e.SetPostion(ar.FEN, ar.param);
+                            ar.EngineInstance = j;
+                            e.SetPostion(ar);
+                            break;
                         }
                     }
                 }
@@ -83,9 +130,15 @@ namespace ChessPosition
         }
         void AnalysisEngine_AnalysisComplete(int thisID)  // needs to refer to the actual analysis request...
         {
+            AnalysisRequest ar = rawRequests[thisID - 1];
+            Engine en = engines[ar.EngineInstance];
             ///find the right ar
             ///copy the curanalysis
             ///post the curanalysis as a new message
+            Console.WriteLine("Analysis completed: " + thisID + " " + engines[ar.EngineInstance].curAnalysis.Score.ToString() + " " + engines[ar.EngineInstance].curAnalysis.bestLine[0]);
+            myResultsQueue.PostMessage(en.curAnalysis.ToQueueString());
+
+            ScheduleTask();
         }
 
     }

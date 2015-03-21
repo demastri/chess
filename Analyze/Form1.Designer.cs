@@ -44,6 +44,8 @@
             this.AnalysisIndexLabel = new System.Windows.Forms.Label();
             this.lastAnalysisString = new System.Windows.Forms.Label();
             this.UseFarm = new System.Windows.Forms.CheckBox();
+            this.nbrEngines = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -173,11 +175,36 @@
             this.UseFarm.Text = "Use Farm";
             this.UseFarm.UseVisualStyleBackColor = true;
             // 
+            // nbrEngines
+            // 
+            this.nbrEngines.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.nbrEngines.FormattingEnabled = true;
+            this.nbrEngines.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "4",
+            "6"});
+            this.nbrEngines.Location = new System.Drawing.Point(145, 110);
+            this.nbrEngines.Name = "nbrEngines";
+            this.nbrEngines.Size = new System.Drawing.Size(45, 21);
+            this.nbrEngines.TabIndex = 12;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(94, 116);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Engines";
+            // 
             // AnalyzeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nbrEngines);
             this.Controls.Add(this.UseFarm);
             this.Controls.Add(this.lastAnalysisString);
             this.Controls.Add(this.AnalysisIndexLabel);
@@ -192,6 +219,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AnalyzeForm";
             this.Text = "BulkAnalyze";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AnalyzeForm_FormClosing);
             this.Load += new System.EventHandler(this.AnalyzeForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -217,6 +245,8 @@
         private System.Windows.Forms.Label AnalysisIndexLabel;
         private System.Windows.Forms.Label lastAnalysisString;
         private System.Windows.Forms.CheckBox UseFarm;
+        private System.Windows.Forms.ComboBox nbrEngines;
+        private System.Windows.Forms.Label label1;
     }
 }
 

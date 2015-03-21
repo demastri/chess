@@ -44,6 +44,14 @@ namespace ChessPosition
             loc = (byte)(((r & 0x0f) << 4) | (c & 0x0f));
         }
 
+        public string ToString()
+        {
+            char [] outArr = new char[2];
+            outArr[0] = (char)(col+'a');
+            outArr[1] = (char)(row+'1');
+            return new string( outArr );
+        }
+
         public static bool operator ==(Square lhs, Square rhs)
         {
             if (object.ReferenceEquals(null, lhs) && object.ReferenceEquals(null, rhs))

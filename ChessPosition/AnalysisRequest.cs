@@ -16,6 +16,7 @@ namespace ChessPosition
         DateTime completionTime;
         Analysis thisAnalysis;
         public string Status;
+        public int EngineInstance;
 
         public AnalysisRequest(string paramStr )
         {
@@ -38,6 +39,7 @@ namespace ChessPosition
 
         public void Init(EngineParameters ep, string fenString, int id)
         {
+            EngineInstance = -1;
             thisID = id;
             param = ep;
             FEN = fenString;

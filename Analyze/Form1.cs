@@ -60,13 +60,22 @@ namespace Analyze
             else
                 AnalyzeViaEngine();
         }
+        DateTime farmStartTime;
         private void AnalyzeViaFarm()
         {
+            if (thisFarm != null)
+            {
+                thisFarm.Shutdown();
+                thisFarm = null;
+            }
             if (thisFarm == null)
             {
-                thisFarm = new AnalysisFarm();
+                thisFarm = new AnalysisFarm(Convert.ToInt32(nbrEngines.Text), this);
                 thisFarm.Start();
             }
+            farmStartTime = DateTime.Now;
+            totalAnalysis = new Dictionary<PositionHash, Analysis>();
+
             completedAnalysisRequests = 0;
             AnalysisIndexLabel.Text = "Current Analysis Index: 0";
 
@@ -81,10 +90,24 @@ namespace Analyze
             foreach (PositionHash ph in repetitionCount.Keys)
                 thisFarmClient.SubmitAnalysisRequest(eParams, ph.Rehydrate().ToFEN(1,1));
         }
-        void AnalysisEngine_AnalysisCompleteV2(int thisID)  // needs to refer to the actual analysis request...
+        void AnalysisEngine_AnalysisCompleteV2(Analysis a)  // needs to refer to the actual analysis request...
         {
-            StoreAnalysis(thisID);
-            AnalysisIndexLabel.Text = "Current Analysis Index: " + (++completedAnalysisRequests).ToString();
+            StoreAnalysis(a);
+            TimeSpan runTime = DateTime.Now - farmStartTime;
+            UpdateLabelText( "Cur Index: " + (curAnalysisPositionIndex=a.AnalysisID).ToString() + " Ttl Rtnd: " + (++completedAnalysisRequests).ToString() + " Run Time: "+runTime.ToString());
+        }
+        delegate void SetTextCallback(string s);
+        private void UpdateLabelText(string s)
+        {
+            if (AnalysisIndexLabel.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(UpdateLabelText);
+                Invoke(d, new object[] { s });
+            }
+            else
+            {
+                AnalysisIndexLabel.Text = s;
+            }
         }
 
         private void AnalyzeViaEngine()
@@ -122,7 +145,17 @@ namespace Analyze
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (UseFarm.Checked)
+            {
+                if (completedAnalysisRequests == repetitionCount.Count && curAnalysisPositionIndex != -1)
+                {
+                    AnalyzeDeltas();
+                    curAnalysisPositionIndex = -1;
+                    thisFarm.Shutdown();
+                    thisFarmClient.Quit();
+                    thisFarmClient = null;
+                }
                 return;
+            }
 
             if (initAnalysis)
                 curAnalysisPositionIndex = -1;
@@ -131,12 +164,12 @@ namespace Analyze
                 AnalysisEngine.CheckProgress();
             TimeSpan curAnalysisTime = DateTime.Now - curAnalysisStartTime;
             if (initAnalysis || (curAnalysisPositionIndex >= 0 &&
-                (curAnalysisTime > posAnalysisTimeLimit || AnalysisEngine.AnalysisComplete())))
+                (/*curAnalysisTime > posAnalysisTimeLimit ||*/ AnalysisEngine.AnalysisComplete())))
             {
                 if (AnalysisEngine.curAnalysis != null && AnalysisEngine.curAnalysis.isComplete)
                     System.Console.WriteLine("ran to the end!");
                 if (!initAnalysis)
-                    StoreAnalysis(curAnalysisPositionIndex);
+                    StoreAnalysis(AnalysisEngine.curAnalysis);
                 if (++curAnalysisPositionIndex < repetitionCount.Count)
                     StartAnalysisAsync(repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate());
                 else
@@ -233,9 +266,9 @@ namespace Analyze
         }
 
 
-        private void StoreAnalysis(int id)
+        private void StoreAnalysis(Analysis analysis)
         {
-            totalAnalysis[repetitionCount.ElementAt(id).Key.Rehydrate().Hash] = AnalysisEngine.curAnalysis;
+            totalAnalysis[repetitionCount.ElementAt(analysis.AnalysisID-1).Key.Rehydrate().Hash] = analysis;
         }
 
         private void AnalyzeDeltas()
@@ -249,25 +282,33 @@ namespace Analyze
                 while (!g.EndOfGame)
                 {
                     refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
+                    int MoveNumber = (g.curPly / 2) + 1;
+
                     g.AdvancePosition();
                     newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-
-                    int MoveNumber = (g.curPly / 2) + 1;
                     decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
-
                     bool blunder = IsThisABlunder(MoveNumber, delta, refAnalysis.Score);
 
+                    g.AdvancePosition(-1);
                     WriteMoveResult(g.OnMove, MoveNumber,
                         g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
                         g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
                         delta,
                         blunder);
+                    g.AdvancePosition();
                 }
             }
         }
+        string logLocation = "C:\\HostWrapper\\analysys.txt";
         public void WriteMoveResult(PlayerEnum onMove, int moveNbr, int moveRating, int oppRating, decimal delta, bool isBlunder)
         {
+            string outString = String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|",
+                (onMove == PlayerEnum.White ? "w" : "b"), moveNbr, moveRating, oppRating, delta, (isBlunder ? "Y" : "N"));
             // ### we can aggregate them however we want from here...
+            StreamWriter log = new StreamWriter(logLocation, true);
+            log.WriteLine(outString);
+            log.Flush();
+            log.Close();
         }
         public void UpdateGameDigest(int RatingWhite, int RatingBlack, int MoveCount)
         {
@@ -290,6 +331,17 @@ namespace Analyze
             if (blunder)
                 Console.WriteLine("got one...");
             return blunder;
+        }
+
+        private void AnalyzeForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (thisFarmClient != null)
+                thisFarmClient.Stop();
+            if (thisFarm != null)
+                thisFarm.Shutdown();
+
+            thisFarmClient = null;
+            thisFarm = null;
         }
 
     }

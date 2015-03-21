@@ -26,23 +26,47 @@ namespace ChessPosition
         public string moveToPonder;
         public List<string> bestLine;
         public decimal Score;
-
         PlayerEnum posOnMove;
-        private int parseTokenIndex;
-        private string[] parseTokens;
 
         public Analysis(PlayerEnum onMove)
         {
             posOnMove = onMove;
             Init();
         }
-        public Analysis(string uciString)
+        public Analysis(string inputString, bool fromQueue)
         {
             Init();
-            UpdateWithUCIString(uciString);
+            if (fromQueue)
+                UpdateWithQueueString(inputString);
+            else
+                UpdateWithUCIString(inputString);
+        }
+        public void UpdateWithQueueString(string queueString)
+        {
+            string[] tokens = queueString.Split('|');
+
+            int curIndex = (tokens[0].Trim() == "" ? 1 : 0);
+
+            AnalysisID = Convert.ToInt32(tokens[curIndex++]);
+            isComplete = (tokens[curIndex++] == "Y");
+            searchDepthPly = Convert.ToInt32(tokens[curIndex++]);
+            selectiveSearchDepthPly = Convert.ToInt32(tokens[curIndex++]);
+            searchTimeMS = Convert.ToInt32(tokens[curIndex++]);
+            searchNodes = Convert.ToInt32(tokens[curIndex++]);
+            searchRateNPS = Convert.ToInt32(tokens[curIndex++]);
+            moveToPonder = tokens[curIndex++];
+            Score = Convert.ToDecimal(tokens[curIndex++]);
+            posOnMove = (tokens[curIndex++] == "w" ? PlayerEnum.White : PlayerEnum.Black);
+
+            bestLine = new List<string>();
+            while (curIndex < tokens.Count()  )
+                bestLine.Add(tokens[curIndex++]);            
         }
         public void UpdateWithUCIString(string uciString)
         {
+            int parseTokenIndex;
+            string[] parseTokens;
+
             int placeVal;
             parseTokens = uciString.Split(' ');
             for (parseTokenIndex = 0; parseTokenIndex < parseTokens.Count(); parseTokenIndex++)
@@ -137,7 +161,33 @@ namespace ChessPosition
                 Score, searchNodes, searchRateNPS, (bestLine.Count > 0 ? bestLine[0] : "NA" ), searchDepthPly);
 
         }
+        /// <summary>
+        /// public int AnalysisID;
+        /// public bool isComplete;
+        /// public int searchDepthPly;
+        /// public int selectiveSearchDepthPly;
+        /// public long searchTimeMS;
+        /// public long searchNodes;
+        /// public int searchRateNPS;
+        /// public string moveToPonder;
+        /// public List<string> bestLine;
+        /// public decimal Score;
+        /// 
+        /// PlayerEnum posOnMove;
+        /// private int parseTokenIndex;
+        /// private string[] parseTokens;
 
+        public string ToQueueString()
+        {
+            string outString = "";
+            outString = String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|", 
+                AnalysisID, (isComplete ? "Y" : "N"), searchDepthPly, selectiveSearchDepthPly, 
+                searchTimeMS, searchNodes, searchRateNPS, moveToPonder, Score, (posOnMove == PlayerEnum.White ? "w" : "b")
+                );
+            foreach (string move in bestLine)
+                outString += move + "|";
+            return outString;
+        }
         private void Init()
         {
             searchDepthPly = selectiveSearchDepthPly = searchRateNPS = -1;

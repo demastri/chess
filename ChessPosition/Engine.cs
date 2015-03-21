@@ -13,7 +13,7 @@ namespace ChessPosition
         protected HostWrapper myEngineProcess;
         protected string engineLoc;
 
-        public delegate void AnalysisUpdateHandler( int analysisID );
+        public delegate void AnalysisUpdateHandler(int analysisID);
         public event AnalysisUpdateHandler AnalysisUpdateEvent;
         public event AnalysisUpdateHandler AnalysisCompleteEvent;
 
@@ -58,7 +58,11 @@ namespace ChessPosition
         }
         public virtual void Quit()
         {
+            myEngineProcess.Cleanup();
             running = false;
+        }
+        public virtual void Status()
+        {
         }
         public virtual bool AnalysisComplete()
         {
@@ -72,12 +76,13 @@ namespace ChessPosition
         public virtual void StartAnalysis(Game g)
         {
             // no idea how to instantiate this yet
-            SetPostion( g.ToFEN());
+            SetPostion(g.ToFEN());
         }
-        public virtual void SetPostion(string fenString, EngineParameters ep)
+        public virtual void SetPostion(AnalysisRequest ar)
         {
-            PlayerEnum onMove = (fenString[fenString.IndexOf(' ') + 1] == 'w' ? PlayerEnum.White : PlayerEnum.Black);
+            PlayerEnum onMove = (ar.FEN[ar.FEN.IndexOf(' ') + 1] == 'w' ? PlayerEnum.White : PlayerEnum.Black);
             curAnalysis = new Analysis(onMove);
+            curAnalysis.AnalysisID = ar.thisID;
             running = true;
         }
         public virtual void SetPostion(string fenString)
@@ -88,10 +93,11 @@ namespace ChessPosition
         }
         public int ProcessControl(HostWrapper thisHost)
         {
-            System.Threading.Thread.Sleep(50);
             while (thisHost.incoming.Count > 0)
             {
                 string s = thisHost.incoming[0];
+                myEngineProcess.WriteLog("Incoming -> " + s);
+
                 lastEngineReply = s;
                 // ### this will be engine specific to turn string to analysis - for now display whatever you get
                 if (s != null && Analysis.isUCIstring(lastResponse = s))
@@ -101,23 +107,25 @@ namespace ChessPosition
                     RaiseAnalysisUpdate(curAnalysis.AnalysisID);
                 }
                 thisHost.incoming.RemoveAt(0);
-                if (AnalysisComplete()&&curAnalysis!=null)
+                if (AnalysisComplete() && curAnalysis != null)
                     RaiseAnalysisComplete(curAnalysis.AnalysisID);
             }
             return running ? HostWrapper.IsRunning : HostWrapper.IsEnding;
         }
         public virtual void CheckProgress()
         {
-            if( myEngineProcess != null )
+            if (myEngineProcess != null)
                 myEngineProcess.CheckProgress();
         }
         protected void RaiseAnalysisUpdate(int analysisID)
         {
-            AnalysisUpdateEvent(analysisID);
+            if (AnalysisUpdateEvent != null)
+                AnalysisUpdateEvent(analysisID);
         }
         protected void RaiseAnalysisComplete(int analysisID)
         {
-            AnalysisCompleteEvent(analysisID);
+            if (AnalysisCompleteEvent != null)
+                AnalysisCompleteEvent(analysisID);
         }
     }
 }

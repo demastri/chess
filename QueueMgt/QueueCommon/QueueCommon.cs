@@ -130,9 +130,15 @@ namespace QueueCommon
         }
         public void PostMessage(string someMessage)
         {
-            byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(someMessage);
-            channel.BasicPublish(exchangeName, routingKey, null, messageBodyBytes);
-            //Console.WriteLine("Posting message " + (++messagesSent).ToString());
+            try
+            {
+                byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(someMessage);
+                channel.BasicPublish(exchangeName, routingKey, null, messageBodyBytes);
+                //Console.WriteLine("Posting message " + (++messagesSent).ToString());
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         public void PostTestMessages()
