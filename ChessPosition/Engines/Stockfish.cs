@@ -14,10 +14,21 @@ namespace ChessPosition.Engines
         public Stockfish()
         {
             engineLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
-            engineLoc = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
+            //engineLoc = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
             myEngineProcess = new HostWrapper(engineLoc, true, ProcessControl);
 
             myEngineProcess.Start();
+        }
+        public override void SetPostion(string fenString, EngineParameters ep)
+        {
+            base.SetPostion(fenString);
+
+            myEngineProcess.WriteToClient("stop");
+            myEngineProcess.WriteToClient("position fen " + fenString);
+            if (ep.searchDepth > 0)
+                myEngineProcess.WriteToClient("go depth "+ep.searchDepth.ToString());
+            else
+                myEngineProcess.WriteToClient("go movetime " + ep.searchTimeMS.ToString());
         }
         public override void SetPostion(string fenString)
         {

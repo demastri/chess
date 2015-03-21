@@ -13,8 +13,9 @@ namespace ChessPosition
         protected HostWrapper myEngineProcess;
         protected string engineLoc;
 
-        public delegate void AnalysisUpdateHandler();
-        public event AnalysisUpdateHandler AnalysisUpdate;
+        public delegate void AnalysisUpdateHandler( int analysisID );
+        public event AnalysisUpdateHandler AnalysisUpdateEvent;
+        public event AnalysisUpdateHandler AnalysisCompleteEvent;
 
         public string lastEngineReply;
         public string lastAnalysisReply;
@@ -59,6 +60,10 @@ namespace ChessPosition
         {
             running = false;
         }
+        public virtual bool AnalysisComplete()
+        {
+            return curAnalysis == null || curAnalysis.isComplete;
+        }
         public virtual void StartAnalysis(Position pos)
         {
             // no idea how to instantiate this yet
@@ -68,6 +73,12 @@ namespace ChessPosition
         {
             // no idea how to instantiate this yet
             SetPostion( g.ToFEN());
+        }
+        public virtual void SetPostion(string fenString, EngineParameters ep)
+        {
+            PlayerEnum onMove = (fenString[fenString.IndexOf(' ') + 1] == 'w' ? PlayerEnum.White : PlayerEnum.Black);
+            curAnalysis = new Analysis(onMove);
+            running = true;
         }
         public virtual void SetPostion(string fenString)
         {
@@ -87,9 +98,11 @@ namespace ChessPosition
                 {
                     lastAnalysisReply = s;
                     curAnalysis.UpdateWithUCIString(lastAnalysisReply);
+                    RaiseAnalysisUpdate(curAnalysis.AnalysisID);
                 }
                 thisHost.incoming.RemoveAt(0);
-                RaiseAnalysisUpdate();
+                if (AnalysisComplete()&&curAnalysis!=null)
+                    RaiseAnalysisComplete(curAnalysis.AnalysisID);
             }
             return running ? HostWrapper.IsRunning : HostWrapper.IsEnding;
         }
@@ -98,9 +111,13 @@ namespace ChessPosition
             if( myEngineProcess != null )
                 myEngineProcess.CheckProgress();
         }
-        protected void RaiseAnalysisUpdate()
+        protected void RaiseAnalysisUpdate(int analysisID)
         {
-            AnalysisUpdate();
+            AnalysisUpdateEvent(analysisID);
+        }
+        protected void RaiseAnalysisComplete(int analysisID)
+        {
+            AnalysisCompleteEvent(analysisID);
         }
     }
 }

@@ -47,63 +47,106 @@ namespace Analyze
                 UniquePosLabel.Text = "Unique Pos: ---";
             }
         }
-        void AnalysisEngine_AnalysisUpdate()
+
+        int completedAnalysisRequests;
+        AnalysisFarmClient thisFarmClient = null;
+
+        AnalysisFarm thisFarm = null;
+
+        private void AnalysisButton_Click(object sender, EventArgs e)
+        {
+            if (UseFarm.Checked)
+                AnalyzeViaFarm();
+            else
+                AnalyzeViaEngine();
+        }
+        private void AnalyzeViaFarm()
+        {
+            if (thisFarm == null)
+            {
+                thisFarm = new AnalysisFarm();
+                thisFarm.Start();
+            }
+            completedAnalysisRequests = 0;
+            AnalysisIndexLabel.Text = "Current Analysis Index: 0";
+
+            string EngineName = "Stockfish";
+            EngineParameters eParams = new EngineParameters(EngineName, 20, -1);
+
+            thisFarmClient = new AnalysisFarmClient(this);
+
+            // thisFarm.AnalysisUpdateEvent += AnalysisEngine_AnalysisUpdate;   // probably not needed for this app...
+            thisFarmClient.AnalysisCompleteEvent += AnalysisEngine_AnalysisCompleteV2;
+
+            foreach (PositionHash ph in repetitionCount.Keys)
+                thisFarmClient.SubmitAnalysisRequest(eParams, ph.Rehydrate().ToFEN(1,1));
+        }
+        void AnalysisEngine_AnalysisCompleteV2(int thisID)  // needs to refer to the actual analysis request...
+        {
+            StoreAnalysis(thisID);
+            AnalysisIndexLabel.Text = "Current Analysis Index: " + (++completedAnalysisRequests).ToString();
+        }
+
+        private void AnalyzeViaEngine()
+        {
+            string EngineName = "Stockfish";
+            AnalysisEngine = Engine.InitEngine(EngineName);
+
+            AnalysisEngine.AnalysisUpdateEvent += AnalysisEngine_AnalysisUpdate;
+            AnalysisEngine.AnalysisCompleteEvent += AnalysisEngine_AnalysisComplete;
+
+            totalAnalysis = new Dictionary<PositionHash, Analysis>();
+
+            initAnalysis = true;
+        }
+        void AnalysisEngine_AnalysisComplete(int thisID)
         {
             if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
                 lastAnalysisString.Text = AnalysisEngine.curAnalysis.ToString();
             else
-                if (AnalysisEngine != null )
+                if (AnalysisEngine != null)
+                    lastAnalysisString.Text = AnalysisEngine.lastEngineReply;
+        }
+        void AnalysisEngine_AnalysisUpdate(int thisID)
+        {
+            if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
+                lastAnalysisString.Text = AnalysisEngine.curAnalysis.ToString();
+            else
+                if (AnalysisEngine != null)
                     lastAnalysisString.Text = AnalysisEngine.lastEngineReply;
 
+            if (AnalysisEngine != null && AnalysisEngine.AnalysisComplete())
+                ;
         }
-        private void RunMenuItem_Click(object sender, EventArgs e)
+
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            if (PGNLoc.Text != "" && File.Exists(PGNLoc.Text))
+            if (UseFarm.Checked)
+                return;
+
+            if (initAnalysis)
+                curAnalysisPositionIndex = -1;
+
+            if (AnalysisEngine != null)
+                AnalysisEngine.CheckProgress();
+            TimeSpan curAnalysisTime = DateTime.Now - curAnalysisStartTime;
+            if (initAnalysis || (curAnalysisPositionIndex >= 0 &&
+                (curAnalysisTime > posAnalysisTimeLimit || AnalysisEngine.AnalysisComplete())))
             {
-                string EngineName = "None";
-                StreamReader tr = new StreamReader(PGNLoc.Text);
-
-                Engine engine = Engine.InitEngine(EngineName);
-                engine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
-
-                Dictionary<PositionHash, Analysis> totalAnalysis = new Dictionary<PositionHash, Analysis>();
-                // seed with start position
-                totalAnalysis[Position.StartPosition.Hash] = null;  // StartAnalysisAsync(engine, Position.StartPosition);
-                Analysis refAnalysis;
-                Analysis newAnalysis;
-
-                foreach (Game g in GameRef)
+                if (AnalysisEngine.curAnalysis != null && AnalysisEngine.curAnalysis.isComplete)
+                    System.Console.WriteLine("ran to the end!");
+                if (!initAnalysis)
+                    StoreAnalysis(curAnalysisPositionIndex);
+                if (++curAnalysisPositionIndex < repetitionCount.Count)
+                    StartAnalysisAsync(repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate());
+                else
                 {
-                    UpdateGameDigest(g.RatingWhite, g.RatingBlack, g.Plies.Last().MoveNumber);
-                    g.ResetPosition();
-                    while (!g.EndOfGame)
-                    {
-                        refAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-
-                        g.AdvancePosition();
-
-                        if (totalAnalysis[g.CurrentPosition.Hash] == null)
-                            totalAnalysis[g.CurrentPosition.Hash] = null; // StartAnalysisAsync(engine, g.CurrentPosition);
-                        newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
-
-                        decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
-
-                        int MoveNumber = (g.curPly / 2) + 1;
-                        WriteMoveResult(g.OnMove, MoveNumber,
-                            g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
-                            g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
-                            delta);
-                    }
+                    AnalyzeDeltas();
+                    curAnalysisPositionIndex = -1;
                 }
             }
-        }
-        public void WriteMoveResult(PlayerEnum onMove, int moveNbr, int moveRating, int oppRating, decimal delta)
-        {
-            // ### we can aggregate them however we want from here...
-        }
-        public void UpdateGameDigest(int RatingWhite, int RatingBlack, int MoveCount)
-        {
-            // ### we can aggregate them however we want from here...
+            AnalysisIndexLabel.Text = "Current Analysis Index: " + curAnalysisPositionIndex.ToString();
+            initAnalysis = false;
         }
 
         private void FileStatsButton_Click(object sender, EventArgs e)
@@ -130,19 +173,6 @@ namespace Analyze
             TotalPliesLabel.Text = "Total Plies: " + totalPlies.ToString();
             UniquePosLabel.Text = "Unique Pos: " + repetitionCount.Count.ToString();
         }
-
-        private void AnalysisButton_Click(object sender, EventArgs e)
-        {
-            string EngineName = "Stockfish";
-            AnalysisEngine = Engine.InitEngine(EngineName);
-
-            AnalysisEngine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
-
-            totalAnalysis = new Dictionary<PositionHash, Analysis>();
-
-            initAnalysis = true;
-        }
-
         private Dictionary<PositionHash, int> IdentifyUniquePositions()
         {
             Game refStart = new Game();
@@ -202,33 +232,10 @@ namespace Analyze
             timer1.Start();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (initAnalysis)
-                curAnalysisPositionIndex = -1;
 
-            if (AnalysisEngine != null)
-                AnalysisEngine.CheckProgress();
-            TimeSpan curAnalysisTime = DateTime.Now - curAnalysisStartTime;
-            if (initAnalysis || (curAnalysisPositionIndex >= 0 && curAnalysisTime > posAnalysisTimeLimit))
-            {
-                if( !initAnalysis )
-                    StoreAnalysis();
-                if (++curAnalysisPositionIndex < repetitionCount.Count)
-                    StartAnalysisAsync(repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate());
-                else
-                {
-                    AnalyzeDeltas();
-                    curAnalysisPositionIndex = -1;
-                }
-            }
-            AnalysisIndexLabel.Text = "Current Analysis Index: " + curAnalysisPositionIndex.ToString();
-            initAnalysis = false;
-        }
-
-        private void StoreAnalysis()
+        private void StoreAnalysis(int id)
         {
-            totalAnalysis[repetitionCount.ElementAt(curAnalysisPositionIndex).Key.Rehydrate().Hash] = AnalysisEngine.curAnalysis;
+            totalAnalysis[repetitionCount.ElementAt(id).Key.Rehydrate().Hash] = AnalysisEngine.curAnalysis;
         }
 
         private void AnalyzeDeltas()
@@ -245,18 +252,45 @@ namespace Analyze
                     g.AdvancePosition();
                     newAnalysis = totalAnalysis[g.CurrentPosition.Hash];
 
-                    decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
-                    bool blunder = delta >= 2.5m;
-                    if (blunder)
-                        Console.WriteLine("got one...");
-
                     int MoveNumber = (g.curPly / 2) + 1;
+                    decimal delta = Math.Abs(refAnalysis.Score - newAnalysis.Score);
+
+                    bool blunder = IsThisABlunder(MoveNumber, delta, refAnalysis.Score);
+
                     WriteMoveResult(g.OnMove, MoveNumber,
                         g.OnMove == PlayerEnum.White ? g.RatingWhite : g.RatingBlack,
                         g.OnMove == PlayerEnum.White ? g.RatingBlack : g.RatingWhite,
-                        delta);
+                        delta,
+                        blunder);
                 }
             }
         }
+        public void WriteMoveResult(PlayerEnum onMove, int moveNbr, int moveRating, int oppRating, decimal delta, bool isBlunder)
+        {
+            // ### we can aggregate them however we want from here...
+        }
+        public void UpdateGameDigest(int RatingWhite, int RatingBlack, int MoveCount)
+        {
+            // ### we can aggregate them however we want from here...
+        }
+
+        private bool IsThisABlunder(int move, decimal delta, decimal incomingScore)
+        {
+            // this is somewhat subjective
+            // con something be a blunder if it still leads to a dead won game (simplification)?
+            // is something a blunder if you're dead lost (trying for counterplay)?
+            // should your move be counted as "not a blunder" for stats if it's book or tablebase bound?
+            // does engine analysis even matter for "book" lines...
+            // do exhibition or skittles games matter, or only rated events?
+
+            // store the delta and the subejective flag
+            // 0 = not a tumor, 1 = simplification, 2 = counterplay, 3 = book
+
+            bool blunder = delta >= 2.5m;
+            if (blunder)
+                Console.WriteLine("got one...");
+            return blunder;
+        }
+
     }
 }

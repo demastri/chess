@@ -16,6 +16,8 @@ namespace ChessPosition
             return (parseTokens[0] == "info" || parseTokens[0] == "bestmove");
         }
 
+        public int AnalysisID;
+        public bool isComplete;
         public int searchDepthPly;
         public int selectiveSearchDepthPly;
         public long searchTimeMS;
@@ -109,6 +111,18 @@ namespace ChessPosition
                     case "currline":
                         // ###
                         break;
+                    case "bestmove":
+                        // should be able to assert that 
+                        if (parseTokens[++parseTokenIndex] != bestLine[0])
+                        {
+                            if (bestLine.Count == 0)
+                                bestLine.Add(parseTokens[parseTokenIndex]);
+                            else
+                                bestLine[0] = parseTokens[parseTokenIndex];
+                            System.Console.WriteLine("really...the best line isn't the one we've been considering..." + bestLine[0]);
+                        }
+                        isComplete = true;
+                        break;
                 }
             }
 
@@ -119,8 +133,8 @@ namespace ChessPosition
                 return String.Format("Score: Mate in {0} Best:{3}" + Environment.NewLine + "Nodes: {1,9:D}  Rate: {2,8:D}\n",
                     Math.Abs(Score/1000), searchNodes, searchRateNPS, (bestLine.Count > 0 ? bestLine[0] : "NA"));
 
-            return String.Format ("Score: {0,5:F2} Best:{3}"+Environment.NewLine+"Nodes: {1,9:D}  Rate: {2,8:D}\n", 
-                Score, searchNodes, searchRateNPS, (bestLine.Count > 0 ? bestLine[0] : "NA" ));
+            return String.Format ("Score: {0,5:F2} Depth:{4} Best:{3}"+Environment.NewLine+"Nodes: {1,9:D}  Rate: {2,8:D}\n", 
+                Score, searchNodes, searchRateNPS, (bestLine.Count > 0 ? bestLine[0] : "NA" ), searchDepthPly);
 
         }
 
@@ -130,6 +144,7 @@ namespace ChessPosition
             searchTimeMS = searchNodes = -1L;
             bestLine = new List<string>();
             Score = 0;
+            isComplete = false;
             moveToPonder = "";
         }
     }

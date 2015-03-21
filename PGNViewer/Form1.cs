@@ -159,10 +159,10 @@ namespace PGNViewer
             }
             AnalysisEngine = Engine.InitEngine(EngineList.Text);
             UpdateAnalysis();
-            AnalysisEngine.AnalysisUpdate += AnalysisEngine_AnalysisUpdate;
+            AnalysisEngine.AnalysisUpdateEvent += AnalysisEngine_AnalysisUpdate;
         }
 
-        void AnalysisEngine_AnalysisUpdate()
+        void AnalysisEngine_AnalysisUpdate(int thisID)
         {
             if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
                 AnalysisText.Text = AnalysisEngine.curAnalysis.ToString();

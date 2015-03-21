@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,7 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis.cs" />
+    <Compile Include="AnalysisRequest.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="EngineParameters.cs" />
+    <Compile Include="Engines\AnalysisFarm.cs" />
+    <Compile Include="Engines\AnalysisFarmClient.cs" />
     <Compile Include="Engines\Crafty.cs" />
     <Compile Include="Engines\Stockfish.cs" />
     <Compile Include="Game.cs" />
@@ -59,10 +64,17 @@
       <Project>{2009788c-625d-45f7-af04-dc21ec78d0e5}</Project>
       <Name>ProcessWrappers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\QueueMgt\QueueCommon\QueueCommon.csproj">
+      <Project>{2dfeaa97-e378-4005-8c70-da85919c78c6}</Project>
+      <Name>QueueCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{1f22ef48-ecbb-4c1a-8f43-32fe5a7981b7}</Project>
       <Name>Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

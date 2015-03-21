@@ -33,7 +33,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.FileStatsButton = new System.Windows.Forms.Button();
             this.AnalysisButton = new System.Windows.Forms.Button();
@@ -44,6 +43,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.AnalysisIndexLabel = new System.Windows.Forms.Label();
             this.lastAnalysisString = new System.Windows.Forms.Label();
+            this.UseFarm = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,8 +67,7 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OpenMenuItem,
-            this.RunMenuItem});
+            this.OpenMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -79,13 +78,6 @@
             this.OpenMenuItem.Size = new System.Drawing.Size(103, 22);
             this.OpenMenuItem.Text = "&Open";
             this.OpenMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
-            // 
-            // RunMenuItem
-            // 
-            this.RunMenuItem.Name = "RunMenuItem";
-            this.RunMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.RunMenuItem.Text = "&Run";
-            this.RunMenuItem.Click += new System.EventHandler(this.RunMenuItem_Click);
             // 
             // openFileDialog1
             // 
@@ -171,11 +163,22 @@
             this.lastAnalysisString.TabIndex = 10;
             this.lastAnalysisString.Text = "Analysis:";
             // 
+            // UseFarm
+            // 
+            this.UseFarm.AutoSize = true;
+            this.UseFarm.Location = new System.Drawing.Point(196, 112);
+            this.UseFarm.Name = "UseFarm";
+            this.UseFarm.Size = new System.Drawing.Size(71, 17);
+            this.UseFarm.TabIndex = 11;
+            this.UseFarm.Text = "Use Farm";
+            this.UseFarm.UseVisualStyleBackColor = true;
+            // 
             // AnalyzeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.UseFarm);
             this.Controls.Add(this.lastAnalysisString);
             this.Controls.Add(this.AnalysisIndexLabel);
             this.Controls.Add(this.UniquePosLabel);
@@ -203,7 +206,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem RunMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button FileStatsButton;
         private System.Windows.Forms.Button AnalysisButton;
@@ -214,6 +216,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label AnalysisIndexLabel;
         private System.Windows.Forms.Label lastAnalysisString;
+        private System.Windows.Forms.CheckBox UseFarm;
     }
 }
 

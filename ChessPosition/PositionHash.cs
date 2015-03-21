@@ -20,12 +20,19 @@ namespace ChessPosition
         int epOffset = 69;
         int currentPieceOffset = 77;
 
+        public PositionHash(char [] refHash)
+        {
+            hashValue = new char[hashLength + 1];
+            for (int i = 0; i < hashLength; i++)
+                hashValue[i] = refHash[i];
+            hashValue[hashLength] = '\0';
+        }
         public PositionHash(Position p)
         {
             /// 64 bits for presence / absence of pieces
             /// 1 bit onmove - white=0
             /// 4 bits for castle rights
-            /// 4 bits for ep file (file of last p moved, 0x0f = no ep)
+            /// 8 bits for ep capture square file (file of last p moved, 0xff = no ep)
             /// string of huffman encoded pieces with color bit prepended
             /// typical start position has:
             /// 16 P @ 1 bit each = 16 bits
@@ -36,13 +43,13 @@ namespace ChessPosition
             /// 2  K @ 4 bit each =  8 bits
             /// subtotal of 68 bits for material
             /// additional max 32 color bits 
-            /// total of 172 bits overall
-            /// => 29 B64 encoded characters
+            /// total of 177 bits overall
+            /// => 30 B64 encoded characters
             /// it's possible (but highly unlikely) that promotions without captures could add to this total
             /// theoretically trading every P for a Q would add 3 bits each, or 48 add'l total, 
             /// for a max of 220 bits / 37 B64 char
             /// 
-            /// It's phenomenal overkill, but using a 40 char string as the hash leaves no issues, and allows the hash
+            /// It's phenomenal overkill, but using a 50 char string as the hash leaves no issues, and allows the hash
             /// algorithm to extend for uncluding gamecontext if needed
             /// 
             /// note that this is COMPLETE from a move generation / evaluation perspective,
