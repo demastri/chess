@@ -17,7 +17,7 @@ namespace AnalysisFarmConsole
                 AnalysisFarm thisFarm = null;
                 if (thisFarm == null)
                 {
-                    thisFarm = new AnalysisFarm(4, null);
+                    thisFarm = new AnalysisFarm(6, null);
                     thisFarm.Start();
                 }
             }

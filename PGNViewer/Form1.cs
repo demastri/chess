@@ -164,8 +164,8 @@ namespace PGNViewer
 
         void AnalysisEngine_AnalysisUpdate(int thisID)
         {
-            if (AnalysisEngine != null && AnalysisEngine.curAnalysis != null)
-                AnalysisText.Text = AnalysisEngine.curAnalysis.ToString();
+            if (AnalysisEngine != null && AnalysisEngine.curAnalysisRequest.thisAnalysis != null)
+                AnalysisText.Text = AnalysisEngine.curAnalysisRequest.thisAnalysis.ToString();
         }
         private void UpdateAnalysis()
         {
@@ -174,7 +174,7 @@ namespace PGNViewer
                 AnalysisEngine.Stop();
                 if (curGame != null)
                 {
-                    AnalysisEngine.SetPostion(curGame.ToFEN());
+                    AnalysisEngine.SetPostion(new EngineParameters("stockfish", 50, -1), curGame.ToFEN());
                 }
             }
         }

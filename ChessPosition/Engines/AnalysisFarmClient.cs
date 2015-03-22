@@ -67,7 +67,7 @@ namespace ChessPosition
         /// </summary>
 
         public delegate void AnalysisUpdateHandler(int analysisID);
-        public delegate void AnalysisCompleteHandler(Analysis analysis);
+        public delegate void AnalysisCompleteHandler(AnalysisRequest analysis);
         public event AnalysisUpdateHandler AnalysisUpdateEvent;
         public event AnalysisCompleteHandler AnalysisCompleteEvent;
 
@@ -99,17 +99,16 @@ namespace ChessPosition
             myResultsQueue.CloseConnections();
         }
         int positionssent = 0;
-        public int SubmitAnalysisRequest(EngineParameters eParams, string fenString)
+        public int SubmitAnalysisRequest(AnalysisRequest ar)
         {
             // sotre the request in a place where someone will look at it
             // instantiate an engine/farm if needed and point it at the first one if needed
             // event handlers for that engine should chain through to the events requested by the client
-            AnalysisRequest req = new AnalysisRequest(eParams, fenString, ++requestIDSeed);
-            queuedRequests.Add(req);
-            // ### write it to the queue;
-            myPositionQueue.PostMessage(req.ToQueueString());
+            queuedRequests.Add(ar);
+            // write it to the queue;
+            myPositionQueue.PostMessage(ar.ToQueueString());
 
-            return req.thisID;
+            return ar.thisID;
         }
 
         private void InitQueues()
@@ -122,7 +121,8 @@ namespace ChessPosition
         {
             // turn this into an analysis message
             Console.WriteLine("Returned..." + System.Text.Encoding.Default.GetString(result));
-            Analysis ar = new Analysis(System.Text.Encoding.Default.GetString(result), true);
+            // ### probably not correct constructor below
+            AnalysisRequest ar = new AnalysisRequest(System.Text.Encoding.Default.GetString(result));
             AnalysisCompleteEvent( ar );
         }
     }

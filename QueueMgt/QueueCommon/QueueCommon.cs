@@ -128,6 +128,15 @@ namespace QueueCommon
             dok = channel.QueueDeclarePassive(queueName);
             return dok.MessageCount == 0;
         }
+        public uint MessageCount()
+        {
+            dok = channel.QueueDeclarePassive(queueName);
+            return dok.MessageCount;
+        }
+        public bool IsClosed()
+        {
+            return channel.IsClosed;
+        }
         public void PostMessage(string someMessage)
         {
             try
@@ -149,6 +158,13 @@ namespace QueueCommon
                 channel.BasicPublish(exchangeName, routingKey, null, messageBodyBytes);
                 Console.WriteLine("Posting message " + messagesSent.ToString());
             }
+        }
+        public byte[] ReadMessage()
+        {
+            BasicGetResult result = channel.BasicGet(queueName, true);
+            if (result != null)
+                return result.Body;
+            return null;
         }
         public void PullMessages()
         {

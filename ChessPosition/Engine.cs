@@ -20,7 +20,7 @@ namespace ChessPosition
         public string lastEngineReply;
         public string lastAnalysisReply;
         public string lastResponse;
-        public Analysis curAnalysis;
+        public AnalysisRequest curAnalysisRequest;
         public bool running;
 
         static Dictionary<Piece, int> ValueMap = new Dictionary<Piece, int>()
@@ -64,32 +64,42 @@ namespace ChessPosition
         public virtual void Status()
         {
         }
+        public virtual bool Idle()
+        {
+            return curAnalysisRequest == null || curAnalysisRequest.thisAnalysis == null || curAnalysisRequest.thisAnalysis.isComplete;
+        }
         public virtual bool AnalysisComplete()
         {
-            return curAnalysis == null || curAnalysis.isComplete;
+            return curAnalysisRequest != null && curAnalysisRequest.thisAnalysis != null && curAnalysisRequest.thisAnalysis.isComplete;
+
         }
-        public virtual void StartAnalysis(Position pos)
+        public virtual void StartAnalysis(EngineParameters ep, Position pos)
         {
             // no idea how to instantiate this yet
-            SetPostion(pos.ToFEN(0, 10));
+            SetPostion(ep, pos.ToFEN(0, 10));
         }
-        public virtual void StartAnalysis(Game g)
+        public virtual void StartAnalysis(EngineParameters ep, Game g)
         {
             // no idea how to instantiate this yet
-            SetPostion(g.ToFEN());
+            SetPostion(ep, g.ToFEN());
         }
         public virtual void SetPostion(AnalysisRequest ar)
         {
             PlayerEnum onMove = (ar.FEN[ar.FEN.IndexOf(' ') + 1] == 'w' ? PlayerEnum.White : PlayerEnum.Black);
-            curAnalysis = new Analysis(onMove);
-            curAnalysis.AnalysisID = ar.thisID;
+            curAnalysisRequest = ar;
+            curAnalysisRequest.thisAnalysis = new Analysis(onMove);
             running = true;
+            curAnalysisRequest.MarkRunning();
         }
-        public virtual void SetPostion(string fenString)
+        public virtual void SetPostion(EngineParameters ep, string fenString)
         {
             PlayerEnum onMove = (fenString[fenString.IndexOf(' ') + 1] == 'w' ? PlayerEnum.White : PlayerEnum.Black);
-            curAnalysis = new Analysis(onMove);
+            Position p = new Position(fenString);
+            curAnalysisRequest = new AnalysisRequest(ep, p);
+            curAnalysisRequest.thisID = p.Hash.GetHashCode();
+            curAnalysisRequest.thisAnalysis = new Analysis(onMove);
             running = true;
+            curAnalysisRequest.MarkRunning();
         }
         public int ProcessControl(HostWrapper thisHost)
         {
@@ -103,12 +113,15 @@ namespace ChessPosition
                 if (s != null && Analysis.isUCIstring(lastResponse = s))
                 {
                     lastAnalysisReply = s;
-                    curAnalysis.UpdateWithUCIString(lastAnalysisReply);
-                    RaiseAnalysisUpdate(curAnalysis.AnalysisID);
+                    curAnalysisRequest.thisAnalysis.UpdateWithUCIString(lastAnalysisReply);
+                    RaiseAnalysisUpdate(curAnalysisRequest.thisID);
                 }
                 thisHost.incoming.RemoveAt(0);
-                if (AnalysisComplete() && curAnalysis != null)
-                    RaiseAnalysisComplete(curAnalysis.AnalysisID);
+                if (AnalysisComplete())
+                {
+                    curAnalysisRequest.MarkCompleted();
+                    RaiseAnalysisComplete(curAnalysisRequest.thisID);
+                }
             }
             return running ? HostWrapper.IsRunning : HostWrapper.IsEnding;
         }

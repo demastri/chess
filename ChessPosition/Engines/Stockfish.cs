@@ -30,13 +30,16 @@ namespace ChessPosition.Engines
             else
                 myEngineProcess.WriteToClient("go movetime " + ar.param.searchTimeMS.ToString());
         }
-        public override void SetPostion(string fenString)
+        public override void SetPostion(EngineParameters ep, string fenString)
         {
-            base.SetPostion(fenString);
+            base.SetPostion(ep, fenString);
 
             myEngineProcess.WriteToClient("stop");
             myEngineProcess.WriteToClient("position fen " + fenString);
-            myEngineProcess.WriteToClient("go depth 20");
+            if (ep.searchDepth > 0)
+                myEngineProcess.WriteToClient("go depth " + ep.searchDepth.ToString());
+            else
+                myEngineProcess.WriteToClient("go movetime " + ep.searchTimeMS.ToString());
         }
         public override void Status()
         {

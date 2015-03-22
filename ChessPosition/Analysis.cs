@@ -16,7 +16,6 @@ namespace ChessPosition
             return (parseTokens[0] == "info" || parseTokens[0] == "bestmove");
         }
 
-        public int AnalysisID;
         public bool isComplete;
         public int searchDepthPly;
         public int selectiveSearchDepthPly;
@@ -47,14 +46,13 @@ namespace ChessPosition
 
             int curIndex = (tokens[0].Trim() == "" ? 1 : 0);
 
-            AnalysisID = Convert.ToInt32(tokens[curIndex++]);
             isComplete = (tokens[curIndex++] == "Y");
             searchDepthPly = Convert.ToInt32(tokens[curIndex++]);
             selectiveSearchDepthPly = Convert.ToInt32(tokens[curIndex++]);
             searchTimeMS = Convert.ToInt32(tokens[curIndex++]);
             searchNodes = Convert.ToInt32(tokens[curIndex++]);
             searchRateNPS = Convert.ToInt32(tokens[curIndex++]);
-            moveToPonder = tokens[curIndex++];
+            moveToPonder = tokens[curIndex++].Trim();
             Score = Convert.ToDecimal(tokens[curIndex++]);
             posOnMove = (tokens[curIndex++] == "w" ? PlayerEnum.White : PlayerEnum.Black);
 
@@ -137,7 +135,7 @@ namespace ChessPosition
                         break;
                     case "bestmove":
                         // should be able to assert that 
-                        if (parseTokens[++parseTokenIndex] != bestLine[0])
+                        if (bestLine.Count>0 && parseTokens[++parseTokenIndex] != bestLine[0])
                         {
                             if (bestLine.Count == 0)
                                 bestLine.Add(parseTokens[parseTokenIndex]);
@@ -180,9 +178,9 @@ namespace ChessPosition
         public string ToQueueString()
         {
             string outString = "";
-            outString = String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|", 
-                AnalysisID, (isComplete ? "Y" : "N"), searchDepthPly, selectiveSearchDepthPly, 
-                searchTimeMS, searchNodes, searchRateNPS, moveToPonder, Score, (posOnMove == PlayerEnum.White ? "w" : "b")
+            outString = String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|", 
+                (isComplete ? "Y" : "N"), searchDepthPly, selectiveSearchDepthPly, 
+                searchTimeMS, searchNodes, searchRateNPS, (moveToPonder == "" ? " " : moveToPonder), Score, (posOnMove == PlayerEnum.White ? "w" : "b")
                 );
             foreach (string move in bestLine)
                 outString += move + "|";

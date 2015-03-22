@@ -31,6 +31,7 @@ namespace ChessPosition
         }
         private void EngineTick(object sender, EventArgs e)
         {
+            CheckQueues();
             foreach (Engine en in engines)
                 en.CheckProgress();
         }
@@ -91,18 +92,40 @@ namespace ChessPosition
         private void InitQueues()
         {
             myPositionQueue = new RabbitMQWrapper("AnalysisFarm", "AnalysisRequest", "request", "localhost");
-            myPositionQueue.SetListenerCallback(ListenerCallback);
+            // actually, I don't want to pull everything off the queue as soon as it hits, I just want to pull when I have some capacity
+            //myPositionQueue.SetListenerCallback(ListenerCallback);
 
             myResultsQueue = new RabbitMQWrapper("AnalysisFarm", "AnalysisResults", "result", "localhost");
         }
         private void ListenerCallback(byte[] result)    // ok, this means we got a request
         {
             // turn this into an analysis request, find an engine and go
-            // ###requests will certainly outstrip our ability to process them
+            // ### requests will certainly outstrip our ability to process them
             Console.WriteLine("something happened: " + System.Text.Encoding.Default.GetString(result));
 
             rawRequests.Add(new AnalysisRequest(System.Text.Encoding.Default.GetString(result)));
             ScheduleTask();
+        }
+        private void CheckQueues()
+        {
+            if (!myPositionQueue.IsClosed() && !myPositionQueue.QueueEmpty() && EnginesIdle())
+            {
+                byte [] msg = myPositionQueue.ReadMessage();
+
+                if (msg != null)
+                {
+                    Console.WriteLine("Pulled one message: " + myPositionQueue.MessageCount().ToString() + " remaining");
+                    rawRequests.Add(new AnalysisRequest(System.Text.Encoding.Default.GetString(msg)));
+                    ScheduleTask();
+                }
+            }
+        }
+        private bool EnginesIdle()
+        {
+            for (int j = 0; j < engines.Count; j++)
+                if (engines[j].Idle())
+                    return true;
+            return false;
         }
         private void ScheduleTask()
         {
@@ -115,11 +138,10 @@ namespace ChessPosition
                     for (int j = 0; j < engines.Count; j++)
                     {
                         Engine e = engines[j];
-                        if (e.AnalysisComplete())
+                        if (e.Idle() )
                         {
                             Console.WriteLine("Analysis started: " + ar.thisID);
                             scheduled = i;
-                            ar.Status = "In Process";
                             ar.EngineInstance = j;
                             e.SetPostion(ar);
                             break;
@@ -130,13 +152,24 @@ namespace ChessPosition
         }
         void AnalysisEngine_AnalysisComplete(int thisID)  // needs to refer to the actual analysis request...
         {
-            AnalysisRequest ar = rawRequests[thisID - 1];
+            AnalysisRequest ar = null;
+            foreach( AnalysisRequest thisar in rawRequests )
+                if (thisar.thisID == thisID)
+                {
+                    ar = thisar;
+                    break;
+                }
+
+
             Engine en = engines[ar.EngineInstance];
+            ar.thisAnalysis = en.curAnalysisRequest.thisAnalysis;
+
+            string bestmove = (ar.thisAnalysis.bestLine.Count > 0 ? ar.thisAnalysis.bestLine[0] : "");
             ///find the right ar
             ///copy the curanalysis
             ///post the curanalysis as a new message
-            Console.WriteLine("Analysis completed: " + thisID + " " + engines[ar.EngineInstance].curAnalysis.Score.ToString() + " " + engines[ar.EngineInstance].curAnalysis.bestLine[0]);
-            myResultsQueue.PostMessage(en.curAnalysis.ToQueueString());
+            Console.WriteLine("Analysis completed: " + thisID + " " + ar.thisAnalysis.Score.ToString() + " " + bestmove);
+            myResultsQueue.PostMessage(ar.ToQueueString());
 
             ScheduleTask();
         }

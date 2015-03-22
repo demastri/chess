@@ -67,5 +67,14 @@ namespace ChessPosition
                 return NotationMapping[c];
             return PieceType.Invalid;
         }
+        public static Piece FromFENChar(char c)
+        {
+            if (NotationMapping.ContainsKey(Char.ToUpper(c)))
+                return new Piece( 
+                    (Char.IsUpper(c) ? PlayerEnum.White : PlayerEnum.Black),
+                    NotationMapping[Char.ToUpper(c)] );
+            return new Piece( PlayerEnum.White, PieceType.Invalid);
+        }
+
     }
 }

@@ -24,9 +24,9 @@ namespace ChessPosition
         {
             board = new Dictionary<Square, Piece>();
             castleRights = 0x0f;
-            epLoc = new Square(0x0f, 0x0f);
+            epLoc = new Square(Square.Rank.NONE, Square.File.NONE);
             onMove = PlayerEnum.White;
-            
+
             board.Add(new Square(Square.Rank.R1, Square.File.FA), new Piece(PlayerEnum.White, Piece.PieceType.Rook));
             board.Add(new Square(Square.Rank.R1, Square.File.FB), new Piece(PlayerEnum.White, Piece.PieceType.Knight));
             board.Add(new Square(Square.Rank.R1, Square.File.FC), new Piece(PlayerEnum.White, Piece.PieceType.Bishop));
@@ -67,6 +67,84 @@ namespace ChessPosition
         public Position(PositionHash ph)
         {
             Init(ph.Rehydrate());
+        }
+        public Position(string fenString)
+        {
+            board = new Dictionary<Square, Piece>();
+
+            int curFenStringIndex = 0;
+            char thisChar;
+
+            for (int rank = 7; rank >= 0; rank--)
+            {
+                byte file = 0;
+                while (file < 8)
+                {
+                    thisChar = fenString[curFenStringIndex++];
+                    if (Char.IsDigit(thisChar))
+                        file += (byte)(thisChar - '0');
+                    else
+                        board.Add(new Square((byte)rank, file++), Piece.FromFENChar(thisChar));
+                }
+                // this had better be the / following the interior file definitions
+                if (rank > 0)
+                {
+                    thisChar = fenString[curFenStringIndex++];
+                    if (thisChar != '/')
+                        Console.WriteLine("bad fen string...");
+                }
+            }
+
+            // this had better be the space following the board definitions
+            thisChar = fenString[curFenStringIndex++];
+            if (thisChar != ' ')
+                Console.WriteLine("bad fen string...");
+            thisChar = fenString[curFenStringIndex++];
+            onMove = (thisChar == 'w' ? PlayerEnum.White : PlayerEnum.Black);
+
+            thisChar = fenString[curFenStringIndex++];
+            if (thisChar != ' ')
+                Console.WriteLine("bad fen string...");
+            if ((thisChar = fenString[curFenStringIndex++]) == '-')
+            {
+                castleRights = 0x00;
+                curFenStringIndex++;    // consume the space...
+            }
+            else do
+                {
+                    switch (thisChar)
+                    {
+                        case 'k': castleRights = (byte)(castleRights | (byte)CastleRights.KS_Black); break;
+                        case 'q': castleRights = (byte)(castleRights | (byte)CastleRights.QS_Black); break;
+                        case 'K': castleRights = (byte)(castleRights | (byte)CastleRights.KS_White); break;
+                        case 'Q': castleRights = (byte)(castleRights | (byte)CastleRights.QS_White); break;
+                    }
+                } while ((thisChar = fenString[curFenStringIndex++]) != ' ');
+
+            if ((thisChar = fenString[curFenStringIndex++]) == '-')
+                epLoc = new Square(Square.Rank.NONE, Square.File.NONE);
+            else
+            {
+                Square.File file = (Square.File)(thisChar - 'a');
+                thisChar = fenString[curFenStringIndex++];
+                Square.Rank rank = (Square.Rank)(thisChar - '1');
+                epLoc = new Square(rank, file);
+            }
+
+            // since the porition representation doesn't strictly care about either halfmove click or fullmove number, we're done
+            int halfmove = 0;
+            while ((thisChar = fenString[++curFenStringIndex]) != ' ')
+                halfmove = 10 * halfmove + (thisChar - '0');
+
+            int movenbr = 0;
+            while (++curFenStringIndex < fenString.Length)
+            {
+                thisChar = fenString[curFenStringIndex];
+                movenbr = 10 * movenbr + (thisChar - '0');
+            }
+
+            if (ToFEN(halfmove, movenbr) != fenString)
+                Console.WriteLine("bad fen string...");
         }
 
         private void Init(Position p)

@@ -46,6 +46,11 @@
             this.UseFarm = new System.Windows.Forms.CheckBox();
             this.nbrEngines = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.useLocalFarm = new System.Windows.Forms.CheckBox();
+            this.timeEntry = new System.Windows.Forms.TextBox();
+            this.depthEntry = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +60,7 @@
             this.PGNLoc.Name = "PGNLoc";
             this.PGNLoc.Size = new System.Drawing.Size(259, 20);
             this.PGNLoc.TabIndex = 1;
+            this.PGNLoc.Text = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\Data\\interesting.pgn";
             // 
             // menuStrip1
             // 
@@ -62,7 +68,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(344, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -150,7 +156,7 @@
             // AnalysisIndexLabel
             // 
             this.AnalysisIndexLabel.AutoSize = true;
-            this.AnalysisIndexLabel.Location = new System.Drawing.Point(13, 139);
+            this.AnalysisIndexLabel.Location = new System.Drawing.Point(12, 162);
             this.AnalysisIndexLabel.Name = "AnalysisIndexLabel";
             this.AnalysisIndexLabel.Size = new System.Drawing.Size(126, 13);
             this.AnalysisIndexLabel.TabIndex = 9;
@@ -168,6 +174,8 @@
             // UseFarm
             // 
             this.UseFarm.AutoSize = true;
+            this.UseFarm.Checked = true;
+            this.UseFarm.CheckState = System.Windows.Forms.CheckState.Checked;
             this.UseFarm.Location = new System.Drawing.Point(196, 112);
             this.UseFarm.Name = "UseFarm";
             this.UseFarm.Size = new System.Drawing.Size(71, 17);
@@ -198,11 +206,62 @@
             this.label1.TabIndex = 13;
             this.label1.Text = "Engines";
             // 
+            // useLocalFarm
+            // 
+            this.useLocalFarm.AutoSize = true;
+            this.useLocalFarm.Checked = true;
+            this.useLocalFarm.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useLocalFarm.Location = new System.Drawing.Point(196, 135);
+            this.useLocalFarm.Name = "useLocalFarm";
+            this.useLocalFarm.Size = new System.Drawing.Size(78, 17);
+            this.useLocalFarm.TabIndex = 14;
+            this.useLocalFarm.Text = "Local Farm";
+            this.useLocalFarm.UseVisualStyleBackColor = true;
+            // 
+            // timeEntry
+            // 
+            this.timeEntry.Location = new System.Drawing.Point(109, 178);
+            this.timeEntry.Name = "timeEntry";
+            this.timeEntry.Size = new System.Drawing.Size(41, 20);
+            this.timeEntry.TabIndex = 15;
+            this.timeEntry.Text = "-1";
+            // 
+            // depthEntry
+            // 
+            this.depthEntry.Location = new System.Drawing.Point(196, 178);
+            this.depthEntry.Name = "depthEntry";
+            this.depthEntry.Size = new System.Drawing.Size(41, 20);
+            this.depthEntry.TabIndex = 16;
+            this.depthEntry.Text = "20";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(51, 185);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Time (ms)";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(156, 185);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 13);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Depth";
+            // 
             // AnalyzeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(344, 313);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.depthEntry);
+            this.Controls.Add(this.timeEntry);
+            this.Controls.Add(this.useLocalFarm);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nbrEngines);
             this.Controls.Add(this.UseFarm);
@@ -247,6 +306,11 @@
         private System.Windows.Forms.CheckBox UseFarm;
         private System.Windows.Forms.ComboBox nbrEngines;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox useLocalFarm;
+        private System.Windows.Forms.TextBox timeEntry;
+        private System.Windows.Forms.TextBox depthEntry;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 
