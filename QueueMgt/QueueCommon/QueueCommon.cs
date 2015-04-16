@@ -24,6 +24,8 @@ namespace QueueCommon
         int messagesSent = 0;
         ReadQueueHandler clientCallback = null;
 
+        public string BaseName { get { return queueName.IndexOf('.') < 0 ? queueName : queueName.Substring(0, queueName.IndexOf('.')); } }
+
         public delegate void ReadQueueHandler(byte[] result);
         public event ReadQueueHandler SubscribedMessageReceived;
 
