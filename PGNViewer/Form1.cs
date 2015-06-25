@@ -556,6 +556,17 @@ namespace PGNViewer
                             tempStr += curGame.Plies[lastWPly].refToken.tokenString;
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "WhitePriorMoveTime":
+                            // comment text on white's last move
+                            tempStr = "";
+                            if (lastWPly-1 >= 0)
+                            {
+                                Ply p = curGame.Plies[lastWPly-1];
+                                if (p.comment != null)
+                                    tempStr = p.comment.value;
+                            }
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
                         case "WhiteLastMoveTime":
                             // comment text on white's last move
                             tempStr = "";
@@ -577,6 +588,17 @@ namespace PGNViewer
                         case "BlackCurMove":
                             tempStr = (whiteOnMove ? lastMoveNbr : lastMoveNbr-1).ToString() + ". ... ";
                             tempStr += curGame.Plies[lastBPly].refToken.tokenString;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "BlackPriorMoveTime":
+                            // comment text on white's last move
+                            tempStr = "";
+                            if (lastBPly - 1 >= 0)
+                            {
+                                Ply p = curGame.Plies[lastBPly - 1];
+                                if (p.comment != null)
+                                    tempStr = p.comment.value;
+                            }
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackLastMoveTime":

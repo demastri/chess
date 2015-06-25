@@ -53,7 +53,7 @@ namespace ChessPosition
                 }
                 catch (InvalidOperationException e)
                 {
-                    ;// ok, eof likely
+                    tr.Close();// ok, eof likely
                 }
             }
             return GameRef;

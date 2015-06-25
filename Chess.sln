@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "engines", "engines", "{41E1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{CB1ADB60-5F5A-4162-8D19-ADC8C9C71987}"
 	ProjectSection(SolutionItems) = preProject
+		Data\corr.pgn = Data\corr.pgn
 		Data\interesting.pgn = Data\interesting.pgn
 		Data\Nakamura 10 games.pgn = Data\Nakamura 10 games.pgn
 		Data\Nakamura.pgn = Data\Nakamura.pgn
