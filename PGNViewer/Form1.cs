@@ -20,32 +20,70 @@ namespace PGNViewer
     {
         // open items for basic correspondence use:
         // generate HTML grid for mail inclusion
-            // generate the templated grid
-            // show in a browser / copy to clipboard...
+        // generate the templated grid
+        // show in a browser / copy to clipboard...
         // (validate?) and commit updates validates/updates to screen, needs to save updated game to file
         // save the updated game / file (decorations ###% Right now has to be in the ENTERED STRING)
+        // ### terminators & results updating & displaying properly
+        // grouping games in files (in corr mode) by complete / in progress
 
         List<Game> GameRef;
         Engine AnalysisEngine;
         Game curGame;
         string curPGNFileLoc = "";
+        TreeNode inProgOnMoveNode = null;
+        TreeNode inProgWaitingNode = null;
+        TreeNode complNode = null;
 
         public PGNViewer()
         {
             InitializeComponent();
         }
 
+        private void ReloadGamesFromFile()
+        {
+            LoadGamesFromFile(curPGNFileLoc);
+        }
+        private void LoadGamesFromFile(string fn)
+        {
+            curPGNFileLoc = fn;
+            GameRef = Game.ReadPGNFile(curPGNFileLoc);
+            GameList.Nodes.Clear();
+            if (curDisplayMode == 3)    // corr
+            {
+                inProgOnMoveNode = GameList.Nodes.Add("In Progress - On Move");
+                inProgWaitingNode = GameList.Nodes.Add("In Progress - Waiting");
+                complNode = GameList.Nodes.Add("Complete");
+                foreach (Game g in GameRef)
+                {
+                    bool ImWhite = g.Tags["White"] == corrName.Text;
+                    bool WOnMove = g.Plies.Count % 2 == 0;
+                    if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
+                    {
+                        if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
+                            inProgOnMoveNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                        else
+                            inProgWaitingNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                    }
+                    else
+                        complNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                }
+            }
+            else
+            {
+                foreach (Game g in GameRef)
+                {
+                    GameList.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                }
+            }
+        }
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                curPGNFileLoc = openFileDialog1.FileName;
-                GameRef = Game.ReadPGNFile(curPGNFileLoc);
-                GameList.Items.Clear();
-                foreach (Game g in GameRef)
-                {
-                    GameList.Items.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
-                }
+                LoadGamesFromFile(openFileDialog1.FileName);
+
             }
         }
 
@@ -82,6 +120,11 @@ namespace PGNViewer
 
         private void DrawBoard()
         {
+            int limitingSize = boardDisplay.Width < boardDisplay.Height ? boardDisplay.Width : boardDisplay.Height;
+            double fontFactor = 13.75;
+            int fontSize = (int)(limitingSize / fontFactor);
+            boardDisplay.Font = new Font(pfc.Families[0], fontSize);
+
             string emptyBoard =
                   "!\"\"\"\"\"\"\"\"#" + Environment.NewLine // top line
                 + "ç + + + +%" + Environment.NewLine    // h-rank with rank ID
@@ -94,6 +137,21 @@ namespace PGNViewer
                 + "à+ + + + %" + Environment.NewLine    // a-rank with rank ID
                 + "/èéêëìíîï)" + Environment.NewLine;    // bottom line w/fileID
 
+            if (ckInvertBoard.Checked)
+            {
+                emptyBoard =
+                      "!\"\"\"\"\"\"\"\"#" + Environment.NewLine // top line
+                    + "à + + + +%" + Environment.NewLine    // a-rank with rank ID
+                    + "á+ + + + %" + Environment.NewLine    // b
+                    + "â + + + +%" + Environment.NewLine    // c
+                    + "ã+ + + + %" + Environment.NewLine    // d
+                    + "ä + + + +%" + Environment.NewLine    // e
+                    + "å+ + + + %" + Environment.NewLine    // f
+                    + "æ + + + +%" + Environment.NewLine    // g
+                    + "ç+ + + + %" + Environment.NewLine    // h-rank with rank ID
+                    + "/ïîíìëêéè)" + Environment.NewLine;    // bottom line w/fileID
+            }
+
             string thisBoard = emptyBoard;
             if (curGame != null)
             {
@@ -104,11 +162,13 @@ namespace PGNViewer
                 FENText.Text = curGame.ToFEN();
             }
             boardDisplay.Text = thisBoard;
-
+            boardDisplay.Select(0, 0);
         }
 
         private void HighlightPGNMove()
         {
+            if (curGame == null)
+                return;
             int thisPly = curGame.curPly - 1;
             bool isBlack = thisPly % 2 == 1;
             if (thisPly < 0 && PGNText.Text != null)
@@ -140,6 +200,8 @@ namespace PGNViewer
         }
         private void HighlightCorrMove()
         {
+            if (curGame == null)
+                return;
             int curRow = (curGame.curPly - 1) / 2;
             int curCol = ((curGame.curPly - 1) % 2 == 0) ? 1 : 4;
 
@@ -153,27 +215,16 @@ namespace PGNViewer
 
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
         {
+            if (ckInvertBoard.Checked)
+            {
+                rank = 9 - rank;
+                file = 9 - file;
+            }
             int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - rank)) + (file);
             bool isWhite = (((((rank - 1) % 2) == ((file - 1) % 2)) ? 1 : 0) == 0);   // 1 => b
             char pcChar = isWhite ? Char.ToLower(pc.ToChess7Char) : Char.ToUpper(pc.ToChess7Char);  // upper case is on a dark square...
 
             return Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
-        }
-
-        private void GameList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PGNText.Text = "";
-            if (GameList.SelectedIndices.Count == 1)
-            {
-                PGNText.Text = GameRef[GameList.SelectedIndices[0]].PGNSource;
-                curGame = GameRef[GameList.SelectedIndices[0]];
-                curGame.ResetPosition();
-            }
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateCorrespondence();
-            HighlightCorrMove();
-            UpdateAnalysis();
         }
 
         private void DisableAnalysis()
@@ -310,12 +361,14 @@ namespace PGNViewer
         }
         private void DisableCorrespondence()
         {
+            corrNameLabel.Visible = corrName.Visible = false;
             corrGridView.Enabled = corrGridView.Visible = false;
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
             CorrMoveNbr.Visible = CorrLabel.Visible = CorrMoveText.Visible = CorrMoveTime.Visible = CorrTimeNow.Visible = false;
         }
         private void EnableCorrespondence()
         {
+            corrNameLabel.Visible = corrName.Visible = true;
             corrGridView.Enabled = corrGridView.Visible = true;
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
             CorrMoveNbr.Visible = CorrLabel.Visible = CorrMoveText.Visible = CorrMoveTime.Visible = CorrTimeNow.Visible = true;
@@ -333,19 +386,22 @@ namespace PGNViewer
             // follow highlighted move from pgn viewer
             // enter move as W/B
             // enter move time as W/B - button for "~now"
-            // calculate reflection time (###% totals?)
+            // calculate reflection time (including totals)
             // (validate?) and commit updates validates/updates to screen, needs to save updated game to file
             // ###% move game to "other" (complete) file
             // generate HTML grid for mail inclusion
             // pgn viewer follow highlighted grid move :) 
             // pgn reader has to deal with "in-progress" games
-            // ###% open/complete folders in grid?
+            // open/complete folders in grid?
 
             // at this point we can load the grid with each player's moves (1 row per full ply)
             // if there's time associated with the move we can keep reflection time at that point as well
+            corrGridView.Rows.Clear();
+            if (curGame == null)
+                return;
+
             int rows = (curGame.Plies.Count - 1) / 2 + 1;
 
-            corrGridView.Rows.Clear();
             corrGridView.Rows.Insert(0, rows);
 
             CorrMoveNbr.Text = (curGame.Plies.Count / 2 + 1).ToString() + ((curGame.Plies.Count % 2 == 0) ? "" : " ... ");
@@ -355,7 +411,7 @@ namespace PGNViewer
 
             DateTime lastMoveTime = DateTime.MinValue;
             totalCorrTimeW = 30 + (30 * (curGame.Plies.Count / 20));
-            totalCorrTimeB = 30 + (30 * ((curGame.Plies.Count-1) / 20));
+            totalCorrTimeB = 30 + (30 * ((curGame.Plies.Count - 1) / 20));
             usedCorrTimeW = 0;
             usedCorrTimeB = 0;
             lastCorrTimeW = 0;
@@ -399,7 +455,7 @@ namespace PGNViewer
             }
             remainCorrTimeW = totalCorrTimeW - usedCorrTimeW;
             remainCorrTimeB = totalCorrTimeB - usedCorrTimeB;
-            ReflTimeLabel.Text = "Reflection Time:  Tot/Used/Rem (W/B): " +Environment.NewLine +
+            ReflTimeLabel.Text = "Reflection Time:  Tot/Used/Rem (W/B): " + Environment.NewLine +
                 totalCorrTimeW.ToString() + " / " + usedCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString() + "     " +
                 totalCorrTimeB.ToString() + " / " + usedCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
         }
@@ -493,6 +549,8 @@ namespace PGNViewer
 
             // save the updated game / file
             Game.SavePGNFile(curPGNFileLoc, GameRef);
+
+            ReloadGamesFromFile();
         }
 
         private void CorrPublish_Click(object sender, EventArgs e)
@@ -534,7 +592,7 @@ namespace PGNViewer
             bool whiteOnMove = (curGame.Plies.Count % 2 == 0);
             int lastWPly = curGame.Plies.Count - (whiteOnMove ? 1 : 0) - 1;
             int lastBPly = curGame.Plies.Count - (whiteOnMove ? 0 : 1) - 1;
-            int lastMoveNbr = (curGame.Plies.Count-1) / 2 + 1;
+            int lastMoveNbr = (curGame.Plies.Count - 1) / 2 + 1;
             string tempStr = "";
             string[] tokens = refStr.Split(new char[] { '<', '>' });
             foreach (string token in tokens)
@@ -559,9 +617,9 @@ namespace PGNViewer
                         case "WhitePriorMoveTime":
                             // comment text on white's last move
                             tempStr = "";
-                            if (lastWPly-1 >= 0)
+                            if (lastWPly - 1 >= 0)
                             {
-                                Ply p = curGame.Plies[lastWPly-1];
+                                Ply p = curGame.Plies[lastWPly - 1];
                                 if (p.comment != null)
                                     tempStr = p.comment.value;
                             }
@@ -579,14 +637,14 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteReflTimeOverview":
-                            tempStr = (remainCorrTimeW+lastCorrTimeW).ToString() + " / " + lastCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString();
+                            tempStr = (remainCorrTimeW + lastCorrTimeW).ToString() + " / " + lastCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackName":
                             refStr = refStr.Replace(token, curGame.Tags["Black"]);
                             break;
                         case "BlackCurMove":
-                            tempStr = (whiteOnMove ? lastMoveNbr : lastMoveNbr-1).ToString() + ". ... ";
+                            tempStr = (whiteOnMove ? lastMoveNbr : lastMoveNbr - 1).ToString() + ". ... ";
                             tempStr += curGame.Plies[lastBPly].refToken.tokenString;
                             refStr = refStr.Replace(token, tempStr);
                             break;
@@ -613,7 +671,7 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackReflTimeOverview":
-                            tempStr = (remainCorrTimeB+lastCorrTimeB).ToString() + " / " + lastCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
+                            tempStr = (remainCorrTimeB + lastCorrTimeB).ToString() + " / " + lastCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "PGNSource":
@@ -629,6 +687,49 @@ namespace PGNViewer
                     refStr = refStr.Replace(token, "Some New Value -" + token.Substring(1) + "-");
             }
             return refStr;
+        }
+
+        private void PGNViewer_Resize(object sender, EventArgs e)
+        {
+            DrawBoard();
+
+        }
+
+        private void ckInvertBoard_Click(object sender, EventArgs e)
+        {
+            DrawBoard();
+        }
+
+        private void GameList_SelectedIndexChanged(object sender, TreeViewEventArgs e)
+        {
+            PGNText.Text = "";
+            curGame = null;
+            PGNText.Text = "";
+            if (GameList.SelectedNode != null)
+            {
+                foreach (Game g in GameRef)
+                    if (g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] == GameList.SelectedNode.Text)
+                    {
+                        curGame = g;
+                        break;
+                    }
+                if (curGame != null)
+                {
+                    PGNText.Text = curGame.PGNSource;
+                    curGame.ResetPosition();
+                }
+            }
+            if (curGame != null)
+            {
+                ckInvertBoard.Checked = (curGame.Tags["Black"] == corrName.Text);
+                if (curGame.Tags["Result"] == "*" || curGame.Tags["Result"] == "")
+                    curGame.AdvancePosition(curGame.Plies.Count);
+            }
+            DrawBoard();
+            HighlightPGNMove();
+            UpdateCorrespondence();
+            HighlightCorrMove();
+            UpdateAnalysis();
         }
     }
 }

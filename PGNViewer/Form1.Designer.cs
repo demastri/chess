@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.GameList = new System.Windows.Forms.ListView();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,25 +65,19 @@
             this.CorrUpdate = new System.Windows.Forms.Button();
             this.CorrPublish = new System.Windows.Forms.Button();
             this.ReflTimeLabel = new System.Windows.Forms.Label();
+            this.ckInvertBoard = new System.Windows.Forms.CheckBox();
+            this.GameList = new System.Windows.Forms.TreeView();
+            this.corrNameLabel = new System.Windows.Forms.Label();
+            this.corrName = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // GameList
-            // 
-            this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.GameList.Location = new System.Drawing.Point(12, 27);
-            this.GameList.MultiSelect = false;
-            this.GameList.Name = "GameList";
-            this.GameList.Size = new System.Drawing.Size(298, 445);
-            this.GameList.TabIndex = 0;
-            this.GameList.UseCompatibleStateImageBehavior = false;
-            this.GameList.View = System.Windows.Forms.View.List;
-            this.GameList.SelectedIndexChanged += new System.EventHandler(this.GameList_SelectedIndexChanged);
-            // 
             // boardDisplay
             // 
+            this.boardDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.boardDisplay.Location = new System.Drawing.Point(316, 27);
             this.boardDisplay.Multiline = true;
             this.boardDisplay.Name = "boardDisplay";
@@ -157,8 +150,7 @@
             // 
             // PGNText
             // 
-            this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PGNText.HideSelection = false;
             this.PGNText.Location = new System.Drawing.Point(316, 311);
@@ -171,6 +163,7 @@
             // 
             // ResetGameButton
             // 
+            this.ResetGameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ResetGameButton.Location = new System.Drawing.Point(341, 256);
             this.ResetGameButton.Name = "ResetGameButton";
             this.ResetGameButton.Size = new System.Drawing.Size(30, 23);
@@ -181,6 +174,7 @@
             // 
             // BackButton
             // 
+            this.BackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BackButton.Location = new System.Drawing.Point(413, 256);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(30, 23);
@@ -191,6 +185,7 @@
             // 
             // FwdButton
             // 
+            this.FwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FwdButton.Location = new System.Drawing.Point(449, 256);
             this.FwdButton.Name = "FwdButton";
             this.FwdButton.Size = new System.Drawing.Size(30, 23);
@@ -201,8 +196,7 @@
             // 
             // FENText
             // 
-            this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FENText.Location = new System.Drawing.Point(316, 285);
             this.FENText.Name = "FENText";
@@ -213,12 +207,13 @@
             // 
             // EngineList
             // 
+            this.EngineList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.EngineList.FormattingEnabled = true;
             this.EngineList.Items.AddRange(new object[] {
             "None",
             "Stockfish",
             "Crafty"});
-            this.EngineList.Location = new System.Drawing.Point(578, 27);
+            this.EngineList.Location = new System.Drawing.Point(791, 27);
             this.EngineList.Name = "EngineList";
             this.EngineList.Size = new System.Drawing.Size(160, 21);
             this.EngineList.TabIndex = 8;
@@ -241,6 +236,7 @@
             // 
             // JumpBackButton
             // 
+            this.JumpBackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.JumpBackButton.Location = new System.Drawing.Point(377, 256);
             this.JumpBackButton.Name = "JumpBackButton";
             this.JumpBackButton.Size = new System.Drawing.Size(30, 23);
@@ -251,6 +247,7 @@
             // 
             // JumpFwdButton
             // 
+            this.JumpFwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.JumpFwdButton.Location = new System.Drawing.Point(485, 256);
             this.JumpFwdButton.Name = "JumpFwdButton";
             this.JumpFwdButton.Size = new System.Drawing.Size(30, 23);
@@ -261,6 +258,7 @@
             // 
             // JumpToEndButton
             // 
+            this.JumpToEndButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.JumpToEndButton.Location = new System.Drawing.Point(521, 256);
             this.JumpToEndButton.Name = "JumpToEndButton";
             this.JumpToEndButton.Size = new System.Drawing.Size(30, 23);
@@ -275,6 +273,8 @@
             this.corrGridView.AllowUserToDeleteRows = false;
             this.corrGridView.AllowUserToResizeColumns = false;
             this.corrGridView.AllowUserToResizeRows = false;
+            this.corrGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.corrGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.corrGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.MoveNbr,
@@ -349,6 +349,7 @@
             // 
             // CorrMoveTime
             // 
+            this.CorrMoveTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrMoveTime.CustomFormat = "MM/dd/yyyy HH:mm:ss";
             this.CorrMoveTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.CorrMoveTime.Location = new System.Drawing.Point(799, 208);
@@ -358,6 +359,7 @@
             // 
             // CorrLabel
             // 
+            this.CorrLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrLabel.AutoSize = true;
             this.CorrLabel.Location = new System.Drawing.Point(579, 208);
             this.CorrLabel.Name = "CorrLabel";
@@ -367,6 +369,7 @@
             // 
             // CorrMoveText
             // 
+            this.CorrMoveText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrMoveText.Location = new System.Drawing.Point(746, 208);
             this.CorrMoveText.Name = "CorrMoveText";
             this.CorrMoveText.Size = new System.Drawing.Size(47, 20);
@@ -374,6 +377,7 @@
             // 
             // CorrTimeNow
             // 
+            this.CorrTimeNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrTimeNow.Location = new System.Drawing.Point(957, 206);
             this.CorrTimeNow.Name = "CorrTimeNow";
             this.CorrTimeNow.Size = new System.Drawing.Size(42, 23);
@@ -384,6 +388,7 @@
             // 
             // CorrMoveNbr
             // 
+            this.CorrMoveNbr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrMoveNbr.Location = new System.Drawing.Point(693, 207);
             this.CorrMoveNbr.Name = "CorrMoveNbr";
             this.CorrMoveNbr.ReadOnly = true;
@@ -392,6 +397,7 @@
             // 
             // CorrUpdate
             // 
+            this.CorrUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrUpdate.Location = new System.Drawing.Point(891, 235);
             this.CorrUpdate.Name = "CorrUpdate";
             this.CorrUpdate.Size = new System.Drawing.Size(51, 23);
@@ -402,6 +408,7 @@
             // 
             // CorrPublish
             // 
+            this.CorrPublish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrPublish.Location = new System.Drawing.Point(948, 235);
             this.CorrPublish.Name = "CorrPublish";
             this.CorrPublish.Size = new System.Drawing.Size(51, 23);
@@ -412,6 +419,7 @@
             // 
             // ReflTimeLabel
             // 
+            this.ReflTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ReflTimeLabel.AutoSize = true;
             this.ReflTimeLabel.Location = new System.Drawing.Point(578, 230);
             this.ReflTimeLabel.Name = "ReflTimeLabel";
@@ -419,11 +427,54 @@
             this.ReflTimeLabel.TabIndex = 21;
             this.ReflTimeLabel.Text = "Reflection Time:  Total/Used/Remain (W/B):";
             // 
+            // ckInvertBoard
+            // 
+            this.ckInvertBoard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ckInvertBoard.AutoSize = true;
+            this.ckInvertBoard.Location = new System.Drawing.Point(582, 31);
+            this.ckInvertBoard.Name = "ckInvertBoard";
+            this.ckInvertBoard.Size = new System.Drawing.Size(84, 17);
+            this.ckInvertBoard.TabIndex = 22;
+            this.ckInvertBoard.Text = "Invert Board";
+            this.ckInvertBoard.UseVisualStyleBackColor = true;
+            this.ckInvertBoard.Click += new System.EventHandler(this.ckInvertBoard_Click);
+            // 
+            // GameList
+            // 
+            this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GameList.Location = new System.Drawing.Point(12, 27);
+            this.GameList.Name = "GameList";
+            this.GameList.Size = new System.Drawing.Size(298, 445);
+            this.GameList.TabIndex = 23;
+            this.GameList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
+            // 
+            // corrNameLabel
+            // 
+            this.corrNameLabel.AutoSize = true;
+            this.corrNameLabel.Location = new System.Drawing.Point(579, 262);
+            this.corrNameLabel.Name = "corrNameLabel";
+            this.corrNameLabel.Size = new System.Drawing.Size(55, 13);
+            this.corrNameLabel.TabIndex = 24;
+            this.corrNameLabel.Text = "My Name:";
+            // 
+            // corrName
+            // 
+            this.corrName.Location = new System.Drawing.Point(639, 259);
+            this.corrName.Name = "corrName";
+            this.corrName.Size = new System.Drawing.Size(168, 20);
+            this.corrName.TabIndex = 25;
+            this.corrName.Text = "John DeMastri";
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1012, 484);
+            this.Controls.Add(this.corrName);
+            this.Controls.Add(this.corrNameLabel);
+            this.Controls.Add(this.GameList);
+            this.Controls.Add(this.ckInvertBoard);
             this.Controls.Add(this.ReflTimeLabel);
             this.Controls.Add(this.CorrPublish);
             this.Controls.Add(this.CorrUpdate);
@@ -444,12 +495,12 @@
             this.Controls.Add(this.ResetGameButton);
             this.Controls.Add(this.PGNText);
             this.Controls.Add(this.boardDisplay);
-            this.Controls.Add(this.GameList);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "PGNViewer";
             this.Text = "PGN Viewer";
             this.Load += new System.EventHandler(this.PGNViewer_Load);
+            this.Resize += new System.EventHandler(this.PGNViewer_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).EndInit();
@@ -460,7 +511,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView GameList;
         private System.Windows.Forms.TextBox boardDisplay;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -497,6 +547,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn BMoveReflection;
         private System.Windows.Forms.Button CorrPublish;
         private System.Windows.Forms.Label ReflTimeLabel;
+        private System.Windows.Forms.CheckBox ckInvertBoard;
+        private System.Windows.Forms.TreeView GameList;
+        private System.Windows.Forms.Label corrNameLabel;
+        private System.Windows.Forms.TextBox corrName;
     }
 }
 
