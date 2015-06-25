@@ -12,12 +12,10 @@ namespace ChessPosition
         public List<Ply> Plies;
         public Position CurrentPosition;
         public PlayerEnum OnMove { get { return CurrentPosition.onMove; } set { CurrentPosition.onMove = value; } }
-        public string GameDate;
-        public string GameRound;
-        public string PlayerWhite;
-        public string PlayerBlack;
         public int RatingWhite;
         public int RatingBlack;
+
+        public Dictionary<string, string> Tags;
 
         public string PGNSource;
 
@@ -31,6 +29,15 @@ namespace ChessPosition
         Dictionary<PositionHash, int> repetitions;
         private int progressCounter;
 
+        public static void SavePGNFile(string PGNFileLoc, List<Game> games)
+        {
+            //PGNFileLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\test.pgn";
+            StreamWriter tr = new StreamWriter(PGNFileLoc);
+            foreach (Game g in games)
+                g.Save(tr);
+            tr.Flush();
+            tr.Close();
+        }
         public static List<Game> ReadPGNFile(string PGNFileLoc)
         {
             List<Game> GameRef = new List<Game>();
@@ -60,6 +67,7 @@ namespace ChessPosition
                 InitGame();
                 PGNtokens = nextTokenSet.tokens;
                 PGNSource = nextTokenSet.pgn;
+                Ply lastPly = null;
                 foreach (PGNToken token in PGNtokens)
                 {
                     switch (token.tokenType)
@@ -68,13 +76,19 @@ namespace ChessPosition
                             HandleTag((PGNTag)token);
                             break;
                         case PGNTokenType.Invalid:
+                            break;
                         case PGNTokenType.MoveNumber:
+                            break;
                         case PGNTokenType.Comment:
+                            if (lastPly != null)
+                                lastPly.comment = (PGNComment)token;
+                            break;
                         case PGNTokenType.Terminator:
                             // these can be skipped
                             break;
                         case PGNTokenType.MoveString:
-                            HandleMove((PGNMoveString)token);
+                            lastPly = HandleMove((PGNMoveString)token);
+                            lastPly.refToken = token;
                             break;
                     }
                     if (token.tokenType == PGNTokenType.Terminator)
@@ -83,6 +97,9 @@ namespace ChessPosition
                         return;
                     }
                 }
+                // ok, we're out of tokens, must be a game in progress...
+                ResetPosition();
+                return;
             }
             throw new InvalidOperationException();
         }
@@ -97,9 +114,19 @@ namespace ChessPosition
             repetitions = new Dictionary<PositionHash, int>();
             PGNtokens = new List<PGNToken>();
 
+            Tags = new Dictionary<string, string>();
+            Tags.Add("Event", "");  // Seven Tag Roster of mandatory tags for archival work
+            Tags.Add("Site", "");
+            Tags.Add("Date", "");
+            Tags.Add("Round", "");
+            Tags.Add("White", "");
+            Tags.Add("Black", "");
+            Tags.Add("Result", "");
+
             ResetPosition();
             PGNSource = "";
-            RatingBlack = RatingWhite = NoRating;
+
+            RatingWhite = RatingBlack = NoRating;
         }
 
         public void ResetPosition()
@@ -109,7 +136,7 @@ namespace ChessPosition
             curPly = 0;
             progressCounter = 0;
         }
-     
+
         public bool AdvancePosition()
         {
             return AdvancePosition(1);
@@ -163,39 +190,15 @@ namespace ChessPosition
 
         private void HandleTag(PGNTag t)
         {
-            switch (t.key)
-            {
-                case "Event":
-                    break;
-                case "Site":
-                    break;
-                case "Date":
-                    GameDate = t.value;
-                    break;
-                case "Round":
-                    GameRound = t.value;
-                    break;
-                case "White":
-                    PlayerWhite = t.value;
-                    break;
-                case "Black":
-                    PlayerBlack = t.value;
-                    break;
-                case "Result":
-                    break;
-                case "WhiteElo":
-                    RatingWhite = (t.value == "" ? NoRating : (t.value == "-" ? Unrated : Convert.ToInt32(t.value)));
-                    break;
-                case "BlackElo":
-                    RatingBlack = (t.value == "" ? NoRating : (t.value == "-" ? Unrated : Convert.ToInt32(t.value)));
-                    break;
-                case "WhiteUSCF":
-                    RatingWhite = Convert.ToInt32(t.value);
-                    break;
-                case "BlackUSCF":
-                    RatingBlack = Convert.ToInt32(t.value);
-                    break;
-            }
+            if (Tags.ContainsKey(t.key))
+                Tags[t.key] = t.value;
+            else
+                Tags.Add(t.key, t.value);
+
+            if ((t.key == "WhiteElo" || t.key == "WhiteUSCF") && t.value.Trim().Length > 0)
+                RatingWhite = Convert.ToInt32(t.value);
+            if ((t.key == "BlackElo" || t.key == "BlackUSCF") && t.value.Trim().Length > 0)
+                RatingBlack = Convert.ToInt32(t.value);
         }
 
         public string ToFEN()
@@ -206,7 +209,7 @@ namespace ChessPosition
         private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
         private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
 
-        private void HandleMove(PGNMoveString token)
+        public Ply HandleMove(PGNMoveString token)
         {
             int curPlyNumber = Plies.Count + 1;
             int curMoveNumber = (curPlyNumber - 1) / 2;
@@ -256,7 +259,7 @@ namespace ChessPosition
                     {
                         // should handle the error more gracefully than this ...
                         System.Console.WriteLine("Couldn't properly process this move string: " + token);
-                        return;
+                        return null;
                     }
                     curPiece.piece = thisPcType;
                     locString = locString.Substring(1); // trim off the piece identifier
@@ -288,13 +291,20 @@ namespace ChessPosition
                             TargetSquare.row = (byte)(locString[1] - '1');
                             options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, Square.Rank.NONE, Square.File.NONE);
                             if (options.Count != 1)
+                            {
                                 System.Console.WriteLine("couldn't unambiguously process move <no pc for target> " + token);
+                                return null;
+                            }
                             Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                         }
                         else
                         {
                             if (curPiece.piece != Piece.PieceType.Pawn)
+                            {
                                 System.Console.WriteLine("couldn't unambiguously process move <not P for col capture> " + token);
+                                return null;
+                            }
+
                             // cd -> how to id the source and target squares??  certainly both squares are col constrained
                             // the source square is constrained but how to constrain the targets?
                             // it's a capture on that file - we can start by listing all occupied squares on that file
@@ -311,13 +321,20 @@ namespace ChessPosition
                                 {
                                     options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, Square.Rank.NONE, (Square.File)colConstraint);
                                     if (options.Count > 1 || (options.Count > 0 && SourceSquare != null))
+                                    {
                                         System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token);
+                                        return null;
+                                    }
+
                                     if (options.Count == 1)
                                         SourceSquare = options[0];
                                 }
                             }
                             if (SourceSquare == null)
+                            {
                                 System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token);
+                                return null;
+                            }
                             else
                                 Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                         }
@@ -330,7 +347,11 @@ namespace ChessPosition
                         options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, (Square.Rank)rowConstraint, (Square.File)colConstraint);
                         // at this point, there is a restriction on either row or col to validate
                         if (options.Count != 1)
+                        {
                             System.Console.WriteLine("couldn't unambiguously process partially constrained move  " + token);
+                            return null;
+                        }
+
                         Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                         break;
                     case 4:
@@ -340,13 +361,74 @@ namespace ChessPosition
                         TargetSquare.row = (byte)(locString[3] - '1');
                         options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, (Square.Rank)SourceSquare.row, (Square.File)SourceSquare.col);
                         if (!options.Contains(SourceSquare) || options.Count != 1)
+                        {
                             System.Console.WriteLine("couldn't find specified piece for move  " + token);
+                            return null;
+                        }
                         Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                         break;
                 }
             }
             CurrentPosition.MakeMove(curPly);
             curPlyNumber++;
+            return curPly;
+        }
+
+        public string BuildMoveList()
+        {
+            string outStr = "";
+            foreach (PGNToken t in PGNtokens)
+            {
+                switch (t.tokenType)
+                {
+                    case PGNTokenType.MoveNumber:
+                        outStr += t.tokenString;
+                        break;
+                    case PGNTokenType.MoveString:
+                        outStr += t.tokenString + " ";
+                        break;
+                }
+            }
+            if (Plies.Count % 2 == 0) // white on move
+                outStr += (Plies.Count / 2 + 1).ToString() + ".";
+            outStr += " ...";
+            return outStr;
+        }
+
+        public void Save(StreamWriter sw)
+        {
+            int curLineLength = 0;
+            int lineLengthTrigger = 90;
+            bool wasatag = false;
+            foreach (PGNToken p in PGNtokens)
+            {
+                // start new move on a new line if needed
+                if( (wasatag && p.tokenType != PGNTokenType.Tag) || curLineLength >= lineLengthTrigger && p.tokenType == PGNTokenType.MoveNumber)
+                {
+                    wasatag = false;
+                    sw.WriteLine();
+                    curLineLength = 0;
+                }
+
+                sw.Write(p.tokenString.Trim());
+                curLineLength += p.tokenString.Trim().Length;
+
+                if ( p.tokenType != PGNTokenType.MoveNumber)
+                {
+                    sw.Write(" ");
+                    curLineLength++;
+                }
+
+                if (p.tokenType == PGNTokenType.Tag)
+                {
+                    wasatag = true;
+                    sw.WriteLine();
+                    curLineLength = 0;
+                }
+            }
+            sw.WriteLine();
+            if( curLineLength > 0 )
+                sw.WriteLine();
         }
     }
 }

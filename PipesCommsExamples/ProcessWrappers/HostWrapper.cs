@@ -484,8 +484,8 @@ namespace ProcessWrappers
                 }
 
                 List<string> routes = new List<string>();
-                QueueCommon.ConnectionDetail listenDetail = cd.UpdateQueueDetail("ServerQueue", cd.routeKeys);
-                queueClient = new QueueingModel(listenDetail);
+                // ### QueueCommon.ConnectionDetail listenDetail = cd.UpdateQueueDetail("ServerQueue", cd.routeKeys);
+                // ### queueClient = new QueueingModel(listenDetail);
             }
             public void InitProcess(string procName)
             {

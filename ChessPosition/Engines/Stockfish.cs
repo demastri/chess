@@ -15,7 +15,7 @@ namespace ChessPosition.Engines
         {
             //engineLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
             engineLoc = "D:\\Projects\\Workspaces\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
-            myEngineProcess = new HostWrapper(engineLoc, true, ProcessControl, false);
+            // ### myEngineProcess = new HostWrapper(engineLoc, true, ProcessControl, false);
 
             myEngineProcess.Start();
         }

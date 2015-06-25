@@ -16,6 +16,9 @@ namespace ChessPosition
         public Square dest;
         public Piece promo;
 
+        public PGNToken refToken;
+        public PGNComment comment;
+
         public Ply()
         {
             src = null;

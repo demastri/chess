@@ -92,7 +92,7 @@ namespace ChessPosition
     }
     public class PGNComment : PGNToken
     {
-        string value;
+        public string value;
 
         public PGNComment(string s, int offset)
         {

@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<style media="screen" type="text/css">
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <table border="1" cellpadding="5">
+        <tr>
+            <td>Event</td>
+            <td colspan="2">@EventName</td>
+        </tr>
+        <tr>
+            <td>Game</td>
+            <td colspan="2">@GameName</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td rowspan="4">White</td>
+                <td>White</td><td>@WhiteName</td>
+        </tr>
+                <tr><td>Current Move</td><td>@WhiteCurMove</td></tr>
+                <tr><td>Last Move Rec'd Time</td><td>@WhiteLastMoveTime</td></tr>
+                <tr><td>Reflection Time (in / cur / out)</td><td>@WhiteReflTimeOverview</td></tr>
+        <tr>
+            <td rowspan="4">Black</td>
+                <td>Black</td><td>@BlackName</td>
+        </tr>
+                <tr><td>Current Move</td><td>@BlackCurMove</td></tr>
+                <tr><td>Last Move Rec'd Time</td><td>@BlackLastMoveTime</td></tr>
+                <tr><td>Reflection Time (in / cur / out)</td><td>@BlackReflTimeOverview</td></tr>
+        <tr>
+            <td>Move List</td>
+            <td colspan="2">@PGNSource</td>
+        </tr>
+        <tr>
+            <td>Diagram</td>
+            <td colspan="2">@Diagram</td>
+        </tr>
+    </table>
+</body>
+</html>

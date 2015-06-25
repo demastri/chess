@@ -24,19 +24,42 @@ namespace ChessPosition
                     }
             }
         }
-        
+
         public string pgn;
+        static public string startNextGameTag = "";
         public List<PGNToken> tokens;
         public PGNTokenizer(StreamReader sr)
         {
-            // read and add to pgn until you see a terminator...### could be embedded
-            pgn = "";
+            // read and add to pgn until you see a terminator...
+            // another valid end of game state is whitespace then another tag
+            // ### could be embedded with comments afterwards
+            if( startNextGameTag != "" )
+                pgn = startNextGameTag+ " " + Environment.NewLine;
+            else
+                pgn = "";
+            startNextGameTag = "";
+
+            bool inAGame = false;
+
             bool done = false;
             while (!done && !sr.EndOfStream)
             {
+                bool inATag = false;
                 string line = sr.ReadLine();
                 if (line.Trim() != "")
                 {
+                    if (line[0] == '[')
+                        inATag = true;
+                    else
+                        inAGame = true;
+
+                    if (inAGame && inATag) // ok - we've rolled to the next one 
+                    {
+                        startNextGameTag = line + Environment.NewLine;
+                        done = true;
+                        continue;
+                    }
+
                     pgn += line + " " + Environment.NewLine;
                     foreach (string s in terminators)
                         if (line.IndexOf(s) >= 0 && line.Substring(line.IndexOf(s) + s.Length).Trim() == "")
