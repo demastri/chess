@@ -84,7 +84,7 @@ namespace ChessPosition
                                 lastPly.comment = (PGNComment)token;
                             break;
                         case PGNTokenType.Terminator:
-                            // these can be skipped
+                            Tags["Result"] = token.tokenString;
                             break;
                         case PGNTokenType.MoveString:
                             lastPly = HandleMove((PGNMoveString)token);

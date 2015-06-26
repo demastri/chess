@@ -58,15 +58,16 @@ namespace PGNViewer
                 {
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
+                    string s = g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"];
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
-                            inProgOnMoveNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                            inProgOnMoveNode.Nodes.Add(s,s);
                         else
-                            inProgWaitingNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                            inProgWaitingNode.Nodes.Add(s, s);
                     }
                     else
-                        complNode.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                        complNode.Nodes.Add(s, s);
                 }
             }
             else
@@ -471,6 +472,8 @@ namespace PGNViewer
 
         private void CorrUpdate_Click(object sender, EventArgs e)
         {
+            string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+
             string possMove = CorrMoveText.Text + " ";
             DateTime possTime = CorrMoveTime.Value;
 
@@ -491,6 +494,11 @@ namespace PGNViewer
             // append this to the game
             // ###% actually refactor this so almost all of it lives in the game class...
             Ply newMove = null;
+            if (possMove.Trim() == "" )
+            {
+                MessageBox.Show("There was a problem with the provided move");
+                return;
+            }
             PGNMoveString moveStr = new PGNMoveString(possMove, 0);
             curGame.ResetPosition();
             curGame.AdvancePosition(curGame.Plies.Count);
@@ -511,6 +519,18 @@ namespace PGNViewer
             // insert a nl here
             // insert these tokens after the existing newline character and add a nl
             // add the time comment 
+
+            PGNToken termToken = null;
+
+            foreach( PGNToken t in curGame.PGNtokens )
+                if (t.tokenType == PGNTokenType.Terminator)
+                {
+                    termToken = t;
+                    break;
+                }
+            if (termToken != null)
+                curGame.PGNtokens.Remove(termToken);
+                        
             bool isAWhiteMove = (curGame.Plies.Count % 2 == 1);
             PGNText.Text = PGNText.Text.Substring(0, PGNText.Text.Length - Environment.NewLine.Length);
             int curLineLength = PGNText.Text.Length - PGNText.Text.LastIndexOf(Environment.NewLine);
@@ -538,6 +558,9 @@ namespace PGNViewer
 
             PGNText.Text += Environment.NewLine;
 
+            if (termToken != null)
+                curGame.PGNtokens.Add(termToken);
+
             UpdateCorrespondence();
 
             // move to the end...
@@ -551,6 +574,12 @@ namespace PGNViewer
             Game.SavePGNFile(curPGNFileLoc, GameRef);
 
             ReloadGamesFromFile();
+
+            TreeNode n = GameList.Nodes.Find(selectedText, true)[0];
+            GameList.SelectedNode = n;
+            GameList_SelectedIndexChanged(null, null);
+
+            CorrMoveText.Text = "";
         }
 
         private void CorrPublish_Click(object sender, EventArgs e)
@@ -604,7 +633,8 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, curGame.Tags["Event"]);
                             break;
                         case "GameName":
-                            refStr = refStr.Replace(token, curGame.Tags["Round"]);
+                            //refStr = refStr.Replace(token, curGame.Tags["Round"]);
+                            refStr = refStr.Replace(token, curGame.Tags["White"] + " - " + curGame.Tags["Black"]);
                             break;
                         case "WhiteName":
                             refStr = refStr.Replace(token, curGame.Tags["White"]);
@@ -621,7 +651,7 @@ namespace PGNViewer
                             {
                                 Ply p = curGame.Plies[lastWPly - 1];
                                 if (p.comment != null)
-                                    tempStr = p.comment.value;
+                                    tempStr = p.comment.value + " " + corrTZ.Text;
                             }
                             refStr = refStr.Replace(token, tempStr);
                             break;
@@ -632,7 +662,7 @@ namespace PGNViewer
                             {
                                 Ply p = curGame.Plies[lastWPly];
                                 if (p.comment != null)
-                                    tempStr = p.comment.value;
+                                    tempStr = p.comment.value + " " + corrTZ.Text;
                             }
                             refStr = refStr.Replace(token, tempStr);
                             break;
@@ -655,7 +685,7 @@ namespace PGNViewer
                             {
                                 Ply p = curGame.Plies[lastBPly - 1];
                                 if (p.comment != null)
-                                    tempStr = p.comment.value;
+                                    tempStr = p.comment.value + " " + corrTZ.Text;
                             }
                             refStr = refStr.Replace(token, tempStr);
                             break;
@@ -666,7 +696,7 @@ namespace PGNViewer
                             {
                                 Ply p = curGame.Plies[lastBPly];
                                 if (p.comment != null)
-                                    tempStr = p.comment.value;
+                                    tempStr = p.comment.value + " " + corrTZ.Text;
                             }
                             refStr = refStr.Replace(token, tempStr);
                             break;

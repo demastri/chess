@@ -69,6 +69,8 @@
             this.GameList = new System.Windows.Forms.TreeView();
             this.corrNameLabel = new System.Windows.Forms.Label();
             this.corrName = new System.Windows.Forms.TextBox();
+            this.corrTZ = new System.Windows.Forms.TextBox();
+            this.corrTZLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -146,7 +148,8 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.DefaultExt = "pgn";
+            this.openFileDialog1.Filter = "PGN files (*.pgn)|*.pgn|All files (*.*)|*.*";
             // 
             // PGNText
             // 
@@ -451,6 +454,7 @@
             // 
             // corrNameLabel
             // 
+            this.corrNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrNameLabel.AutoSize = true;
             this.corrNameLabel.Location = new System.Drawing.Point(579, 262);
             this.corrNameLabel.Name = "corrNameLabel";
@@ -460,17 +464,39 @@
             // 
             // corrName
             // 
+            this.corrName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrName.Location = new System.Drawing.Point(639, 259);
             this.corrName.Name = "corrName";
             this.corrName.Size = new System.Drawing.Size(168, 20);
             this.corrName.TabIndex = 25;
             this.corrName.Text = "John DeMastri";
             // 
+            // corrTZ
+            // 
+            this.corrTZ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.corrTZ.Location = new System.Drawing.Point(870, 258);
+            this.corrTZ.Name = "corrTZ";
+            this.corrTZ.Size = new System.Drawing.Size(47, 20);
+            this.corrTZ.TabIndex = 27;
+            this.corrTZ.Text = "CT";
+            // 
+            // corrTZLabel
+            // 
+            this.corrTZLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.corrTZLabel.AutoSize = true;
+            this.corrTZLabel.Location = new System.Drawing.Point(810, 261);
+            this.corrTZLabel.Name = "corrTZLabel";
+            this.corrTZLabel.Size = new System.Drawing.Size(43, 13);
+            this.corrTZLabel.TabIndex = 26;
+            this.corrTZLabel.Text = "Corr TZ";
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1012, 484);
+            this.Controls.Add(this.corrTZ);
+            this.Controls.Add(this.corrTZLabel);
             this.Controls.Add(this.corrName);
             this.Controls.Add(this.corrNameLabel);
             this.Controls.Add(this.GameList);
@@ -551,6 +577,8 @@
         private System.Windows.Forms.TreeView GameList;
         private System.Windows.Forms.Label corrNameLabel;
         private System.Windows.Forms.TextBox corrName;
+        private System.Windows.Forms.TextBox corrTZ;
+        private System.Windows.Forms.Label corrTZLabel;
     }
 }
 

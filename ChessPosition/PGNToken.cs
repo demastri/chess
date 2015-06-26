@@ -90,6 +90,7 @@ namespace ChessPosition
             tokenString = s.Substring(offset, end - offset + 1);
         }
     }
+    
     public class PGNComment : PGNToken
     {
         public string value;
@@ -131,6 +132,22 @@ namespace ChessPosition
                     value = s.Substring(offset + 1, eol - offset - 1);   // trim off the '()'
                 }
             }
+        }
+    }
+
+    public class PGNTerminator : PGNToken
+    {
+        public static List<string> terminators = new List<string>() { "1-0", "0-1", "1/2-1/2", "*" };
+        public PGNTerminator(string s, int offset)
+        {
+            tokenType = PGNTokenType.Invalid;
+            foreach (string t in terminators)
+                if (s.Substring(offset).IndexOf(t) == 0)  // ok this is a terminator
+                {
+                    startLocation = offset;
+                    tokenType = PGNTokenType.Terminator;
+                    tokenString = t;
+                }
         }
     }
 }

@@ -9,22 +9,6 @@ namespace ChessPosition
 {
     public class PGNTokenizer
     {
-        private static List<string> terminators = new List<string>() { "1-0", "0-1", "1/2-1/2", "*" };
-        public class Terminator : PGNToken
-        {
-            public Terminator(string s, int offset)
-            {
-                tokenType = PGNTokenType.Invalid;
-                foreach( string t in terminators )
-                    if (s.Substring(offset).IndexOf(t) == 0)  // ok this is a terminator
-                    {
-                        startLocation = offset;
-                        tokenType = PGNTokenType.Terminator;
-                        tokenString = t;
-                    }
-            }
-        }
-
         public string pgn;
         static public string startNextGameTag = "";
         public List<PGNToken> tokens;
@@ -61,7 +45,7 @@ namespace ChessPosition
                     }
 
                     pgn += line + " " + Environment.NewLine;
-                    foreach (string s in terminators)
+                    foreach (string s in PGNTerminator.terminators)
                         if (line.IndexOf(s) >= 0 && line.Substring(line.IndexOf(s) + s.Length).Trim() == "")
                             done = true;
                 }
@@ -111,7 +95,7 @@ namespace ChessPosition
                     outToken = new PGNComment(pgn, i);
                     break;
                 default:   // should be a move number or string...
-                    outToken = new Terminator(pgn, i);
+                    outToken = new PGNTerminator(pgn, i);
                     if( outToken.tokenType == PGNTokenType.Invalid )
                         if( char.IsDigit(pgn[i]) )
                             outToken = new PGNMoveNumber(pgn, i);
