@@ -39,6 +39,8 @@
             this.mruMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.mruMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.mruMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,8 +79,8 @@
             this.corrName = new System.Windows.Forms.TextBox();
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.corrTemplateList = new System.Windows.Forms.ComboBox();
+            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -110,6 +112,7 @@
             // 
             this.FileMenuStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.closeToolStripMenuItem1,
             this.toolStripSeparator1,
             this.mruMenuItem1,
             this.mruMenuItem2,
@@ -121,7 +124,6 @@
             this.FileMenuStrip.Name = "FileMenuStrip";
             this.FileMenuStrip.Size = new System.Drawing.Size(37, 20);
             this.FileMenuStrip.Text = "&File";
-            this.FileMenuStrip.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -169,6 +171,18 @@
             this.mruMenuItem5.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem5.Text = "&5 - MRU5";
             this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // modeToolStripMenuItem
             // 
@@ -273,7 +287,7 @@
             "None",
             "Stockfish",
             "Crafty"});
-            this.EngineList.Location = new System.Drawing.Point(791, 27);
+            this.EngineList.Location = new System.Drawing.Point(840, 27);
             this.EngineList.Name = "EngineList";
             this.EngineList.Size = new System.Drawing.Size(160, 21);
             this.EngineList.TabIndex = 8;
@@ -503,6 +517,7 @@
             // 
             this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.GameList.HideSelection = false;
             this.GameList.Location = new System.Drawing.Point(12, 27);
             this.GameList.Name = "GameList";
             this.GameList.Size = new System.Drawing.Size(298, 445);
@@ -547,23 +562,33 @@
             this.corrTZLabel.TabIndex = 26;
             this.corrTZLabel.Text = "Corr TZ";
             // 
-            // toolStripSeparator2
+            // corrTemplateList
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.corrTemplateList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.corrTemplateList.FormattingEnabled = true;
+            this.corrTemplateList.Items.AddRange(new object[] {
+            "None",
+            "Stockfish",
+            "Crafty"});
+            this.corrTemplateList.Location = new System.Drawing.Point(674, 27);
+            this.corrTemplateList.Name = "corrTemplateList";
+            this.corrTemplateList.Size = new System.Drawing.Size(160, 21);
+            this.corrTemplateList.TabIndex = 28;
+            this.corrTemplateList.Text = "None";
             // 
-            // exitToolStripMenuItem
+            // closeToolStripMenuItem1
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem1.Text = "C&lose";
+            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
             // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1012, 484);
+            this.Controls.Add(this.corrTemplateList);
             this.Controls.Add(this.corrTZ);
             this.Controls.Add(this.corrTZLabel);
             this.Controls.Add(this.corrName);
@@ -656,6 +681,8 @@
         private System.Windows.Forms.ToolStripMenuItem mruMenuItem5;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ComboBox corrTemplateList;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem1;
     }
 }
 

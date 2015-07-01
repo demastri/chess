@@ -81,6 +81,13 @@ namespace PGNViewer
                     GameList.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
                 }
             }
+            curGame = null;
+            DrawBoard();
+            UpdateCorrespondence();
+            HighlightPGNMove();
+            HighlightCorrMove();
+            UpdateAnalysis();
+            UpdateFormTitle();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -168,6 +175,9 @@ namespace PGNViewer
                 }
                 FENText.Text = curGame.ToFEN();
             }
+            else
+                FENText.Text = "";
+
             boardDisplay.Text = thisBoard;
             boardDisplay.Select(0, 0);
         }
@@ -175,7 +185,10 @@ namespace PGNViewer
         private void HighlightPGNMove()
         {
             if (curGame == null)
+            {
+                PGNText.Text = "";
                 return;
+            }
             int thisPly = curGame.curPly - 1;
             bool isBlack = thisPly % 2 == 1;
             if (thisPly < 0 && PGNText.Text != null)
@@ -368,6 +381,7 @@ namespace PGNViewer
         }
         private void DisableCorrespondence()
         {
+            corrTemplateList.Visible = corrTZLabel.Visible = corrTZ.Visible = false;
             corrNameLabel.Visible = corrName.Visible = false;
             corrGridView.Enabled = corrGridView.Visible = false;
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
@@ -375,10 +389,13 @@ namespace PGNViewer
         }
         private void EnableCorrespondence()
         {
+            corrTemplateList.Visible = corrTZLabel.Visible = corrTZ.Visible = true;
             corrNameLabel.Visible = corrName.Visible = true;
             corrGridView.Enabled = corrGridView.Visible = true;
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
             CorrMoveNbr.Visible = CorrLabel.Visible = CorrMoveText.Visible = CorrMoveTime.Visible = CorrTimeNow.Visible = true;
+
+            InitCorrTemplateList();
         }
         int totalCorrTimeW = 0;
         int totalCorrTimeB = 0;
@@ -389,6 +406,19 @@ namespace PGNViewer
         List<int> corrTimes;
         int remainCorrTimeW = 0;
         int remainCorrTimeB = 0;
+
+        private void InitCorrTemplateList()
+        {
+            corrTemplateList.Items.Clear();
+            DirectoryInfo templates = new DirectoryInfo(Directory.GetCurrentDirectory() + "/Resources");
+            FileInfo [] tFiles = templates.GetFiles("*.html");
+            foreach (FileInfo fi in tFiles)
+            {
+                corrTemplateList.Items.Add(fi.Name.Substring(0, fi.Name.Length - 5));
+            }
+            corrTemplateList.SelectedIndex = corrTemplateList.Items.Count - 1;
+        }
+
         private void UpdateCorrespondence()
         {
             // follow highlighted move from pgn viewer
@@ -405,6 +435,7 @@ namespace PGNViewer
             // at this point we can load the grid with each player's moves (1 row per full ply)
             // if there's time associated with the move we can keep reflection time at that point as well
             corrGridView.Rows.Clear();
+            ReflTimeLabel.Text = "Reflection Time:  Tot/Used/Rem (W/B): ";
             if (curGame == null)
                 return;
 
@@ -602,12 +633,7 @@ namespace PGNViewer
             MemoryStream outStream = new MemoryStream();
             StreamWriter writer = new StreamWriter(outStream);
 
-            StreamReader tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CCTemplate.html");
-            if( curGame.OnMove == PlayerEnum.White )
-                tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CC-Simple-W.html");
-            else
-                tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CC-Simple-B.html");
-            tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CCTemplate.html");
+            StreamReader tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/"+corrTemplateList.SelectedItem+".html");
             while (!tr.EndOfStream)
             {
                 string thisLine = tr.ReadLine();
@@ -811,7 +837,7 @@ namespace PGNViewer
             Brush bk = Brushes.Black;
 
             gr.Clear(Color.White);
-            Font myFont = boardDisplay.Font = new Font(pfc.Families[0], fontSize, FontStyle.Regular, GraphicsUnit.Pixel);
+            Font myFont = new Font(pfc.Families[0], fontSize, FontStyle.Regular, GraphicsUnit.Pixel);
             gr.DrawString(s, myFont, bk, new Point(0, 0));
             pBox.Image = bmp;
         }
@@ -864,6 +890,17 @@ namespace PGNViewer
             UpdateCorrespondence();
             HighlightCorrMove();
             UpdateAnalysis();
+            UpdateFormTitle();
+        }
+        private void UpdateFormTitle()
+        {
+            Text = "PGN Viewer";
+            if (curPGNFileLoc != "")
+            {
+                Text += " - " + curPGNFileLoc;
+                if (curGame != null)
+                    Text += " (" + curGame.Tags["White"] + "-" + curGame.Tags["Black"] + ")";
+            }
         }
         private void UpdateMRUMenu()
         {
@@ -892,6 +929,11 @@ namespace PGNViewer
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void closeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            LoadGamesFromFile("");
         }
     }
 }
