@@ -24,7 +24,7 @@ namespace PGNViewer
         // show in a browser / copy to clipboard...
         // (validate?) and commit updates validates/updates to screen, needs to save updated game to file
         // save the updated game / file (decorations ###% Right now has to be in the ENTERED STRING)
-        // ### terminators & results updating & displaying properly
+        // terminators & results updating & displaying properly
         // grouping games in files (in corr mode) by complete / in progress
 
         List<Game> GameRef;
@@ -34,10 +34,14 @@ namespace PGNViewer
         TreeNode inProgOnMoveNode = null;
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
+        MRUHandler mruList;
 
         public PGNViewer()
         {
             InitializeComponent();
+            mruList = new MRUHandler();
+            mruList.InitList();
+            UpdateMRUMenu();
         }
 
         private void ReloadGamesFromFile()
@@ -62,7 +66,7 @@ namespace PGNViewer
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
-                            inProgOnMoveNode.Nodes.Add(s,s);
+                            inProgOnMoveNode.Nodes.Add(s, s);
                         else
                             inProgWaitingNode.Nodes.Add(s, s);
                     }
@@ -84,7 +88,9 @@ namespace PGNViewer
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 LoadGamesFromFile(openFileDialog1.FileName);
-
+                mruList.AddMRUFile(openFileDialog1.FileName);
+                mruList.UpdateList();
+                UpdateMRUMenu();
             }
         }
 
@@ -380,6 +386,7 @@ namespace PGNViewer
         int usedCorrTimeB = 0;
         int lastCorrTimeW = 0;
         int lastCorrTimeB = 0;
+        List<int> corrTimes;
         int remainCorrTimeW = 0;
         int remainCorrTimeB = 0;
         private void UpdateCorrespondence()
@@ -391,7 +398,7 @@ namespace PGNViewer
             // (validate?) and commit updates validates/updates to screen, needs to save updated game to file
             // ###% move game to "other" (complete) file
             // generate HTML grid for mail inclusion
-            // pgn viewer follow highlighted grid move :) 
+            // pgn viewer follow highlighted grid move :) ###%
             // pgn reader has to deal with "in-progress" games
             // open/complete folders in grid?
 
@@ -417,6 +424,7 @@ namespace PGNViewer
             usedCorrTimeB = 0;
             lastCorrTimeW = 0;
             lastCorrTimeB = 0;
+            corrTimes = new List<int>();
 
             for (int i = 0; i < curGame.Plies.Count; i++)
             {
@@ -442,6 +450,7 @@ namespace PGNViewer
                     lastMoveTime = DateTime.MinValue;
                     thisReflTime = 0;
                 }
+                corrTimes.Add(thisReflTime);
                 if (i % 2 == 0) // W
                 {
                     lastCorrTimeW = thisReflTime;
@@ -494,7 +503,7 @@ namespace PGNViewer
             // append this to the game
             // ###% actually refactor this so almost all of it lives in the game class...
             Ply newMove = null;
-            if (possMove.Trim() == "" )
+            if (possMove.Trim() == "")
             {
                 MessageBox.Show("There was a problem with the provided move");
                 return;
@@ -522,7 +531,7 @@ namespace PGNViewer
 
             PGNToken termToken = null;
 
-            foreach( PGNToken t in curGame.PGNtokens )
+            foreach (PGNToken t in curGame.PGNtokens)
                 if (t.tokenType == PGNTokenType.Terminator)
                 {
                     termToken = t;
@@ -530,7 +539,7 @@ namespace PGNViewer
                 }
             if (termToken != null)
                 curGame.PGNtokens.Remove(termToken);
-                        
+
             bool isAWhiteMove = (curGame.Plies.Count % 2 == 1);
             PGNText.Text = PGNText.Text.Substring(0, PGNText.Text.Length - Environment.NewLine.Length);
             int curLineLength = PGNText.Text.Length - PGNText.Text.LastIndexOf(Environment.NewLine);
@@ -593,7 +602,12 @@ namespace PGNViewer
             MemoryStream outStream = new MemoryStream();
             StreamWriter writer = new StreamWriter(outStream);
 
-            StreamReader tr = new StreamReader("../../Resources/CCTemplate.html");
+            StreamReader tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CCTemplate.html");
+            if( curGame.OnMove == PlayerEnum.White )
+                tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CC-Simple-W.html");
+            else
+                tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CC-Simple-B.html");
+            tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/CCTemplate.html");
             while (!tr.EndOfStream)
             {
                 string thisLine = tr.ReadLine();
@@ -627,8 +641,62 @@ namespace PGNViewer
             foreach (string token in tokens)
             {
                 if (token.Length > 1 && token[0] == '@')
-                    switch (token.Substring(1))
+                {
+                    string key = token.Substring(1);
+                    int offsetLoc = key.IndexOf('-');
+                    int offset = 0;
+                    if (offsetLoc >= 0)
                     {
+                        offset = Convert.ToInt32(key.Substring(offsetLoc + 1));
+                        key = key.Substring(0, offsetLoc);
+                    }
+                    switch (key)
+                    {
+                        case "MoveNbr":
+                            lastMoveNbr -= offset;
+                            if (lastMoveNbr > 0)
+                                tempStr = lastMoveNbr <= 0 ? "" : (lastMoveNbr.ToString() + ".");
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "WhiteMove":
+                            lastWPly -= 2 * offset;
+                            if (lastWPly >= 0)
+                                tempStr += curGame.Plies[lastWPly].refToken.tokenString;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "WhiteMoveTime":
+                            lastWPly -= 2 * offset;
+                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
+                                tempStr += curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "WhiteReflTime":
+                            lastWPly -= 2 * offset;
+                            if (lastWPly >= 0)
+                                tempStr += corrTimes[lastWPly].ToString();
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "BlackMove":
+                            lastBPly -= 2 * offset;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
+                                tempStr += curGame.Plies[lastBPly].refToken.tokenString;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "BlackMoveTime":
+                            lastBPly -= 2 * offset;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
+                                tempStr += curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+                        case "BlackReflTime":
+                            lastBPly -= 2 * offset;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
+                                tempStr += corrTimes[lastBPly].ToString();
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+
+
+
                         case "EventName":
                             refStr = refStr.Replace(token, curGame.Tags["Event"]);
                             break;
@@ -709,14 +777,50 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, "<br>" + curGame.BuildMoveList() + "<br><br>");
                             break;
                         case "Diagram":
-                            // ###%
-                            refStr = "&nbsp;";
+                            // pull the current text from the board display
+                            string boardText = boardDisplay.Text;
+                            // draw it into a picture box (font/size)
+                            PictureBox outBox = new PictureBox();
+                            outBox.Width = outBox.Height = 150;
+                            picBox_Paint(outBox, boardText, 14);
+
+                            // extract the image data from the picture box
+                            string imageInBase64 = ConvertImageToBase64String(outBox.Image);
+
+                            // build the img tag contents
+                            string imgStr = "<img id=\"myImg\" src=\"data:image/bmp;base64," + imageInBase64 + "\" alt=\"My Image data in base 64\" />";
+
+                            // write the image tag to the template
+                            refStr = refStr.Replace(token, "" + imgStr + "");
                             break;
                     }
+                }
                 if (token.Length > 0 && token[0] == '@')
                     refStr = refStr.Replace(token, "Some New Value -" + token.Substring(1) + "-");
             }
             return refStr;
+        }
+        private void picBox_Paint(PictureBox pBox, string s, int fontSize)
+        {
+            Bitmap bmp = new Bitmap(pBox.Width, pBox.Height);
+            Graphics gr = Graphics.FromImage(bmp);
+
+            Pen p = new Pen(Color.Red);
+            p.Width = 0.2f;
+
+            Brush bk = Brushes.Black;
+
+            gr.Clear(Color.White);
+            Font myFont = boardDisplay.Font = new Font(pfc.Families[0], fontSize, FontStyle.Regular, GraphicsUnit.Pixel);
+            gr.DrawString(s, myFont, bk, new Point(0, 0));
+            pBox.Image = bmp;
+        }
+        private string ConvertImageToBase64String(Image img)
+        {
+            MemoryStream ms = new MemoryStream();
+            img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            return Convert.ToBase64String(ms.ToArray());
         }
 
         private void PGNViewer_Resize(object sender, EventArgs e)
@@ -760,6 +864,34 @@ namespace PGNViewer
             UpdateCorrespondence();
             HighlightCorrMove();
             UpdateAnalysis();
+        }
+        private void UpdateMRUMenu()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                ToolStripItem menu = FileMenuStrip.DropDownItems["mruMenuItem" + i.ToString()];
+                int mruIndex = mruList.MRUFiles.Count - i;
+                if (mruIndex >= 0)
+                {
+                    menu.Text = "&" + i.ToString() + " - " + mruList.MRUFiles[mruIndex];
+                    menu.Visible = true;
+                }
+                else
+                {
+                    menu.Visible = false;
+                }
+            }
+        }
+
+        private void mruMenuItem_Click(object sender, EventArgs e)
+        {
+            string fn = sender.ToString().Substring(5);
+            LoadGamesFromFile(fn);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

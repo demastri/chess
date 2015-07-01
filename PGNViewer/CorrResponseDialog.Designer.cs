@@ -39,12 +39,13 @@
             this.htmlView.Location = new System.Drawing.Point(0, 0);
             this.htmlView.MinimumSize = new System.Drawing.Size(20, 20);
             this.htmlView.Name = "htmlView";
-            this.htmlView.Size = new System.Drawing.Size(362, 426);
+            this.htmlView.Size = new System.Drawing.Size(458, 574);
             this.htmlView.TabIndex = 0;
             // 
             // SendToClipboard
             // 
-            this.SendToClipboard.Location = new System.Drawing.Point(275, 403);
+            this.SendToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.SendToClipboard.Location = new System.Drawing.Point(371, 551);
             this.SendToClipboard.Name = "SendToClipboard";
             this.SendToClipboard.Size = new System.Drawing.Size(75, 23);
             this.SendToClipboard.TabIndex = 1;
@@ -54,8 +55,9 @@
             // 
             // cancelButton
             // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(194, 403);
+            this.cancelButton.Location = new System.Drawing.Point(290, 551);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 2;
@@ -68,7 +70,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(362, 426);
+            this.ClientSize = new System.Drawing.Size(458, 574);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.SendToClipboard);
             this.Controls.Add(this.htmlView);

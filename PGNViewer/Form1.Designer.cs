@@ -31,8 +31,14 @@
             this.components = new System.ComponentModel.Container();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mruMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mruMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mruMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mruMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mruMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +77,8 @@
             this.corrName = new System.Windows.Forms.TextBox();
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -90,7 +98,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
+            this.FileMenuStrip,
             this.modeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -98,20 +106,69 @@
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // FileMenuStrip
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
+            this.FileMenuStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.mruMenuItem1,
+            this.mruMenuItem2,
+            this.mruMenuItem3,
+            this.mruMenuItem4,
+            this.mruMenuItem5,
+            this.toolStripSeparator2,
+            this.exitToolStripMenuItem});
+            this.FileMenuStrip.Name = "FileMenuStrip";
+            this.FileMenuStrip.Size = new System.Drawing.Size(37, 20);
+            this.FileMenuStrip.Text = "&File";
+            this.FileMenuStrip.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // mruMenuItem1
+            // 
+            this.mruMenuItem1.Name = "mruMenuItem1";
+            this.mruMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem1.Text = "&1 - MRU1";
+            this.mruMenuItem1.Click += new System.EventHandler(this.mruMenuItem_Click);
+            // 
+            // mruMenuItem2
+            // 
+            this.mruMenuItem2.Name = "mruMenuItem2";
+            this.mruMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem2.Text = "&2 - MRU2";
+            this.mruMenuItem2.Click += new System.EventHandler(this.mruMenuItem_Click);
+            // 
+            // mruMenuItem3
+            // 
+            this.mruMenuItem3.Name = "mruMenuItem3";
+            this.mruMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem3.Text = "&3 - MRU3";
+            this.mruMenuItem3.Click += new System.EventHandler(this.mruMenuItem_Click);
+            // 
+            // mruMenuItem4
+            // 
+            this.mruMenuItem4.Name = "mruMenuItem4";
+            this.mruMenuItem4.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem4.Text = "&4 - MRU4";
+            this.mruMenuItem4.Click += new System.EventHandler(this.mruMenuItem_Click);
+            // 
+            // mruMenuItem5
+            // 
+            this.mruMenuItem5.Name = "mruMenuItem5";
+            this.mruMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem5.Text = "&5 - MRU5";
+            this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // modeToolStripMenuItem
             // 
@@ -490,6 +547,18 @@
             this.corrTZLabel.TabIndex = 26;
             this.corrTZLabel.Text = "Corr TZ";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -539,7 +608,7 @@
 
         private System.Windows.Forms.TextBox boardDisplay;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox PGNText;
@@ -579,6 +648,14 @@
         private System.Windows.Forms.TextBox corrName;
         private System.Windows.Forms.TextBox corrTZ;
         private System.Windows.Forms.Label corrTZLabel;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mruMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem mruMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem mruMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem mruMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem mruMenuItem5;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

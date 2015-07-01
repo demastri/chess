@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<style media="screen" type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <td>&nbsp;</td>
+            <td colspan="3">@WhiteName</td>
+            <td></td>
+            <td colspan="3">@BlackName</td>
+        </tr>
+        <tr>
+            <td colspan="8"></td>
+        </tr>
+        <tr>
+            <td>nbr</td>
+            <td>move</td>
+            <td>rec&#39;d</td>
+            <td>time</td>
+            <td></td>
+            <td>move</td>
+            <td>rec&#39;d</td>
+            <td>time</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr-2</td>
+            <td>@WhiteMove-2</td>
+            <td>@WhiteMoveTime-2</td>
+            <td>@WhiteReflTime-2</td>
+            <td></td>
+            <td>@BlackMove-1</td>
+            <td>@BlackMoveTime-1</td>
+            <td>@BlackReflTime-1</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr-1</td>
+            <td>@WhiteMove-1</td>
+            <td>@WhiteMoveTime-1</td>
+            <td>@WhiteReflTime-1</td>
+            <td></td>
+            <td>@BlackMove</td>
+            <td>@BlackMoveTime</td>
+            <td>@BlackReflTime</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr</td>
+            <td>@WhiteMove</td>
+            <td>@WhiteMoveTime</td>
+            <td>@WhiteReflTime</td>
+            <td></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3">Reflection Time (incoming / current / remaining)</td>
+            <td>@WhiteReflTimeOverview</td>
+            <td colspan="3"></td>
+            <td>@BlackReflTimeOverview</td>
+        </tr>
+
+    </table>
+</body>
+</html>
