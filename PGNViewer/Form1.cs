@@ -137,6 +137,9 @@ namespace PGNViewer
             int limitingSize = boardDisplay.Width < boardDisplay.Height ? boardDisplay.Width : boardDisplay.Height;
             double fontFactor = 13.75;
             int fontSize = (int)(limitingSize / fontFactor);
+
+            if (fontSize == 0)
+                return;
             boardDisplay.Font = new Font(pfc.Families[0], fontSize);
 
             string emptyBoard =
