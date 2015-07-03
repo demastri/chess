@@ -705,6 +705,13 @@ namespace PGNViewer
                                 tempStr += corrTimes[lastWPly].ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "WhiteClockStart":
+                            lastWPly -= 1+(2 * offset);
+                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
+                                tempStr += curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
+
                         case "BlackMove":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
@@ -723,8 +730,12 @@ namespace PGNViewer
                                 tempStr += corrTimes[lastBPly].ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
-
-
+                        case "BlackClockStart":
+                            lastBPly -= 1 + (2 * offset);
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
+                                tempStr += curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
 
                         case "EventName":
                             refStr = refStr.Replace(token, curGame.Tags["Event"]);
@@ -736,66 +747,12 @@ namespace PGNViewer
                         case "WhiteName":
                             refStr = refStr.Replace(token, curGame.Tags["White"]);
                             break;
-                        case "WhiteCurMove":
-                            tempStr = lastMoveNbr.ToString() + ".";
-                            tempStr += curGame.Plies[lastWPly].refToken.tokenString;
-                            refStr = refStr.Replace(token, tempStr);
-                            break;
-                        case "WhitePriorMoveTime":
-                            // comment text on white's last move
-                            tempStr = "";
-                            if (lastWPly - 1 >= 0)
-                            {
-                                Ply p = curGame.Plies[lastWPly - 1];
-                                if (p.comment != null)
-                                    tempStr = p.comment.value + " " + corrTZ.Text;
-                            }
-                            refStr = refStr.Replace(token, tempStr);
-                            break;
-                        case "WhiteLastMoveTime":
-                            // comment text on white's last move
-                            tempStr = "";
-                            if (lastWPly >= 0)
-                            {
-                                Ply p = curGame.Plies[lastWPly];
-                                if (p.comment != null)
-                                    tempStr = p.comment.value + " " + corrTZ.Text;
-                            }
-                            refStr = refStr.Replace(token, tempStr);
-                            break;
                         case "WhiteReflTimeOverview":
                             tempStr = (remainCorrTimeW + lastCorrTimeW).ToString() + " / " + lastCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackName":
                             refStr = refStr.Replace(token, curGame.Tags["Black"]);
-                            break;
-                        case "BlackCurMove":
-                            tempStr = (whiteOnMove ? lastMoveNbr : lastMoveNbr - 1).ToString() + ". ... ";
-                            tempStr += curGame.Plies[lastBPly].refToken.tokenString;
-                            refStr = refStr.Replace(token, tempStr);
-                            break;
-                        case "BlackPriorMoveTime":
-                            // comment text on white's last move
-                            tempStr = "";
-                            if (lastBPly - 1 >= 0)
-                            {
-                                Ply p = curGame.Plies[lastBPly - 1];
-                                if (p.comment != null)
-                                    tempStr = p.comment.value + " " + corrTZ.Text;
-                            }
-                            refStr = refStr.Replace(token, tempStr);
-                            break;
-                        case "BlackLastMoveTime":
-                            // comment text on b's last move
-                            tempStr = "";
-                            if (lastBPly >= 0)
-                            {
-                                Ply p = curGame.Plies[lastBPly];
-                                if (p.comment != null)
-                                    tempStr = p.comment.value + " " + corrTZ.Text;
-                            }
-                            refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackReflTimeOverview":
                             tempStr = (remainCorrTimeB + lastCorrTimeB).ToString() + " / " + lastCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
