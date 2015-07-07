@@ -666,7 +666,7 @@ namespace PGNViewer
             int lastBPly = curGame.Plies.Count - (whiteOnMove ? 0 : 1) - 1;
             int lastMoveNbr = (curGame.Plies.Count - 1) / 2 + 1;
             string tempStr = "";
-            string[] tokens = refStr.Split(new char[] { '<', '>' });
+            string[] tokens = refStr.Split(new char[] { '<', '>', ' '});
             foreach (string token in tokens)
             {
                 if (token.Length > 1 && token[0] == '@')
@@ -687,53 +687,66 @@ namespace PGNViewer
                                 tempStr = lastMoveNbr <= 0 ? "" : (lastMoveNbr.ToString() + ".");
                             refStr = refStr.Replace(token, tempStr);
                             break;
+
+                        case "WhiteMoveNbr":
+                            lastWPly -= 2 * offset;
+                            if (lastWPly >= 0)
+                                tempStr = ((lastWPly/2)+1).ToString()+". ";
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
                         case "WhiteMove":
                             lastWPly -= 2 * offset;
                             if (lastWPly >= 0)
-                                tempStr += curGame.Plies[lastWPly].refToken.tokenString;
+                                tempStr = curGame.Plies[lastWPly].refToken.tokenString;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteMoveTime":
                             lastWPly -= 2 * offset;
                             if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
-                                tempStr += curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                                tempStr = curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteReflTime":
                             lastWPly -= 2 * offset;
                             if (lastWPly >= 0)
-                                tempStr += corrTimes[lastWPly].ToString();
+                                tempStr = corrTimes[lastWPly].ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteClockStart":
                             lastWPly -= 1+(2 * offset);
                             if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
-                                tempStr += curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                                tempStr = curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
+                        case "BlackMoveNbr":
+                            lastBPly -= 2 * offset;
+                            if (lastBPly >= 0)
+                                tempStr = ((lastBPly /2)+1).ToString()+". ... ";
+                            refStr = refStr.Replace(token, tempStr);
+                            break;
                         case "BlackMove":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
-                                tempStr += curGame.Plies[lastBPly].refToken.tokenString;
+                                tempStr = curGame.Plies[lastBPly].refToken.tokenString;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackMoveTime":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
-                                tempStr += curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                                tempStr = curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackReflTime":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
-                                tempStr += corrTimes[lastBPly].ToString();
+                                tempStr = corrTimes[lastBPly].ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackClockStart":
                             lastBPly -= 1 + (2 * offset);
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
-                                tempStr += curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                                tempStr = curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
