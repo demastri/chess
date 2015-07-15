@@ -206,6 +206,76 @@ namespace ChessPosition
             return CurrentPosition.ToFEN(progressCounter, curPly / 2 + 1);
         }
 
+        public Ply CreateMove(Square src, Square dest)
+        {
+            Ply outPly = new Ply(src, dest);
+            outPly.refToken = new PGNToken();
+            outPly.refToken.tokenType = PGNTokenType.MoveString;
+
+            Piece thisPc = CurrentPosition.PieceAt(src);
+            Piece capPc = CurrentPosition.PieceAt(dest);
+
+            if (thisPc == null || thisPc.color != OnMove || (capPc != null && capPc.color == OnMove))
+                return null;
+            List<Square> options = CurrentPosition.FindPieceWithTarget(thisPc, dest, Square.Rank.NONE, Square.File.NONE);
+            if (!options.Contains(src))
+                return null;
+            // at this point, thisPc is the right color, and could move from src->dest
+            // Fully defined piece text = (Piece desig)(constrain row)(constrain col)(capture flag)(dest sq)
+
+            // castle
+            if (thisPc.piece == Piece.PieceType.King && (Square.File)src.col == Square.File.FE)
+                if ((Square.File)dest.col == Square.File.FG &&
+                    (CurrentPosition.castleRights & (byte)
+                    (OnMove == PlayerEnum.White ?
+                    Position.CastleRights.KS_White : Position.CastleRights.KS_Black)) != 0)
+                {
+                    outPly.refToken.tokenString = "O-O";
+                    return outPly;
+                }
+                else if ((Square.File)dest.col == Square.File.FC &&
+                    (CurrentPosition.castleRights & (byte)
+                    (OnMove == PlayerEnum.White ?
+                    Position.CastleRights.QS_White : Position.CastleRights.QS_Black)) != 0)
+                {
+                    outPly.refToken.tokenString = "O-O-O";
+                    return outPly;
+                }
+
+            // move
+            outPly.refToken.tokenString = thisPc.piece == Piece.PieceType.Pawn ? "" : thisPc.ToString();
+            // constraining piece...
+            if (options.Count > 1)
+            {
+                int rankCount = 0;
+                int fileCount = 0;
+                foreach (Square s in options)
+                {
+                    if (s.row == src.row)
+                        rankCount++;
+                    if (s.col == src.col)
+                        fileCount++;
+                }
+                if (fileCount == 1)
+                    // if there's only one on the src file, use the file as a diff
+                    outPly.refToken.tokenString += src.ToString().Substring(0, 1);
+                else if (rankCount == 1)
+                    // otherwise if there's only one on the src rank, use the rank as a dif
+                    outPly.refToken.tokenString += src.ToString().Substring(1, 1);
+                else
+                    // otherwise use the full square
+                    outPly.refToken.tokenString += src.ToString();
+            }
+
+            // capture or cap ep
+            if (capPc != null || CurrentPosition.epLoc == dest && thisPc.piece == Piece.PieceType.Pawn) 
+                outPly.refToken.tokenString += "x";
+            // dest sq
+            outPly.refToken.tokenString += dest.ToString();
+
+            return outPly;
+        }
+
         private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
         private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
 
@@ -403,7 +473,7 @@ namespace ChessPosition
             foreach (PGNToken p in PGNtokens)
             {
                 // start new move on a new line if needed
-                if( (wasatag && p.tokenType != PGNTokenType.Tag) || curLineLength >= lineLengthTrigger && p.tokenType == PGNTokenType.MoveNumber)
+                if ((wasatag && p.tokenType != PGNTokenType.Tag) || curLineLength >= lineLengthTrigger && p.tokenType == PGNTokenType.MoveNumber)
                 {
                     wasatag = false;
                     sw.WriteLine();
@@ -413,7 +483,7 @@ namespace ChessPosition
                 sw.Write(p.tokenString.Trim());
                 curLineLength += p.tokenString.Trim().Length;
 
-                if ( p.tokenType != PGNTokenType.MoveNumber)
+                if (p.tokenType != PGNTokenType.MoveNumber)
                 {
                     sw.Write(" ");
                     curLineLength++;
@@ -427,7 +497,7 @@ namespace ChessPosition
                 }
             }
             sw.WriteLine();
-            if( curLineLength > 0 )
+            if (curLineLength > 0)
                 sw.WriteLine();
         }
     }

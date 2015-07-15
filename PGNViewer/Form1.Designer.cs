@@ -33,6 +33,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mruMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mruMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +81,6 @@
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
             this.corrTemplateList = new System.Windows.Forms.ComboBox();
-            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -96,6 +96,8 @@
             this.boardDisplay.ReadOnly = true;
             this.boardDisplay.Size = new System.Drawing.Size(256, 223);
             this.boardDisplay.TabIndex = 1;
+            this.boardDisplay.Click += new System.EventHandler(this.boardDisplay_Click);
+            this.boardDisplay.DoubleClick += new System.EventHandler(this.boardDisplay_DoubleClick);
             // 
             // menuStrip1
             // 
@@ -128,59 +130,66 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // closeToolStripMenuItem1
+            // 
+            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(123, 22);
+            this.closeToolStripMenuItem1.Text = "C&lose";
+            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
             // 
             // mruMenuItem1
             // 
             this.mruMenuItem1.Name = "mruMenuItem1";
-            this.mruMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem1.Size = new System.Drawing.Size(123, 22);
             this.mruMenuItem1.Text = "&1 - MRU1";
             this.mruMenuItem1.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem2
             // 
             this.mruMenuItem2.Name = "mruMenuItem2";
-            this.mruMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem2.Size = new System.Drawing.Size(123, 22);
             this.mruMenuItem2.Text = "&2 - MRU2";
             this.mruMenuItem2.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem3
             // 
             this.mruMenuItem3.Name = "mruMenuItem3";
-            this.mruMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem3.Size = new System.Drawing.Size(123, 22);
             this.mruMenuItem3.Text = "&3 - MRU3";
             this.mruMenuItem3.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem4
             // 
             this.mruMenuItem4.Name = "mruMenuItem4";
-            this.mruMenuItem4.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem4.Size = new System.Drawing.Size(123, 22);
             this.mruMenuItem4.Text = "&4 - MRU4";
             this.mruMenuItem4.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem5
             // 
             this.mruMenuItem5.Name = "mruMenuItem5";
-            this.mruMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem5.Size = new System.Drawing.Size(123, 22);
             this.mruMenuItem5.Text = "&5 - MRU5";
             this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(120, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -234,6 +243,7 @@
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.PGNText.Size = new System.Drawing.Size(684, 161);
             this.PGNText.TabIndex = 3;
+            this.PGNText.Click += new System.EventHandler(this.PGNText_Click);
             // 
             // ResetGameButton
             // 
@@ -366,6 +376,7 @@
             this.corrGridView.ShowEditingIcon = false;
             this.corrGridView.Size = new System.Drawing.Size(421, 147);
             this.corrGridView.TabIndex = 13;
+            this.corrGridView.Click += new System.EventHandler(this.corrGridView_Click);
             // 
             // MoveNbr
             // 
@@ -424,27 +435,27 @@
             // CorrMoveTime
             // 
             this.CorrMoveTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrMoveTime.CustomFormat = "MM/dd/yyyy HH:mm:ss";
+            this.CorrMoveTime.CustomFormat = "MM/dd/yyyy HH:mm";
             this.CorrMoveTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.CorrMoveTime.Location = new System.Drawing.Point(799, 208);
+            this.CorrMoveTime.Location = new System.Drawing.Point(823, 208);
             this.CorrMoveTime.Name = "CorrMoveTime";
-            this.CorrMoveTime.Size = new System.Drawing.Size(152, 20);
+            this.CorrMoveTime.Size = new System.Drawing.Size(128, 20);
             this.CorrMoveTime.TabIndex = 14;
             // 
             // CorrLabel
             // 
             this.CorrLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrLabel.AutoSize = true;
-            this.CorrLabel.Location = new System.Drawing.Point(579, 208);
+            this.CorrLabel.Location = new System.Drawing.Point(579, 211);
             this.CorrLabel.Name = "CorrLabel";
-            this.CorrLabel.Size = new System.Drawing.Size(117, 13);
+            this.CorrLabel.Size = new System.Drawing.Size(120, 13);
             this.CorrLabel.TabIndex = 15;
-            this.CorrLabel.Text = "Next Move Text / Time";
+            this.CorrLabel.Text = "Next Move Text / Time:";
             // 
             // CorrMoveText
             // 
             this.CorrMoveText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrMoveText.Location = new System.Drawing.Point(746, 208);
+            this.CorrMoveText.Location = new System.Drawing.Point(770, 208);
             this.CorrMoveText.Name = "CorrMoveText";
             this.CorrMoveText.Size = new System.Drawing.Size(47, 20);
             this.CorrMoveText.TabIndex = 16;
@@ -463,7 +474,7 @@
             // CorrMoveNbr
             // 
             this.CorrMoveNbr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrMoveNbr.Location = new System.Drawing.Point(693, 207);
+            this.CorrMoveNbr.Location = new System.Drawing.Point(717, 208);
             this.CorrMoveNbr.Name = "CorrMoveNbr";
             this.CorrMoveNbr.ReadOnly = true;
             this.CorrMoveNbr.Size = new System.Drawing.Size(47, 20);
@@ -472,7 +483,7 @@
             // CorrUpdate
             // 
             this.CorrUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrUpdate.Location = new System.Drawing.Point(891, 235);
+            this.CorrUpdate.Location = new System.Drawing.Point(891, 234);
             this.CorrUpdate.Name = "CorrUpdate";
             this.CorrUpdate.Size = new System.Drawing.Size(51, 23);
             this.CorrUpdate.TabIndex = 19;
@@ -483,7 +494,7 @@
             // CorrPublish
             // 
             this.CorrPublish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrPublish.Location = new System.Drawing.Point(948, 235);
+            this.CorrPublish.Location = new System.Drawing.Point(948, 234);
             this.CorrPublish.Name = "CorrPublish";
             this.CorrPublish.Size = new System.Drawing.Size(51, 23);
             this.CorrPublish.TabIndex = 20;
@@ -575,13 +586,6 @@
             this.corrTemplateList.Size = new System.Drawing.Size(160, 21);
             this.corrTemplateList.TabIndex = 28;
             this.corrTemplateList.Text = "None";
-            // 
-            // closeToolStripMenuItem1
-            // 
-            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.closeToolStripMenuItem1.Text = "C&lose";
-            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
             // 
             // PGNViewer
             // 

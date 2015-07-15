@@ -75,7 +75,7 @@ namespace ProcessWrappers
 
         #region Private fields
 
-        QueueingModel queueClient;
+        QueueCommon.RabbitMQWrapper queueClient;
         PipeStream pipeClientIn;
         PipeStream pipeClientOut;
         StreamReader StreamIn;
@@ -119,8 +119,8 @@ namespace ProcessWrappers
             // actual client needs to inform us about postRoutes...
             postRoutes.Add("ClientWrapper");
 
-            queueClient = new QueueingModel(param[0], "topic", "clientQueue", listenRoutes, param[1], param[3], param[4], Convert.ToInt32(param[2]));
-            queueClient.SetListenerCallback(HandlePosts);
+            // ### queueClient = new QueueingModel(param[0], "topic", "clientQueue", listenRoutes, param[1], param[3], param[4], Convert.ToInt32(param[2]));
+            // ### queueClient.SetListenerCallback(HandlePosts);
         }
         public void UpdatePostRoute( string src, string dest ) 
         {
@@ -190,7 +190,7 @@ namespace ProcessWrappers
                 {
                     q = 0;
                 }
-                queueClient.PostMessage(msg, postRoutes[q]);
+                // ### queueClient.PostMessage(msg, postRoutes[q]);
             }
             else
             ClientMessage(msg, "");
@@ -199,7 +199,7 @@ namespace ProcessWrappers
         {
             if (useQueueIO)
             {
-                queueClient.PostMessage(msg, route);
+                // ### queueClient.PostMessage(msg, route);
             }
             else
             {

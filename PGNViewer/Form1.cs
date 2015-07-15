@@ -134,6 +134,8 @@ namespace PGNViewer
 
         private void DrawBoard()
         {
+            CleanupDrag();
+
             int limitingSize = boardDisplay.Width < boardDisplay.Height ? boardDisplay.Width : boardDisplay.Height;
             double fontFactor = 13.75;
             int fontSize = (int)(limitingSize / fontFactor);
@@ -185,6 +187,21 @@ namespace PGNViewer
             boardDisplay.Select(0, 0);
         }
 
+        int curMoveTextStart = 0;
+        int curMoveTextEnd = 0;
+        private int findPlyAtLocation(int loc)
+        {
+            for (int i = 0; i <= curGame.Plies.Count; i++)
+            {
+                ChangePosition(0);
+                ChangePosition(i);
+                if (curMoveTextStart <= loc && loc <= curMoveTextEnd)
+                    return i;
+                if (curMoveTextStart > loc)
+                    return i - 1;
+            }
+            return curGame.Plies.Count;
+        }
         private void HighlightPGNMove()
         {
             if (curGame == null)
@@ -195,13 +212,17 @@ namespace PGNViewer
             int thisPly = curGame.curPly - 1;
             bool isBlack = thisPly % 2 == 1;
             if (thisPly < 0 && PGNText.Text != null)
+            {
                 PGNText.Select(0, 0);
+                curMoveTextStart = curMoveTextEnd = 0;
+            }
             else
             {
                 int moveNbr = (thisPly / 2) + 1;
                 bool haveMove = false;
                 bool nextPly = !isBlack;
                 PGNMoveString thisMove = null;
+                PGNToken lastToken = null;
                 foreach (PGNToken t in curGame.PGNtokens)
                 {
                     if (!haveMove && t.tokenType == PGNTokenType.MoveNumber && ((PGNMoveNumber)t).value == moveNbr)
@@ -216,9 +237,14 @@ namespace PGNViewer
                         }
                         else
                             nextPly = true;
+                    lastToken = t;
                 }
                 PGNText.Select(thisMove.startLocation, thisMove.value.Length);
                 PGNText.ScrollToCaret();
+                curMoveTextStart = thisMove.startLocation;
+                curMoveTextEnd = thisMove.startLocation + thisMove.value.Length;
+                if (lastToken != null && lastToken.tokenType == PGNTokenType.MoveNumber)
+                    curMoveTextStart -= lastToken.tokenString.Length;
             }
         }
         private void HighlightCorrMove()
@@ -414,7 +440,7 @@ namespace PGNViewer
         {
             corrTemplateList.Items.Clear();
             DirectoryInfo templates = new DirectoryInfo(Directory.GetCurrentDirectory() + "/Resources");
-            FileInfo [] tFiles = templates.GetFiles("*.html");
+            FileInfo[] tFiles = templates.GetFiles("*.html");
             foreach (FileInfo fi in tFiles)
             {
                 corrTemplateList.Items.Add(fi.Name.Substring(0, fi.Name.Length - 5));
@@ -636,7 +662,7 @@ namespace PGNViewer
             MemoryStream outStream = new MemoryStream();
             StreamWriter writer = new StreamWriter(outStream);
 
-            StreamReader tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/"+corrTemplateList.SelectedItem+".html");
+            StreamReader tr = new StreamReader(Directory.GetCurrentDirectory() + "/Resources/" + corrTemplateList.SelectedItem + ".html");
             while (!tr.EndOfStream)
             {
                 string thisLine = tr.ReadLine();
@@ -666,7 +692,7 @@ namespace PGNViewer
             int lastBPly = curGame.Plies.Count - (whiteOnMove ? 0 : 1) - 1;
             int lastMoveNbr = (curGame.Plies.Count - 1) / 2 + 1;
             string tempStr = "";
-            string[] tokens = refStr.Split(new char[] { '<', '>', ' '});
+            string[] tokens = refStr.Split(new char[] { '<', '>', ' ' });
             foreach (string token in tokens)
             {
                 if (token.Length > 1 && token[0] == '@')
@@ -691,7 +717,7 @@ namespace PGNViewer
                         case "WhiteMoveNbr":
                             lastWPly -= 2 * offset;
                             if (lastWPly >= 0)
-                                tempStr = ((lastWPly/2)+1).ToString()+". ";
+                                tempStr = ((lastWPly / 2) + 1).ToString() + ". ";
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteMove":
@@ -713,7 +739,7 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteClockStart":
-                            lastWPly -= 1+(2 * offset);
+                            lastWPly -= 1 + (2 * offset);
                             if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
                                 tempStr = curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
@@ -722,7 +748,7 @@ namespace PGNViewer
                         case "BlackMoveNbr":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0)
-                                tempStr = ((lastBPly /2)+1).ToString()+". ... ";
+                                tempStr = ((lastBPly / 2) + 1).ToString() + ". ... ";
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackMove":
@@ -908,5 +934,90 @@ namespace PGNViewer
         {
             LoadGamesFromFile("");
         }
+
+        private void corrGridView_Click(object sender, EventArgs e)
+        {
+            int thisRow = corrGridView.SelectedCells[0].RowIndex;
+            int thisCol = corrGridView.SelectedCells[0].ColumnIndex;
+            bool isWhite = (thisCol < 4);
+
+            int newPly = 2 * thisRow + (isWhite ? 1 : 2);
+
+            ChangePosition(0);
+            ChangePosition(newPly);
+        }
+
+        private void PGNText_Click(object sender, EventArgs e)
+        {
+
+            int newPly = findPlyAtLocation(PGNText.SelectionStart);
+
+            ChangePosition(0);
+            ChangePosition(newPly);
+        }
+        bool inDrag = false;
+        int dragStartPosition = -1;
+        Square dragStartSquare = null;
+        Square dragEndSquare = null;
+        private void InitDrag(MouseEventArgs e)
+        {
+            int rowLength = 12;
+            int rowBoardOffset = 1;
+            int startIndex = boardDisplay.SelectionStart;
+            dragStartSquare = new Square(
+                (byte)(8 - startIndex / rowLength),
+                (byte)((startIndex % rowLength) - rowBoardOffset)
+                );
+        }
+
+        private void boardDisplay_DoubleClick(object sender, EventArgs e)
+        {
+            int rowLength = 12;
+            int rowBoardOffset = 1;
+            int startIndex = boardDisplay.SelectionStart;
+
+            startIndex = dragStartPosition;
+            boardDisplay.SelectionStart = startIndex;
+            boardDisplay.SelectionLength = 1;
+
+            byte thisRow = (byte)(8 - startIndex / rowLength);
+            byte thisCol = (byte)((startIndex % rowLength) - rowBoardOffset);
+
+            if (ckInvertBoard.Checked)
+            {
+                thisRow = (byte)(7 - thisRow);
+                thisCol = (byte)(7 - thisCol);
+            }
+
+            if (!inDrag)   // start one...
+            {
+                // use last clicked location as the point
+                dragStartSquare = new Square( thisRow, thisCol );
+                inDrag = true;
+            }
+            else  // end one
+            {
+                dragEndSquare = new Square( thisRow, thisCol );
+
+                // at this point, generate the appropriate move text and populate the proposed move text box
+                // Piece-target square, augmented for source square, capture - including ep, castle
+
+                Ply p = curGame.CreateMove( dragStartSquare, dragEndSquare );
+                CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
+
+                CleanupDrag();
+            }
+
+        }
+        private void CleanupDrag()
+        {
+            dragStartSquare = dragEndSquare = null;
+            inDrag = false;
+        }
+        private void boardDisplay_Click(object sender, EventArgs e)
+        {
+            dragStartPosition = boardDisplay.SelectionStart;
+        }
+
     }
 }

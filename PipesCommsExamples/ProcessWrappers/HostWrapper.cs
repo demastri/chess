@@ -458,7 +458,7 @@ namespace ProcessWrappers
         public class QueueIOModel : IOModel
         {
             Process clientProcess;
-            public QueueingModel queueClient;
+            // ### public QueueingModel queueClient;
             List<string> postRoutes;
 
             string paramString = "";
@@ -511,12 +511,12 @@ namespace ProcessWrappers
 
             public bool CheckRead()
             {
-                return !queueClient.QueueEmpty();
+                return false;// ### !queueClient.QueueEmpty();
             }
             public string ReadResult()
             {
-                if (CheckRead())
-                    return queueClient.ReadMessageAsString();
+                // ### if (CheckRead())
+                // ### return queueClient.ReadMessageAsString();
                 return null;
             }
             public void Write(string msg)
@@ -531,11 +531,11 @@ namespace ProcessWrappers
                 {
                     q = 0;
                 }
-                queueClient.PostMessage(msg, postRoutes[q]);
+                // ### queueClient.PostMessage(msg, postRoutes[q]);
             }
             public void Cleanup()
             {
-                queueClient.CloseConnections();
+                // ### queueClient.CloseConnections();
                 if (clientProcess != null)
                 {
                     try

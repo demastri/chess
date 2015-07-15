@@ -154,6 +154,12 @@ namespace ChessPosition
             castleRights = p.castleRights;
             onMove = p.onMove;
         }
+
+        public Piece PieceAt(Square s)
+        {
+            return board.Keys.Contains(s) ? board[s] : null;
+        }
+
         public List<Square> FindPieceWithTarget(Piece p, Square s, Square.Rank rowConstraint, Square.File colConstraint)
         {
             List<Square> options = new List<Square>();
