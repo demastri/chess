@@ -244,8 +244,10 @@ namespace ChessPosition
 
             // move
             outPly.refToken.tokenString = thisPc.piece == Piece.PieceType.Pawn ? "" : thisPc.ToString();
-            // constraining piece...
-            if (options.Count > 1)
+
+
+            // constraining piece... or it's a capture with a P, need to state the source...
+            if (options.Count > 1 || (options.Count == 1 && capPc != null && thisPc.piece == Piece.PieceType.Pawn) )
             {
                 int rankCount = 0;
                 int fileCount = 0;
@@ -268,7 +270,7 @@ namespace ChessPosition
             }
 
             // capture or cap ep
-            if (capPc != null || CurrentPosition.epLoc == dest && thisPc.piece == Piece.PieceType.Pawn) 
+            if (capPc != null || CurrentPosition.epLoc == dest && thisPc.piece == Piece.PieceType.Pawn)
                 outPly.refToken.tokenString += "x";
             // dest sq
             outPly.refToken.tokenString += dest.ToString();

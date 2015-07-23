@@ -972,11 +972,14 @@ namespace PGNViewer
 
         private void boardDisplay_DoubleClick(object sender, EventArgs e)
         {
+            MouseEventArgs me = (MouseEventArgs)e;
+            Point clickPos = me.Location;
+            clickPos.X -= (int)(boardDisplay.Font.Size / 2.01); // by default, if you're on the right half of a char, it'll select the next one, fix that.
+
             int rowLength = 12;
             int rowBoardOffset = 1;
-            int startIndex = boardDisplay.SelectionStart;
+            int startIndex = boardDisplay.GetCharIndexFromPosition(clickPos);
 
-            startIndex = dragStartPosition;
             boardDisplay.SelectionStart = startIndex;
             boardDisplay.SelectionLength = 1;
 
@@ -994,6 +997,8 @@ namespace PGNViewer
                 // use last clicked location as the point
                 dragStartSquare = new Square( thisRow, thisCol );
                 inDrag = true;
+
+                CorrMoveText.Text = "st->" + dragStartSquare.ToString();
             }
             else  // end one
             {
