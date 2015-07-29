@@ -81,6 +81,8 @@
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
             this.corrTemplateList = new System.Windows.Forms.ComboBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.openLastFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -115,6 +117,8 @@
             this.FileMenuStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.closeToolStripMenuItem1,
+            this.toolStripSeparator3,
+            this.openLastFileMenu,
             this.toolStripSeparator1,
             this.mruMenuItem1,
             this.mruMenuItem2,
@@ -130,66 +134,66 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem1
             // 
             this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(123, 22);
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.closeToolStripMenuItem1.Text = "C&lose";
             this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // mruMenuItem1
             // 
             this.mruMenuItem1.Name = "mruMenuItem1";
-            this.mruMenuItem1.Size = new System.Drawing.Size(123, 22);
+            this.mruMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem1.Text = "&1 - MRU1";
             this.mruMenuItem1.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem2
             // 
             this.mruMenuItem2.Name = "mruMenuItem2";
-            this.mruMenuItem2.Size = new System.Drawing.Size(123, 22);
+            this.mruMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem2.Text = "&2 - MRU2";
             this.mruMenuItem2.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem3
             // 
             this.mruMenuItem3.Name = "mruMenuItem3";
-            this.mruMenuItem3.Size = new System.Drawing.Size(123, 22);
+            this.mruMenuItem3.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem3.Text = "&3 - MRU3";
             this.mruMenuItem3.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem4
             // 
             this.mruMenuItem4.Name = "mruMenuItem4";
-            this.mruMenuItem4.Size = new System.Drawing.Size(123, 22);
+            this.mruMenuItem4.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem4.Text = "&4 - MRU4";
             this.mruMenuItem4.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem5
             // 
             this.mruMenuItem5.Name = "mruMenuItem5";
-            this.mruMenuItem5.Size = new System.Drawing.Size(123, 22);
+            this.mruMenuItem5.Size = new System.Drawing.Size(152, 22);
             this.mruMenuItem5.Text = "&5 - MRU5";
             this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -587,6 +591,18 @@
             this.corrTemplateList.TabIndex = 28;
             this.corrTemplateList.Text = "None";
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.openLastFileMenu.Name = "toolStripMenuItem1";
+            this.openLastFileMenu.Size = new System.Drawing.Size(152, 22);
+            this.openLastFileMenu.Text = "Open L&ast File";
+            this.openLastFileMenu.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -687,6 +703,8 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ComboBox corrTemplateList;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem openLastFileMenu;
     }
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utilities;
+using JPD.Utilities;
 
 namespace ChessPosition
 {
@@ -457,11 +457,11 @@ namespace ChessPosition
                 thisChar = (pc.color == PlayerEnum.White ? Char.ToUpper(thisChar) : Char.ToLower(thisChar));
                 int rightPad = fileIndex - s.col;
 
-                outString = Utilities.Utils.SwapChar(outString, strIndex, thisChar);
+                outString = JPD.Utilities.Utils.SwapChar(outString, strIndex, thisChar);
                 if (leftPad > 0)
-                    outString = Utilities.Utils.InsertChar(outString, strIndex, (char)(leftPad + '0'));
+                    outString = JPD.Utilities.Utils.InsertChar(outString, strIndex, (char)(leftPad + '0'));
                 if (rightPad > 0)
-                    outString = Utilities.Utils.InsertChar(outString, strIndex + (leftPad > 0 ? 2 : 1), (char)(rightPad + '0'));
+                    outString = JPD.Utilities.Utils.InsertChar(outString, strIndex + (leftPad > 0 ? 2 : 1), (char)(rightPad + '0'));
 
             }
             return outString;

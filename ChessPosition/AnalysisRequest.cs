@@ -40,7 +40,7 @@ namespace ChessPosition
             executionCompleteTime = DateTime.Parse(tokens[curIndex++]);
 
             // find the offset for the analysis string...
-            int aIndex = Utilities.Utils.GetNthIndex(paramStr, '|', 10);
+            int aIndex = JPD.Utilities.Utils.GetNthIndex(paramStr, '|', 10);
 
 
             thisAnalysis = new Analysis(paramStr.Substring(aIndex), true);

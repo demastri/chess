@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.IO;
+using System.Xml;
 using ChessPosition;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using JPD.Utilities;
 
 namespace PGNViewer
 {
@@ -34,13 +36,11 @@ namespace PGNViewer
         TreeNode inProgOnMoveNode = null;
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
-        MRUHandler mruList;
 
         public PGNViewer()
         {
             InitializeComponent();
-            mruList = new MRUHandler();
-            mruList.InitList();
+
             UpdateMRUMenu();
         }
 
@@ -95,8 +95,7 @@ namespace PGNViewer
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 LoadGamesFromFile(openFileDialog1.FileName);
-                mruList.AddMRUFile(openFileDialog1.FileName);
-                mruList.UpdateList();
+                Settings.AppSettings.Add("MRUList", openFileDialog1.FileName);
                 UpdateMRUMenu();
             }
         }
@@ -106,8 +105,10 @@ namespace PGNViewer
             LoadFont();
             curGame = null;
             AnalysisEngine = null;
-            SetMode("correspondence");
             timer1.Start();
+
+            SetMode(Settings.AppSettings["StartMode"]);
+            OpenLastFile();
         }
 
         [DllImport("gdi32.dll")]
@@ -273,7 +274,7 @@ namespace PGNViewer
             bool isWhite = (((((rank - 1) % 2) == ((file - 1) % 2)) ? 1 : 0) == 0);   // 1 => b
             char pcChar = isWhite ? Char.ToLower(pc.ToChess7Char) : Char.ToUpper(pc.ToChess7Char);  // upper case is on a dark square...
 
-            return Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
+            return JPD.Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
         }
 
         private void DisableAnalysis()
@@ -388,6 +389,13 @@ namespace PGNViewer
         int curDisplayMode = -1;
         private void SetMode(string mode)
         {
+            if (mode == null)
+                mode = Settings.AppSettings["StartMode"] = "correspondence";
+
+            // save for next start (if this isn't a load...
+            if( curDisplayMode != -1 )
+                Settings.AppSettings["StartMode"] = mode;
+
             if (viewerToolStripMenuItem.Checked = (mode == "viewer"))
             {
                 curDisplayMode = 1;
@@ -906,10 +914,10 @@ namespace PGNViewer
             for (int i = 1; i <= 5; i++)
             {
                 ToolStripItem menu = FileMenuStrip.DropDownItems["mruMenuItem" + i.ToString()];
-                int mruIndex = mruList.MRUFiles.Count - i;
+                int mruIndex = Settings.AppSettings.Count("MRUList") - i;
                 if (mruIndex >= 0)
                 {
-                    menu.Text = "&" + i.ToString() + " - " + mruList.MRUFiles[mruIndex];
+                    menu.Text = "&" + i.ToString() + " - " + Settings.AppSettings["MRUList", mruIndex];
                     menu.Visible = true;
                 }
                 else
@@ -1024,5 +1032,21 @@ namespace PGNViewer
             dragStartPosition = boardDisplay.SelectionStart;
         }
 
+        bool openLastFile = false;
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            openLastFileMenu.Checked = openLastFile = !openLastFile;
+            Settings.AppSettings["OpenLast"] = (openLastFile ? "y" : "n");
+        }
+        private void OpenLastFile()
+        {
+            openLastFile = (Settings.AppSettings["OpenLast"] == "y");
+            openLastFileMenu.Checked = openLastFile;
+
+            if( openLastFile && Settings.AppSettings.Count("MRUList") > 0)
+            {
+                LoadGamesFromFile(Settings.AppSettings["MRUList", Settings.AppSettings.Count("MRUList")-1]);
+            }
+        }
     }
 }
