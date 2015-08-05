@@ -92,11 +92,11 @@
             this.boardDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boardDisplay.Location = new System.Drawing.Point(316, 27);
+            this.boardDisplay.Location = new System.Drawing.Point(352, 27);
             this.boardDisplay.Multiline = true;
             this.boardDisplay.Name = "boardDisplay";
             this.boardDisplay.ReadOnly = true;
-            this.boardDisplay.Size = new System.Drawing.Size(256, 223);
+            this.boardDisplay.Size = new System.Drawing.Size(253, 223);
             this.boardDisplay.TabIndex = 1;
             this.boardDisplay.Click += new System.EventHandler(this.boardDisplay_Click);
             this.boardDisplay.DoubleClick += new System.EventHandler(this.boardDisplay_DoubleClick);
@@ -108,7 +108,7 @@
             this.modeToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1012, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1045, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -252,19 +252,19 @@
             this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PGNText.HideSelection = false;
-            this.PGNText.Location = new System.Drawing.Point(316, 311);
+            this.PGNText.Location = new System.Drawing.Point(352, 311);
             this.PGNText.Multiline = true;
             this.PGNText.Name = "PGNText";
             this.PGNText.ReadOnly = true;
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.PGNText.Size = new System.Drawing.Size(684, 161);
+            this.PGNText.Size = new System.Drawing.Size(681, 161);
             this.PGNText.TabIndex = 3;
             this.PGNText.Click += new System.EventHandler(this.PGNText_Click);
             // 
             // ResetGameButton
             // 
             this.ResetGameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ResetGameButton.Location = new System.Drawing.Point(341, 256);
+            this.ResetGameButton.Location = new System.Drawing.Point(364, 255);
             this.ResetGameButton.Name = "ResetGameButton";
             this.ResetGameButton.Size = new System.Drawing.Size(30, 23);
             this.ResetGameButton.TabIndex = 4;
@@ -275,7 +275,7 @@
             // BackButton
             // 
             this.BackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BackButton.Location = new System.Drawing.Point(413, 256);
+            this.BackButton.Location = new System.Drawing.Point(436, 255);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(30, 23);
             this.BackButton.TabIndex = 5;
@@ -286,7 +286,7 @@
             // FwdButton
             // 
             this.FwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FwdButton.Location = new System.Drawing.Point(449, 256);
+            this.FwdButton.Location = new System.Drawing.Point(472, 255);
             this.FwdButton.Name = "FwdButton";
             this.FwdButton.Size = new System.Drawing.Size(30, 23);
             this.FwdButton.TabIndex = 6;
@@ -298,11 +298,11 @@
             // 
             this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FENText.Location = new System.Drawing.Point(316, 285);
+            this.FENText.Location = new System.Drawing.Point(352, 285);
             this.FENText.Name = "FENText";
             this.FENText.ReadOnly = true;
             this.FENText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.FENText.Size = new System.Drawing.Size(683, 20);
+            this.FENText.Size = new System.Drawing.Size(680, 20);
             this.FENText.TabIndex = 7;
             // 
             // EngineList
@@ -313,7 +313,7 @@
             "None",
             "Stockfish",
             "Crafty"});
-            this.EngineList.Location = new System.Drawing.Point(840, 27);
+            this.EngineList.Location = new System.Drawing.Point(873, 27);
             this.EngineList.Name = "EngineList";
             this.EngineList.Size = new System.Drawing.Size(160, 21);
             this.EngineList.TabIndex = 8;
@@ -337,7 +337,7 @@
             // JumpBackButton
             // 
             this.JumpBackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpBackButton.Location = new System.Drawing.Point(377, 256);
+            this.JumpBackButton.Location = new System.Drawing.Point(400, 255);
             this.JumpBackButton.Name = "JumpBackButton";
             this.JumpBackButton.Size = new System.Drawing.Size(30, 23);
             this.JumpBackButton.TabIndex = 10;
@@ -348,7 +348,7 @@
             // JumpFwdButton
             // 
             this.JumpFwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpFwdButton.Location = new System.Drawing.Point(485, 256);
+            this.JumpFwdButton.Location = new System.Drawing.Point(508, 255);
             this.JumpFwdButton.Name = "JumpFwdButton";
             this.JumpFwdButton.Size = new System.Drawing.Size(30, 23);
             this.JumpFwdButton.TabIndex = 11;
@@ -359,7 +359,7 @@
             // JumpToEndButton
             // 
             this.JumpToEndButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpToEndButton.Location = new System.Drawing.Point(521, 256);
+            this.JumpToEndButton.Location = new System.Drawing.Point(544, 255);
             this.JumpToEndButton.Name = "JumpToEndButton";
             this.JumpToEndButton.Size = new System.Drawing.Size(30, 23);
             this.JumpToEndButton.TabIndex = 12;
@@ -384,7 +384,7 @@
             this.Black,
             this.BMoveTime,
             this.BMoveReflection});
-            this.corrGridView.Location = new System.Drawing.Point(578, 54);
+            this.corrGridView.Location = new System.Drawing.Point(611, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
             this.corrGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -453,7 +453,7 @@
             this.CorrMoveTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrMoveTime.CustomFormat = "MM/dd/yyyy HH:mm";
             this.CorrMoveTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.CorrMoveTime.Location = new System.Drawing.Point(823, 208);
+            this.CorrMoveTime.Location = new System.Drawing.Point(856, 208);
             this.CorrMoveTime.Name = "CorrMoveTime";
             this.CorrMoveTime.Size = new System.Drawing.Size(128, 20);
             this.CorrMoveTime.TabIndex = 14;
@@ -462,7 +462,7 @@
             // 
             this.CorrLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CorrLabel.AutoSize = true;
-            this.CorrLabel.Location = new System.Drawing.Point(579, 211);
+            this.CorrLabel.Location = new System.Drawing.Point(612, 211);
             this.CorrLabel.Name = "CorrLabel";
             this.CorrLabel.Size = new System.Drawing.Size(120, 13);
             this.CorrLabel.TabIndex = 15;
@@ -471,7 +471,7 @@
             // CorrMoveText
             // 
             this.CorrMoveText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrMoveText.Location = new System.Drawing.Point(770, 208);
+            this.CorrMoveText.Location = new System.Drawing.Point(803, 208);
             this.CorrMoveText.Name = "CorrMoveText";
             this.CorrMoveText.Size = new System.Drawing.Size(47, 20);
             this.CorrMoveText.TabIndex = 16;
@@ -479,7 +479,7 @@
             // CorrTimeNow
             // 
             this.CorrTimeNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrTimeNow.Location = new System.Drawing.Point(957, 206);
+            this.CorrTimeNow.Location = new System.Drawing.Point(990, 206);
             this.CorrTimeNow.Name = "CorrTimeNow";
             this.CorrTimeNow.Size = new System.Drawing.Size(42, 23);
             this.CorrTimeNow.TabIndex = 17;
@@ -490,7 +490,7 @@
             // CorrMoveNbr
             // 
             this.CorrMoveNbr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrMoveNbr.Location = new System.Drawing.Point(717, 208);
+            this.CorrMoveNbr.Location = new System.Drawing.Point(750, 208);
             this.CorrMoveNbr.Name = "CorrMoveNbr";
             this.CorrMoveNbr.ReadOnly = true;
             this.CorrMoveNbr.Size = new System.Drawing.Size(47, 20);
@@ -499,7 +499,7 @@
             // CorrUpdate
             // 
             this.CorrUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrUpdate.Location = new System.Drawing.Point(891, 234);
+            this.CorrUpdate.Location = new System.Drawing.Point(924, 234);
             this.CorrUpdate.Name = "CorrUpdate";
             this.CorrUpdate.Size = new System.Drawing.Size(51, 23);
             this.CorrUpdate.TabIndex = 19;
@@ -510,7 +510,7 @@
             // CorrPublish
             // 
             this.CorrPublish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CorrPublish.Location = new System.Drawing.Point(948, 234);
+            this.CorrPublish.Location = new System.Drawing.Point(981, 234);
             this.CorrPublish.Name = "CorrPublish";
             this.CorrPublish.Size = new System.Drawing.Size(51, 23);
             this.CorrPublish.TabIndex = 20;
@@ -522,7 +522,7 @@
             // 
             this.ReflTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ReflTimeLabel.AutoSize = true;
-            this.ReflTimeLabel.Location = new System.Drawing.Point(578, 230);
+            this.ReflTimeLabel.Location = new System.Drawing.Point(611, 230);
             this.ReflTimeLabel.Name = "ReflTimeLabel";
             this.ReflTimeLabel.Size = new System.Drawing.Size(220, 13);
             this.ReflTimeLabel.TabIndex = 21;
@@ -532,7 +532,7 @@
             // 
             this.ckInvertBoard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ckInvertBoard.AutoSize = true;
-            this.ckInvertBoard.Location = new System.Drawing.Point(582, 31);
+            this.ckInvertBoard.Location = new System.Drawing.Point(615, 31);
             this.ckInvertBoard.Name = "ckInvertBoard";
             this.ckInvertBoard.Size = new System.Drawing.Size(84, 17);
             this.ckInvertBoard.TabIndex = 22;
@@ -545,9 +545,9 @@
             this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.GameList.HideSelection = false;
-            this.GameList.Location = new System.Drawing.Point(12, 27);
+            this.GameList.Location = new System.Drawing.Point(28, 27);
             this.GameList.Name = "GameList";
-            this.GameList.Size = new System.Drawing.Size(298, 445);
+            this.GameList.Size = new System.Drawing.Size(318, 445);
             this.GameList.TabIndex = 23;
             this.GameList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
             // 
@@ -555,7 +555,7 @@
             // 
             this.corrNameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrNameLabel.AutoSize = true;
-            this.corrNameLabel.Location = new System.Drawing.Point(579, 262);
+            this.corrNameLabel.Location = new System.Drawing.Point(612, 262);
             this.corrNameLabel.Name = "corrNameLabel";
             this.corrNameLabel.Size = new System.Drawing.Size(55, 13);
             this.corrNameLabel.TabIndex = 24;
@@ -564,7 +564,7 @@
             // corrName
             // 
             this.corrName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.corrName.Location = new System.Drawing.Point(639, 259);
+            this.corrName.Location = new System.Drawing.Point(672, 259);
             this.corrName.Name = "corrName";
             this.corrName.Size = new System.Drawing.Size(168, 20);
             this.corrName.TabIndex = 25;
@@ -574,7 +574,7 @@
             // corrTZ
             // 
             this.corrTZ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.corrTZ.Location = new System.Drawing.Point(870, 258);
+            this.corrTZ.Location = new System.Drawing.Point(903, 258);
             this.corrTZ.Name = "corrTZ";
             this.corrTZ.Size = new System.Drawing.Size(47, 20);
             this.corrTZ.TabIndex = 27;
@@ -584,7 +584,7 @@
             // 
             this.corrTZLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrTZLabel.AutoSize = true;
-            this.corrTZLabel.Location = new System.Drawing.Point(810, 261);
+            this.corrTZLabel.Location = new System.Drawing.Point(843, 261);
             this.corrTZLabel.Name = "corrTZLabel";
             this.corrTZLabel.Size = new System.Drawing.Size(43, 13);
             this.corrTZLabel.TabIndex = 26;
@@ -598,7 +598,7 @@
             "None",
             "Stockfish",
             "Crafty"});
-            this.corrTemplateList.Location = new System.Drawing.Point(674, 27);
+            this.corrTemplateList.Location = new System.Drawing.Point(707, 27);
             this.corrTemplateList.Name = "corrTemplateList";
             this.corrTemplateList.Size = new System.Drawing.Size(160, 21);
             this.corrTemplateList.TabIndex = 28;
@@ -609,7 +609,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1012, 484);
+            this.ClientSize = new System.Drawing.Size(1045, 484);
             this.Controls.Add(this.corrTemplateList);
             this.Controls.Add(this.corrTZ);
             this.Controls.Add(this.corrTZLabel);

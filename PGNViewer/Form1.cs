@@ -66,7 +66,7 @@ namespace PGNViewer
                     
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
-                    string s = g.Tags["Date"] + " (" + ((int)(g.Plies.Count/2)+1) + " m - "+waitDays.ToString()+" d) " + g.Tags["White"] + "-" + g.Tags["Black"];
+                    string s = g.Tags["Date"] + " (" + ((int)((g.Plies.Count-1)/2)+1) + " m - "+waitDays.ToString()+" d) " + g.Tags["White"] + "-" + g.Tags["Black"];
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
