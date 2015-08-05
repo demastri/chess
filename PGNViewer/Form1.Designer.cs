@@ -34,6 +34,8 @@
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.openLastFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mruMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mruMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +83,6 @@
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
             this.corrTemplateList = new System.Windows.Forms.ComboBox();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.openLastFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -134,66 +134,78 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem1
             // 
             this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
             this.closeToolStripMenuItem1.Text = "C&lose";
             this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(145, 6);
+            // 
+            // openLastFileMenu
+            // 
+            this.openLastFileMenu.Name = "openLastFileMenu";
+            this.openLastFileMenu.Size = new System.Drawing.Size(148, 22);
+            this.openLastFileMenu.Text = "Open L&ast File";
+            this.openLastFileMenu.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
             // 
             // mruMenuItem1
             // 
             this.mruMenuItem1.Name = "mruMenuItem1";
-            this.mruMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem1.Size = new System.Drawing.Size(148, 22);
             this.mruMenuItem1.Text = "&1 - MRU1";
             this.mruMenuItem1.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem2
             // 
             this.mruMenuItem2.Name = "mruMenuItem2";
-            this.mruMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem2.Size = new System.Drawing.Size(148, 22);
             this.mruMenuItem2.Text = "&2 - MRU2";
             this.mruMenuItem2.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem3
             // 
             this.mruMenuItem3.Name = "mruMenuItem3";
-            this.mruMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem3.Size = new System.Drawing.Size(148, 22);
             this.mruMenuItem3.Text = "&3 - MRU3";
             this.mruMenuItem3.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem4
             // 
             this.mruMenuItem4.Name = "mruMenuItem4";
-            this.mruMenuItem4.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem4.Size = new System.Drawing.Size(148, 22);
             this.mruMenuItem4.Text = "&4 - MRU4";
             this.mruMenuItem4.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem5
             // 
             this.mruMenuItem5.Name = "mruMenuItem5";
-            this.mruMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.mruMenuItem5.Size = new System.Drawing.Size(148, 22);
             this.mruMenuItem5.Text = "&5 - MRU5";
             this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -556,7 +568,8 @@
             this.corrName.Name = "corrName";
             this.corrName.Size = new System.Drawing.Size(168, 20);
             this.corrName.TabIndex = 25;
-            this.corrName.Text = "John DeMastri";
+            this.corrName.Text = "SomeName";
+            this.corrName.TextChanged += new System.EventHandler(this.corrName_TextChanged);
             // 
             // corrTZ
             // 
@@ -590,18 +603,7 @@
             this.corrTemplateList.Size = new System.Drawing.Size(160, 21);
             this.corrTemplateList.TabIndex = 28;
             this.corrTemplateList.Text = "None";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.openLastFileMenu.Name = "toolStripMenuItem1";
-            this.openLastFileMenu.Size = new System.Drawing.Size(152, 22);
-            this.openLastFileMenu.Text = "Open L&ast File";
-            this.openLastFileMenu.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.corrTemplateList.SelectedIndexChanged += new System.EventHandler(this.corrTemplateList_SelectedIndexChanged);
             // 
             // PGNViewer
             // 

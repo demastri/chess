@@ -7,8 +7,14 @@
                 <h1><%: Title %>Correspondence Game Editor</h1>
             </hgroup>
             <br />
+            <asp:TreeView ID="gamesList" runat="server" ImageSet="BulletedList3" ShowExpandCollapse="False" ShowLines="True">
+                <HoverNodeStyle Font-Underline="True" ForeColor="#5555DD" />
+                <NodeStyle Font-Names="Verdana" Font-Size="8pt" ForeColor="Black" HorizontalPadding="0px" NodeSpacing="0px" VerticalPadding="0px" />
+                <ParentNodeStyle Font-Bold="False" />
+                <SelectedNodeStyle Font-Underline="True" ForeColor="#5555DD" HorizontalPadding="0px" VerticalPadding="0px" />
+            </asp:TreeView>
             <asp:TextBox ID="boardDisplay" runat="server" Font-Names="Chess-7" Height="191px" Rows="10" TextMode="MultiLine" Width="195px">some textb</asp:TextBox>
-            <asp:GridView ID="corrGridView" runat="server" Width="651px" >
+            <asp:GridView ID="corrGridView" runat="server" style="float:right" Width="651px" >
                 <Columns>
                     <asp:BoundField DataField="MoveNbr" HeaderText="#" />
                     <asp:BoundField DataField="WhiteMove" HeaderText="White" />
@@ -21,6 +27,8 @@
             </asp:GridView>
         </div>
     </section>
+    <br />
+    <br />
 </asp:Content>
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
     <h3>We suggest the following:</h3>
@@ -42,4 +50,10 @@
             <a href="http://go.microsoft.com/fwlink/?LinkId=245143">Learn more…</a>
         </li>
     </ol>
+    <asp:TreeView ID="TreeView2" runat="server" ImageSet="BulletedList3" ShowExpandCollapse="False" ShowLines="True">
+                <HoverNodeStyle Font-Underline="True" ForeColor="#5555DD" />
+                <NodeStyle Font-Names="Verdana" Font-Size="8pt" ForeColor="Black" HorizontalPadding="0px" NodeSpacing="0px" VerticalPadding="0px" />
+                <ParentNodeStyle Font-Bold="False" />
+                <SelectedNodeStyle Font-Underline="True" ForeColor="#5555DD" HorizontalPadding="0px" VerticalPadding="0px" />
+            </asp:TreeView>
 </asp:Content>

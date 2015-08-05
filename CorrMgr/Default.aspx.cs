@@ -15,9 +15,20 @@ namespace CorrMgr
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            InitGamesList();
             DrawBoard();
         }
 
+        private void InitGamesList()
+        {
+            gamesList.Nodes.Clear();
+            gamesList.Nodes.Add(new TreeNode("Games On Move"));
+            gamesList.Nodes[0].ChildNodes.Add(new TreeNode("Game 1"));
+            gamesList.Nodes.Add(new TreeNode("Games Waiting For Move"));
+            gamesList.Nodes.Add(new TreeNode("Completed Games"));
+            gamesList.Nodes[2].ChildNodes.Add(new TreeNode("Game 2"));
+            gamesList.Nodes[2].ChildNodes.Add(new TreeNode("Game 3"));
+        }
         private void DrawBoard()
         {
             double limitingSize = boardDisplay.Width.Value < boardDisplay.Height.Value ? boardDisplay.Width.Value : boardDisplay.Height.Value;

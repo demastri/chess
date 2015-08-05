@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<style media="screen" type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+    .auto-style1 {
+        height: 32px;
+    }
+    .auto-style2 {
+        height: 30px;
+    }
+</style>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <td class="auto-style1">&nbsp;</td>
+            <td colspan="3" class="auto-style1">@WhiteName</td>
+            <td class="auto-style1"></td>
+            <td colspan="3" class="auto-style1">@BlackName</td>
+        </tr>
+        <tr>
+            <td colspan="8"></td>
+        </tr>
+        <tr>
+            <td class="auto-style2">nbr</td>
+            <td class="auto-style2">move</td>
+            <td class="auto-style2">rec&#39;d</td>
+            <td class="auto-style2">time</td>
+            <td class="auto-style2"></td>
+            <td class="auto-style2">move</td>
+            <td class="auto-style2">rec&#39;d</td>
+            <td class="auto-style2">time</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr-2</td>
+            <td>@WhiteMove-2</td>
+            <td>@WhiteMoveTime-2</td>
+            <td>@WhiteReflTime-2</td>
+            <td></td>
+            <td>@BlackGridMove-2</td>
+            <td>@BlackGridMoveTime-2</td>
+            <td>@BlackGridReflTime-2</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr-1</td>
+            <td>@WhiteMove-1</td>
+            <td>@WhiteMoveTime-1</td>
+            <td>@WhiteReflTime-1</td>
+            <td></td>
+            <td>@BlackGridMove-1</td>
+            <td>@BlackGridMoveTime-1</td>
+            <td>@BlackGridReflTime-1</td>
+        </tr>
+        <tr>
+            <td>@MoveNbr</td>
+            <td>@WhiteMove</td>
+            <td>@WhiteMoveTime</td>
+            <td>@WhiteReflTime</td>
+            <td></td>
+            <td>@BlackGridMove</td>
+            <td>@BlackGridMoveTime</td>
+            <td>@BlackGridReflTime</td>
+        </tr>
+        <tr>
+            <td colspan="3">Reflection Time (incoming / current / remaining)</td>
+            <td>@WhiteReflTimeOverview</td>
+            <td colspan="3"></td>
+            <td>@BlackReflTimeOverview</td>
+        </tr>
+
+    </table>
+</body>
+</html>

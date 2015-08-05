@@ -37,6 +37,8 @@ namespace PGNViewer
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
 
+        int[] corrTimeControl = { 10, 30 };
+
         public PGNViewer()
         {
             InitializeComponent();
@@ -60,9 +62,11 @@ namespace PGNViewer
                 complNode = GameList.Nodes.Add("Complete");
                 foreach (Game g in GameRef)
                 {
+                    int waitDays = (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comment.tokenString)).Days;
+                    
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
-                    string s = g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"];
+                    string s = g.Tags["Date"] + " (" + ((int)(g.Plies.Count/2)+1) + " m - "+waitDays.ToString()+" d) " + g.Tags["White"] + "-" + g.Tags["Black"];
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
@@ -432,6 +436,7 @@ namespace PGNViewer
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
             CorrMoveNbr.Visible = CorrLabel.Visible = CorrMoveText.Visible = CorrMoveTime.Visible = CorrTimeNow.Visible = true;
 
+            InitCorrContext();
             InitCorrTemplateList();
         }
         int totalCorrTimeW = 0;
@@ -444,6 +449,19 @@ namespace PGNViewer
         int remainCorrTimeW = 0;
         int remainCorrTimeB = 0;
 
+        private void InitCorrContext()
+        {
+            corrName.Text = Settings.AppSettings["MyName"] == null ? "Enter Name Here" : Settings.AppSettings["MyName"];
+            if (Settings.AppSettings["CorrTimeControl"] == null || Settings.AppSettings.Count("CorrTimeControl") != 2)
+            {
+                Settings.AppSettings.Clear("CorrTimeControl");
+                Settings.AppSettings["CorrTimeControl", 0] = "10";
+                Settings.AppSettings["CorrTimeControl", 1] = "30";
+            }
+            corrTimeControl[0] = Convert.ToInt32(Settings.AppSettings["CorrTimeControl", 0]);
+            corrTimeControl[1] = Convert.ToInt32(Settings.AppSettings["CorrTimeControl", 1]);
+        }
+
         private void InitCorrTemplateList()
         {
             corrTemplateList.Items.Clear();
@@ -453,7 +471,12 @@ namespace PGNViewer
             {
                 corrTemplateList.Items.Add(fi.Name.Substring(0, fi.Name.Length - 5));
             }
-            corrTemplateList.SelectedIndex = corrTemplateList.Items.Count - 1;
+            // this is ok - if a setting exists, use that ###.
+            string defaultTemplate = Settings.AppSettings["CorrTemplate"];
+            if (defaultTemplate != null && corrTemplateList.Items.Contains(defaultTemplate) )
+                corrTemplateList.SelectedItem = defaultTemplate;
+            else
+                corrTemplateList.SelectedIndex = corrTemplateList.Items.Count - 1;
         }
 
         private void UpdateCorrespondence()
@@ -486,8 +509,8 @@ namespace PGNViewer
             //corrGridView.Columns[4].HeaderText = curGame.PlayerBlack;
 
             DateTime lastMoveTime = DateTime.MinValue;
-            totalCorrTimeW = 30 + (30 * (curGame.Plies.Count / 20));
-            totalCorrTimeB = 30 + (30 * ((curGame.Plies.Count - 1) / 20));
+            totalCorrTimeW = corrTimeControl[1] + (corrTimeControl[1] * (curGame.Plies.Count / (2*corrTimeControl[0])));
+            totalCorrTimeB = corrTimeControl[1] + (corrTimeControl[1] * ((curGame.Plies.Count - 1) / (2 * corrTimeControl[0])));
             usedCorrTimeW = 0;
             usedCorrTimeB = 0;
             lastCorrTimeW = 0;
@@ -652,11 +675,29 @@ namespace PGNViewer
 
             ReloadGamesFromFile();
 
-            TreeNode n = GameList.Nodes.Find(selectedText, true)[0];
+            TreeNode n = FindGameNode(GameList.Nodes, selectedText);
             GameList.SelectedNode = n;
             GameList_SelectedIndexChanged(null, null);
 
             CorrMoveText.Text = "";
+        }
+
+        private TreeNode FindGameNode (TreeNodeCollection list, string text)
+        {
+            foreach (TreeNode node in list)
+            {
+                string testStr = node.Text;
+                int l = testStr.IndexOf('(');
+                int r = testStr.IndexOf(')');
+                if (l >= 0 && r >= 0)
+                {
+                    testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
+                    if (text == testStr)
+                        return node;
+                }
+                return FindGameNode(node.Nodes, text);
+            }
+            return null;
         }
 
         private void CorrPublish_Click(object sender, EventArgs e)
@@ -665,7 +706,6 @@ namespace PGNViewer
             // show in a browser / copy to clipboard...
 
             CorrResponseDialog respDialog = new CorrResponseDialog();
-            string htmlResp;
 
             MemoryStream outStream = new MemoryStream();
             StreamWriter writer = new StreamWriter(outStream);
@@ -753,30 +793,50 @@ namespace PGNViewer
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
+                        case "BlackGridMoveNbr":
+                            if (!whiteOnMove)
+                                offset -= 1;
+                            goto case "BlackMoveNbr";
                         case "BlackMoveNbr":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0)
                                 tempStr = ((lastBPly / 2) + 1).ToString() + ". ... ";
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "BlackGridMove":
+                            if (!whiteOnMove)
+                                offset -= 1;
+                            goto case "BlackMove";
                         case "BlackMove":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
                                 tempStr = curGame.Plies[lastBPly].refToken.tokenString;
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "BlackGridMoveTime":
+                            if (!whiteOnMove)
+                                offset -= 1;
+                            goto case "BlackMoveTime";
                         case "BlackMoveTime":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
                                 tempStr = curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "BlackGridReflTime":
+                            if (!whiteOnMove)
+                                offset -= 1;
+                            goto case "BlackReflTime";
                         case "BlackReflTime":
                             lastBPly -= 2 * offset;
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
                                 tempStr = corrTimes[lastBPly].ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "BlackGridClockStart":
+                            if (!whiteOnMove)
+                                offset -= 1;
+                            goto case "BlackClockStart";
                         case "BlackClockStart":
                             lastBPly -= 1 + (2 * offset);
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
@@ -874,16 +934,23 @@ namespace PGNViewer
             PGNText.Text = "";
             if (GameList.SelectedNode != null)
             {
-                foreach (Game g in GameRef)
-                    if (g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] == GameList.SelectedNode.Text)
-                    {
-                        curGame = g;
-                        break;
-                    }
-                if (curGame != null)
+                string testStr = GameList.SelectedNode.Text;
+                int l = testStr.IndexOf('(');
+                int r = testStr.IndexOf(')');
+                if (l >= 0 && r >= 0)
                 {
-                    PGNText.Text = curGame.PGNSource;
-                    curGame.ResetPosition();
+                    testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
+                    foreach (Game g in GameRef)
+                        if (g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] == testStr)
+                        {
+                            curGame = g;
+                            break;
+                        }
+                    if (curGame != null)
+                    {
+                        PGNText.Text = curGame.PGNSource;
+                        curGame.ResetPosition();
+                    }
                 }
             }
             if (curGame != null)
@@ -1047,6 +1114,17 @@ namespace PGNViewer
             {
                 LoadGamesFromFile(Settings.AppSettings["MRUList", Settings.AppSettings.Count("MRUList")-1]);
             }
+        }
+
+        private void corrTemplateList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // update the setting appropriately
+            Settings.AppSettings["CorrTemplate"] = corrTemplateList.SelectedItem.ToString();
+        }
+
+        private void corrName_TextChanged(object sender, EventArgs e)
+        {
+            Settings.AppSettings["MyName"] = corrName.Text;
         }
     }
 }

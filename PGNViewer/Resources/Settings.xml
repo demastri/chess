@@ -5,4 +5,10 @@
   </Setting>
   <Setting name="OpenLast" value="y" />
   <Setting name="StartMode" value="correspondence" />
+  <Setting name="CorrTemplate" value="CCTemplate" />
+  <Setting name="MyName" value="SomeName" />
+  <Setting name="CorrTimeControl" >
+    <SettingValue id="1" value="10" />
+    <SettingValue id="2" value="30" />
+  </Setting>
 </Settings>

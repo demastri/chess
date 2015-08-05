@@ -13,6 +13,15 @@ namespace CorrMgr {
     public partial class _Default {
         
         /// <summary>
+        /// gamesList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TreeView gamesList;
+        
+        /// <summary>
         /// boardDisplay control.
         /// </summary>
         /// <remarks>
@@ -29,5 +38,14 @@ namespace CorrMgr {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView corrGridView;
+        
+        /// <summary>
+        /// TreeView2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TreeView TreeView2;
     }
 }

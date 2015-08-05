@@ -92,6 +92,13 @@ namespace JPD.Utilities
         {
             multiValueSettings[k][i] = null;
         }
+        public void Clear(string k)
+        {
+            if (multiValueSettings.ContainsKey(k))
+                multiValueSettings[k].Clear();
+            if (singleValueSettings.ContainsKey(k))
+                singleValueSettings.Remove(k);
+        }
         public int Count(string k)
         {
             if (multiValueSettings.ContainsKey(k))
