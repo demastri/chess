@@ -70,9 +70,15 @@ namespace PGNViewer
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
-                            inProgOnMoveNode.Nodes.Add(s, s);
+                        {
+                            int i = FindInsertIndex(inProgOnMoveNode.Nodes, waitDays, true);
+                            inProgOnMoveNode.Nodes.Insert(i, s);
+                        }
                         else
-                            inProgWaitingNode.Nodes.Add(s, s);
+                        {
+                            int i = FindInsertIndex(inProgWaitingNode.Nodes, waitDays, true);
+                            inProgWaitingNode.Nodes.Insert(i, s);
+                        }
                     }
                     else
                         complNode.Nodes.Add(s, s);
@@ -93,6 +99,24 @@ namespace PGNViewer
             UpdateAnalysis();
             UpdateFormTitle();
         }
+        private int FindInsertIndex(TreeNodeCollection n, int ageInDays, bool decreasing)
+        {
+            int outIndex = -1;
+            while (++outIndex < n.Count)
+            {
+                string s = n[outIndex].Text;
+                int l = s.IndexOf(" - ");
+                int r = s.IndexOf(" d)");
+                if (l >= 0 && r >= 0)
+                {
+                    int thisDay = Convert.ToInt32(s.Substring(l+3, r-l-3));
+                    if( (decreasing && thisDay <= ageInDays) || (!decreasing && thisDay >= ageInDays) )
+                        return outIndex;
+                }
+            }
+            return n.Count;
+        }
+
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -695,7 +719,9 @@ namespace PGNViewer
                     if (text == testStr)
                         return node;
                 }
-                return FindGameNode(node.Nodes, text);
+                TreeNode isKidNode = FindGameNode(node.Nodes, text);
+                if (isKidNode != null)
+                    return isKidNode;
             }
             return null;
         }
