@@ -37,6 +37,7 @@ namespace PGNViewer
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
 
+        int[] refCorrTimeControl = { 10, 30 };
         int[] corrTimeControl = { 10, 30 };
 
         public PGNViewer()
@@ -532,6 +533,20 @@ namespace PGNViewer
             //corrGridView.Columns[1].HeaderText = curGame.PlayerWhite;
             //corrGridView.Columns[4].HeaderText = curGame.PlayerBlack;
 
+            corrTimeControl[0] = refCorrTimeControl[0];
+            corrTimeControl[1] = refCorrTimeControl[1];
+            if (curGame.Tags.ContainsKey("TimeControl"))
+            {
+                string testStr = curGame.Tags["TimeControl"];
+                int l = testStr.IndexOf('/');
+                if (l >= 0)
+                {
+                    corrTimeControl[0] = Convert.ToInt32( testStr.Substring(0, l) );
+                    corrTimeControl[1] = Convert.ToInt32(testStr.Substring(l+1));
+                }
+            }
+
+
             DateTime lastMoveTime = DateTime.MinValue;
             totalCorrTimeW = corrTimeControl[1] + (corrTimeControl[1] * (curGame.Plies.Count / (2*corrTimeControl[0])));
             totalCorrTimeB = corrTimeControl[1] + (corrTimeControl[1] * ((curGame.Plies.Count - 1) / (2 * corrTimeControl[0])));
@@ -675,7 +690,7 @@ namespace PGNViewer
             newMove.refToken.startLocation = PGNText.Text.Length;
             PGNText.Text += possMove;
 
-            PGNComment timeComment = new PGNComment(possTime.ToString("(MM/dd/yyyy HHmm)"), 0);
+            PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"), 0);
             curGame.PGNtokens.Add(timeComment);
             PGNText.Text += timeComment.tokenString + " ";
             newMove.comment = timeComment;
@@ -755,7 +770,7 @@ namespace PGNViewer
         {
             // (05/10/2015 1224)
             DateTime thisTime;
-            if (DateTime.TryParseExact(st, "(MM/dd/yyyy HHmm)", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
+            if (DateTime.TryParseExact(st, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
                 return thisTime;
             return DateTime.MinValue;
         }
