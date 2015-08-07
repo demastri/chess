@@ -82,7 +82,10 @@ namespace PGNViewer
                         }
                     }
                     else
+                    {
+                        s = g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] + " : " + g.Tags["Result"];
                         complNode.Nodes.Add(s, s);
+                    }
                 }
             }
             else
@@ -973,14 +976,27 @@ namespace PGNViewer
             PGNText.Text = "";
             curGame = null;
             PGNText.Text = "";
+            bool gameNode = false;
             if (GameList.SelectedNode != null)
             {
                 string testStr = GameList.SelectedNode.Text;
                 int l = testStr.IndexOf('(');
                 int r = testStr.IndexOf(')');
-                if (l >= 0 && r >= 0)
+                if ((gameNode = (l >= 0 && r >= 0)))
                 {
                     testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
+                }
+                else
+                {
+                    l = testStr.IndexOf(':');
+                    if ((gameNode = (l >= 0)))
+                    {
+                        testStr = testStr.Substring(0, l - 1);
+                    }
+                }
+
+                if (gameNode)
+                {
                     foreach (Game g in GameRef)
                         if (g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] == testStr)
                         {
