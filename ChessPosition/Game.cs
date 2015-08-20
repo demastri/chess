@@ -79,9 +79,9 @@ namespace ChessPosition
                             break;
                         case PGNTokenType.MoveNumber:
                             break;
-                        case PGNTokenType.Comment:
+                        case PGNTokenType.Comment:  // could be one of many
                             if (lastPly != null)
-                                lastPly.comment = (PGNComment)token;
+                                lastPly.comments.Add( (PGNComment)token );
                             break;
                         case PGNTokenType.Terminator:
                             Tags["Result"] = token.tokenString;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessPosition
 {
-    public enum PGNTokenType { Tag, MoveNumber, MoveString, Comment, Terminator, Invalid };
+    public enum PGNTokenType { Tag, MoveNumber, MoveString, Comment, Terminator, Invalid }; // ### should add support for variations, also
     public class PGNToken
     {
         public PGNTokenType tokenType;
@@ -110,7 +110,7 @@ namespace ChessPosition
                     value = s.Substring(offset + 1, eol - offset - 1);   // trim off the ','
                 }
             }
-            if (s[offset] == '(')  // escaped comment
+            if (s[offset] == '(')  // escaped variation
             {
                 int eol = s.IndexOf(')', offset);
                 if (eol < 0)
@@ -121,7 +121,7 @@ namespace ChessPosition
                     value = s.Substring(offset + 1, eol - offset - 1);   // trim off the '()'
                 }
             }
-            if (s[offset] == '{')  // escaped annotation
+            if (s[offset] == '{')  // escaped comment
             {
                 int eol = s.IndexOf('}', offset);
                 if (eol < 0)

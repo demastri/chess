@@ -17,25 +17,29 @@ namespace ChessPosition
         public Piece promo;
 
         public PGNToken refToken;
-        public PGNComment comment;
+        public List<PGNComment> comments;
+        public List<List<Ply>> variation;
 
         public Ply()
         {
             src = null;
             dest = null;
             promo = null;
+            comments = new List<PGNComment>();
         }
         public Ply(Square s, Square d)
         {
             src = new Square(s);
             dest = new Square(d);
             promo = null;
+            comments = new List<PGNComment>();
         }
         public Ply(Square s, Square d, Piece p)
         {
             src = new Square(s);
             dest = new Square(d);
             promo = p;
+            comments = new List<PGNComment>();
         }
     }
 }

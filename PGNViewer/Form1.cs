@@ -63,7 +63,7 @@ namespace PGNViewer
                 complNode = GameList.Nodes.Add("Complete");
                 foreach (Game g in GameRef)
                 {
-                    int waitDays = (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comment.tokenString)).Days;
+                    int waitDays = (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comments)).Days;
                     
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
@@ -567,15 +567,16 @@ namespace PGNViewer
 
                 corrGridView.Rows[i / 2].Cells["MoveNbr"].Value = 1 + i / 2;
                 corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value = p.refToken.tokenString;
-                if (p.comment != null)
+                if (p.comments != null)
                 {
-                    DateTime thisMoveTime = CommentTime(p.comment.tokenString);
+                    DateTime thisMoveTime = CommentTime(p.comments);
                     if (thisMoveTime != DateTime.MinValue && lastMoveTime != DateTime.MinValue && thisMoveTime > lastMoveTime)
                     {
                         TimeSpan refl = thisMoveTime - lastMoveTime;
                         thisReflTime = refl.Days;
                     }
-                    corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "WMoveTime" : "BMoveTime"].Value = p.comment.value;
+                    // should be a time value
+                    corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "WMoveTime" : "BMoveTime"].Value = CommentTimeString( p.comments );
                     lastMoveTime = thisMoveTime;
                 }
                 else
@@ -622,9 +623,9 @@ namespace PGNViewer
             // this a valid time for the game?
             foreach (Ply p in curGame.Plies)
             {
-                if (p.comment != null)
+                if (p.comments != null)
                 {
-                    DateTime commentTime = CommentTime(p.comment.tokenString);
+                    DateTime commentTime = CommentTime(p.comments);
                     if (commentTime > possTime)
                     {
                         MessageBox.Show("There was a later time already posted to this game");
@@ -696,7 +697,7 @@ namespace PGNViewer
             PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"), 0);
             curGame.PGNtokens.Add(timeComment);
             PGNText.Text += timeComment.tokenString + " ";
-            newMove.comment = timeComment;
+            newMove.comments.Add( timeComment );
 
             PGNText.Text += Environment.NewLine;
 
@@ -769,13 +770,34 @@ namespace PGNViewer
             respDialog.ShowDialog();
 
         }
-        private DateTime CommentTime(string st)
+        private int FindTimeComment(List<PGNComment> cmts)
         {
-            // (05/10/2015 1224)
-            DateTime thisTime;
-            if (DateTime.TryParseExact(st, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
+            foreach (PGNComment comment in cmts)
+            {
+                // (05/10/2015 1224)
+                DateTime thisTime;
+                if (DateTime.TryParseExact(comment.tokenString, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
+                    return cmts.IndexOf(comment);
+            } 
+            return -1;
+        }
+        private DateTime CommentTime(List<PGNComment> cmts)
+        {
+            int index = FindTimeComment( cmts );
+            if( index >= 0 )
+            {
+                DateTime thisTime;
+                DateTime.TryParseExact(cmts[index].tokenString, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime);
                 return thisTime;
+            }
             return DateTime.MinValue;
+        }
+        private string CommentTimeString(List<PGNComment> cmts)
+        {
+            int index = FindTimeComment(cmts);
+            if (index >= 0)
+                return cmts[index].tokenString;
+            return "";
         }
         private string ReplaceTags(string refStr)
         {
@@ -820,8 +842,8 @@ namespace PGNViewer
                             break;
                         case "WhiteMoveTime":
                             lastWPly -= 2 * offset;
-                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
-                                tempStr = curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comments != null)
+                                tempStr = CommentTimeString(curGame.Plies[lastWPly].comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteReflTime":
@@ -832,8 +854,8 @@ namespace PGNViewer
                             break;
                         case "WhiteClockStart":
                             lastWPly -= 1 + (2 * offset);
-                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comment != null)
-                                tempStr = curGame.Plies[lastWPly].comment.value + " " + corrTZ.Text;
+                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comments != null)
+                                tempStr = CommentTimeString(curGame.Plies[lastWPly].comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
@@ -863,8 +885,8 @@ namespace PGNViewer
                             goto case "BlackMoveTime";
                         case "BlackMoveTime":
                             lastBPly -= 2 * offset;
-                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
-                                tempStr = curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comments != null)
+                                tempStr = CommentTimeString(curGame.Plies[lastBPly].comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackGridReflTime":
@@ -883,8 +905,8 @@ namespace PGNViewer
                             goto case "BlackClockStart";
                         case "BlackClockStart":
                             lastBPly -= 1 + (2 * offset);
-                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comment != null)
-                                tempStr = curGame.Plies[lastBPly].comment.value + " " + corrTZ.Text;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comments != null)
+                                tempStr = CommentTimeString(curGame.Plies[lastBPly].comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
