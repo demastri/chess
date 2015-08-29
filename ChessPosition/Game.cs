@@ -31,7 +31,7 @@ namespace ChessPosition
 
         public static void SavePGNFile(string PGNFileLoc, List<Game> games)
         {
-            //PGNFileLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\test.pgn";
+            return;
             StreamWriter tr = new StreamWriter(PGNFileLoc);
             foreach (Game g in games)
                 g.Save(tr);
@@ -44,16 +44,12 @@ namespace ChessPosition
             if (PGNFileLoc != "" && File.Exists(PGNFileLoc))
             {
                 StreamReader tr = new StreamReader(PGNFileLoc);
-                GameRef = new List<Game>();
-
-                try
+                PGNTokenizer nextTokenSet = new PGNTokenizer(tr);
+                tr.Close();
+                for (int i = 0; i < nextTokenSet.GameCount; i++)
                 {
-                    while (true)
-                        GameRef.Add(new Game(tr));
-                }
-                catch (InvalidOperationException e)
-                {
-                    tr.Close();// ok, eof likely
+                    nextTokenSet.LoadGame(i);
+                    GameRef.Add(new Game(nextTokenSet));
                 }
             }
             return GameRef;
@@ -62,11 +58,59 @@ namespace ChessPosition
         public Game(StreamReader r) // read from PGN stream
         {
             PGNTokenizer nextTokenSet = new PGNTokenizer(r);
-            if (nextTokenSet.tokens.Count > 0) // ok, we have one
+            for (int i = 0; i < nextTokenSet.GameCount; i++)
             {
-                InitGame();
-                PGNtokens = nextTokenSet.tokens;
-                PGNSource = nextTokenSet.pgn;
+                nextTokenSet.LoadGame(i);
+                if (nextTokenSet.tokens.Count > 0) // ok, we have one
+                {
+                    InitGame();
+                    PGNtokens = nextTokenSet.tokens;
+                    PGNSource = nextTokenSet.pgn;
+                    Ply lastPly = null;
+                    foreach (PGNToken token in PGNtokens)
+                    {
+                        switch (token.tokenType)
+                        {
+                            case PGNTokenType.Tag:
+                                HandleTag((PGNTag)token);
+                                break;
+                            case PGNTokenType.Invalid:
+                                break;
+                            case PGNTokenType.MoveNumber:
+                                break;
+                            case PGNTokenType.Comment:  // could be one of many
+                                if (lastPly != null)
+                                    lastPly.comments.Add((PGNComment)token);
+                                break;
+                            case PGNTokenType.Terminator:
+                                Tags["Result"] = token.tokenString;
+                                break;
+                            case PGNTokenType.MoveString:
+                                lastPly = HandleMove((PGNMoveString)token);
+                                lastPly.refToken = token;
+                                break;
+                        }
+                        if (token.tokenType == PGNTokenType.Terminator)
+                        {
+                            ResetPosition();
+                            return;
+                        }
+                    }
+                    // ok, we're out of tokens, must be a game in progress...
+                    ResetPosition();
+                    return;
+                }
+                throw new InvalidOperationException();
+            }
+        }
+
+        public Game(PGNTokenizer pgt)
+        {
+            InitGame();
+            if (pgt.tokens.Count > 0) // ok, we have one
+            {
+                PGNtokens = pgt.tokens;
+                PGNSource = pgt.pgn;
                 Ply lastPly = null;
                 foreach (PGNToken token in PGNtokens)
                 {
@@ -81,7 +125,7 @@ namespace ChessPosition
                             break;
                         case PGNTokenType.Comment:  // could be one of many
                             if (lastPly != null)
-                                lastPly.comments.Add( (PGNComment)token );
+                                lastPly.comments.Add((PGNComment)token);
                             break;
                         case PGNTokenType.Terminator:
                             Tags["Result"] = token.tokenString;
@@ -101,9 +145,7 @@ namespace ChessPosition
                 ResetPosition();
                 return;
             }
-            throw new InvalidOperationException();
         }
-
         public Game()
         {
             InitGame();
@@ -196,9 +238,9 @@ namespace ChessPosition
                 Tags.Add(t.key, t.value);
 
             if ((t.key == "WhiteElo" || t.key == "WhiteUSCF") && t.value.Trim().Length > 0)
-                RatingWhite = Convert.ToInt32(t.value);
+                RatingWhite = Convert.ToInt32(t.value.Substring(1, t.value.Length-2));
             if ((t.key == "BlackElo" || t.key == "BlackUSCF") && t.value.Trim().Length > 0)
-                RatingBlack = Convert.ToInt32(t.value);
+                RatingBlack = Convert.ToInt32(t.value.Substring(1, t.value.Length - 2));
         }
 
         public string ToFEN()
@@ -247,7 +289,7 @@ namespace ChessPosition
 
 
             // constraining piece... or it's a capture with a P, need to state the source...
-            if (options.Count > 1 || (options.Count == 1 && capPc != null && thisPc.piece == Piece.PieceType.Pawn) )
+            if (options.Count > 1 || (options.Count == 1 && capPc != null && thisPc.piece == Piece.PieceType.Pawn))
             {
                 int rankCount = 0;
                 int fileCount = 0;

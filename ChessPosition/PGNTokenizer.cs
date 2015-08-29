@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using JPD.Parser;
 
 namespace ChessPosition
 {
@@ -12,8 +13,53 @@ namespace ChessPosition
         public string pgn;
         static public string startNextGameTag = "";
         public List<PGNToken> tokens;
+        List<Sentence> games;
+
+        public void TokenizeViaParser(StreamReader sr)
+        {
+            string grammarFile = "Parser/Grammars/PGNSchema.xml";
+            string corpusFile = "Parser/Corpora/Sample.pgn";
+            try
+            {
+                Parser p = new Parser(grammarFile);
+                List<Token> parseTokens = p.Tokenize(sr);
+                //List<Token> parseTokens = p.Tokenize(corpusFile);
+                games = p.Compose(parseTokens);
+                // at this point, we have Sentences (Games) that conform to the Grammar
+                // composed of tokens we can directly translate into domain-usable objects
+                // the list of sentences correspond to the games in the file
+                // foreach game we have the tree of ParseNodes to walk, which resolve to a set of instantiated tokens
+                LoadGame(0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        
+        }
+
+        public int GameCount { get { return games.Count; } }
+
+        public void LoadGame(int i)
+        {
+            tokens = new List<PGNToken>();
+            if (i < 0 || i >= GameCount)
+                return;
+            Sentence game = games[i];   // for each game
+            List<PGNToken> tagTokens = PGNToken.TokenFactory(game, game.node, "TagSection/TagPair");
+            tokens.AddRange(tagTokens);
+            List<PGNToken> moveTokens = PGNToken.TokenFactory(game, game.node, "MoveSection/*");
+            tokens.AddRange(moveTokens);
+            List<PGNToken> termTokens = PGNToken.TokenFactory(game, game.node, "GameTerminator");
+            tokens.AddRange(termTokens);
+        }
+
         public PGNTokenizer(StreamReader sr)
         {
+            TokenizeViaParser(sr);
+            return;
+
+
             // read and add to pgn until you see a terminator...
             // another valid end of game state is whitespace then another tag
             // ### could be embedded with comments afterwards
@@ -59,6 +105,8 @@ namespace ChessPosition
         }
         public void Tokenize()
         {
+            TokenizeViaParser(null);
+            return; // 
             /// full definition of actual PGN token set:
             /// http://www6.chessclub.com/help/PGN-spec
             /// starts as an input string
