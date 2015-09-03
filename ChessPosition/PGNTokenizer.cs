@@ -15,7 +15,7 @@ namespace ChessPosition
         public List<PGNToken> tokens;
         List<Sentence> games;
 
-        public void TokenizeViaParser(StreamReader sr)
+        public void Tokenize(StreamReader sr)
         {
             string grammarFile = "Parser/Grammars/PGNSchema.xml";
             string corpusFile = "Parser/Corpora/Sample.pgn";
@@ -46,6 +46,7 @@ namespace ChessPosition
             if (i < 0 || i >= GameCount)
                 return;
             Sentence game = games[i];   // for each game
+            game.Report();
             List<PGNToken> tagTokens = PGNToken.TokenFactory(game, game.node, "TagSection/TagPair");
             tokens.AddRange(tagTokens);
             List<PGNToken> moveTokens = PGNToken.TokenFactory(game, game.node, "MoveSection/*");
@@ -56,57 +57,13 @@ namespace ChessPosition
 
         public PGNTokenizer(StreamReader sr)
         {
-            TokenizeViaParser(sr);
-            return;
-
-
-            // read and add to pgn until you see a terminator...
-            // another valid end of game state is whitespace then another tag
-            // ### could be embedded with comments afterwards
-            if( startNextGameTag != "" )
-                pgn = startNextGameTag+ " " + Environment.NewLine;
-            else
-                pgn = "";
-            startNextGameTag = "";
-
-            bool inAGame = false;
-
-            bool done = false;
-            while (!done && !sr.EndOfStream)
-            {
-                bool inATag = false;
-                string line = sr.ReadLine();
-                if (line.Trim() != "")
-                {
-                    if (line[0] == '[')
-                        inATag = true;
-                    else
-                        inAGame = true;
-
-                    if (inAGame && inATag) // ok - we've rolled to the next one 
-                    {
-                        startNextGameTag = line + Environment.NewLine;
-                        done = true;
-                        continue;
-                    }
-
-                    pgn += line + " " + Environment.NewLine;
-                    foreach (string s in PGNTerminator.terminators)
-                        if (line.IndexOf(s) >= 0 && line.Substring(line.IndexOf(s) + s.Length).Trim() == "")
-                            done = true;
-                }
-            }
-            Tokenize();
+            Tokenize(sr);
         }
         public PGNTokenizer(string s)
         {
             pgn = s;
-            Tokenize();
+            Tokenize(null);
         }
-        public void Tokenize()
-        {
-            TokenizeViaParser(null);
-            return; // 
             /// full definition of actual PGN token set:
             /// http://www6.chessclub.com/help/PGN-spec
             /// starts as an input string
@@ -225,58 +182,6 @@ namespace ChessPosition
             ///                 
             ///         Within a file, games should be collated (ascending) by
             ///             Date, Event, Site, White, Black, Result, movetext
-
-
-
-            tokens = new List<PGNToken>();
-            for( int i=0; i<pgn.Length; )
-            {
-                if (char.IsWhiteSpace(pgn[i]))
-                    i++;
-                else
-                {
-                    int refi = i;
-                    PGNToken pgntoken = BuildToken( ref i );
-                    if (pgntoken != null)
-                    {
-                        tokens.Add(pgntoken);
-                    }
-                    if (i < refi)
-                        i = refi;
-                }
-            }
-        }
-        public PGNToken BuildToken( ref int i ) 
-        {
-            PGNToken outToken = null;
-            switch (pgn[i])
-            {
-                case '[':   // should be a tag value
-                    outToken = new PGNTag(pgn, i);
-                    break;
-                case '{':   // should be an annotation
-                    outToken = new PGNComment(pgn, i);
-                    break;
-                case ',':   // should be a comment
-                    outToken = new PGNComment(pgn, i);
-                    break;
-                case '(':   // should be a variation! ###
-                    outToken = new PGNComment(pgn, i);
-                    break;
-                default:   // should be a move number or string...
-                    outToken = new PGNTerminator(pgn, i);
-                    if( outToken.tokenType == PGNTokenType.Invalid )
-                        if( char.IsDigit(pgn[i]) )
-                            outToken = new PGNMoveNumber(pgn, i);
-                        else if (("PRNBKQabcdefghO").IndexOf(pgn[i]) >= 0)
-                            outToken = new PGNMoveString(pgn, i);
-                    break;
-            }
-            if (outToken == null || outToken.tokenType == PGNTokenType.Invalid)
-                return null;
-            i = outToken.startLocation + outToken.tokenString.Length;
-            return outToken;
-        }
 
     }
 }

@@ -181,7 +181,7 @@ namespace ChessPosition
             return options;
         }
 
-        private bool IsCheck()  // is the onMove King being attacked??
+        public bool IsCheck()  // is the onMove King being attacked??
         {
             // find the opposing king
             Square attackSq = null;

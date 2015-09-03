@@ -9,13 +9,14 @@ namespace ChessPosition
 {
     public class Game
     {
+        public Dictionary<string, string> Tags;
         public List<Ply> Plies;
+        public PGNTerminator GameTerm;
         public Position CurrentPosition;
         public PlayerEnum OnMove { get { return CurrentPosition.onMove; } set { CurrentPosition.onMove = value; } }
         public int RatingWhite;
         public int RatingBlack;
 
-        public Dictionary<string, string> Tags;
 
         public string PGNSource;
 
@@ -55,96 +56,111 @@ namespace ChessPosition
             return GameRef;
         }
 
-        public Game(StreamReader r) // read from PGN stream
-        {
-            PGNTokenizer nextTokenSet = new PGNTokenizer(r);
-            for (int i = 0; i < nextTokenSet.GameCount; i++)
-            {
-                nextTokenSet.LoadGame(i);
-                if (nextTokenSet.tokens.Count > 0) // ok, we have one
-                {
-                    InitGame();
-                    PGNtokens = nextTokenSet.tokens;
-                    PGNSource = nextTokenSet.pgn;
-                    Ply lastPly = null;
-                    foreach (PGNToken token in PGNtokens)
-                    {
-                        switch (token.tokenType)
-                        {
-                            case PGNTokenType.Tag:
-                                HandleTag((PGNTag)token);
-                                break;
-                            case PGNTokenType.Invalid:
-                                break;
-                            case PGNTokenType.MoveNumber:
-                                break;
-                            case PGNTokenType.Comment:  // could be one of many
-                                if (lastPly != null)
-                                    lastPly.comments.Add((PGNComment)token);
-                                break;
-                            case PGNTokenType.Terminator:
-                                Tags["Result"] = token.tokenString;
-                                break;
-                            case PGNTokenType.MoveString:
-                                lastPly = HandleMove((PGNMoveString)token);
-                                lastPly.refToken = token;
-                                break;
-                        }
-                        if (token.tokenType == PGNTokenType.Terminator)
-                        {
-                            ResetPosition();
-                            return;
-                        }
-                    }
-                    // ok, we're out of tokens, must be a game in progress...
-                    ResetPosition();
-                    return;
-                }
-                throw new InvalidOperationException();
-            }
-        }
-
         public Game(PGNTokenizer pgt)
         {
             InitGame();
             if (pgt.tokens.Count > 0) // ok, we have one
             {
                 PGNtokens = pgt.tokens;
-                PGNSource = pgt.pgn;
+                PGNSource = "";
                 Ply lastPly = null;
                 foreach (PGNToken token in PGNtokens)
                 {
-                    switch (token.tokenType)
-                    {
-                        case PGNTokenType.Tag:
-                            HandleTag((PGNTag)token);
-                            break;
-                        case PGNTokenType.Invalid:
-                            break;
-                        case PGNTokenType.MoveNumber:
-                            break;
-                        case PGNTokenType.Comment:  // could be one of many
-                            if (lastPly != null)
-                                lastPly.comments.Add((PGNComment)token);
-                            break;
-                        case PGNTokenType.Terminator:
-                            Tags["Result"] = token.tokenString;
-                            break;
-                        case PGNTokenType.MoveString:
-                            lastPly = HandleMove((PGNMoveString)token);
-                            lastPly.refToken = token;
-                            break;
-                    }
+                    BuildPlyFromToken(token, Plies, ref lastPly, Plies.Count);
+
                     if (token.tokenType == PGNTokenType.Terminator)
-                    {
-                        ResetPosition();
-                        return;
-                    }
+                        break;
                 }
-                // ok, we're out of tokens, must be a game in progress...
+                // ok, we're out of tokens, must be a game in progress...that's the default...
                 ResetPosition();
+                PGNSource = GeneratePGNSource();
                 return;
             }
+        }
+        private void BuildPlyFromToken(PGNToken token, List<Ply> curPlyCollection, ref Ply lastPly, int curPlyNumber) 
+        {
+            switch (token.tokenType)
+            {
+                case PGNTokenType.Tag:
+                    HandleTag((PGNTag)token);
+                    break;
+                case PGNTokenType.Invalid:
+                    break;
+                case PGNTokenType.MoveNumber:
+                    break;
+                case PGNTokenType.Comment:  // could be one of many
+                    if (lastPly != null)
+                        lastPly.comments.Add((PGNComment)token);
+                    break;
+                case PGNTokenType.Terminator:
+                    GameTerm = new PGNTerminator(token.tokenString);
+                    Tags["Result"] = GameTerm.tokenString;
+                    break;
+                case PGNTokenType.MoveString:
+                    lastPly = HandleMove((PGNMoveString)token, curPlyCollection, curPlyNumber);
+                    if (((PGNMoveString)token).variations != null)
+                        foreach (List<PGNToken> var in ((PGNMoveString)token).variations)
+                        {
+                            ResetPosition();
+                            AdvancePosition(curPlyNumber);
+                            List<Ply> varPlies = HandleVariation(var, curPlyCollection, curPlyNumber);
+                            if (lastPly.variation == null)
+                                lastPly.variation = new List<List<Ply>>();
+                            lastPly.variation.Add(varPlies);
+                        }
+                    break;
+            }
+        }
+
+        private string GeneratePGNSource()
+        {
+            string outString = "";
+            // tags
+            foreach (string tagKey in Tags.Keys)
+                outString += "[" + tagKey + "\"" + Tags[tagKey] + "\"]" + Environment.NewLine;
+
+            // moves
+            outString += GeneratePGNSource(Plies, 0, outString.Length);
+
+            // term
+            outString += GameTerm.tokenString;
+
+            return outString;
+        }
+        private string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen)
+        {
+            string outString = "";
+
+            // moves
+            foreach (Ply ply in variation)
+            {
+                bool WOnMove = (curPly % 2 == 0);
+                int curMove = (curPly / 2 + 1);
+                if (WOnMove)
+                    outString += curMove.ToString() + ".";
+                ply.refToken.startLocation = baseStrLen + outString.Length;
+                outString += ply.refToken.value + " ";
+
+                foreach (PGNComment comment in ply.comments)
+                    if (comment.isBraceComment)
+                        outString += "{" + comment.value + "} ";
+                    else
+                        outString += "; " + comment.value + Environment.NewLine;
+
+                if (ply.refToken.variations != null)
+                    foreach (List<PGNToken> subVar in ply.refToken.variations)
+                    {
+                        outString += "(";
+                        foreach (PGNToken t in subVar)
+                            outString += t.tokenString + " ";
+                        if (outString[outString.Length - 1] == ' ')
+                            outString = outString.Substring(0, outString.Length - 1);
+                        outString += ") ";
+                    }
+
+                curPly++;
+            }
+            return outString;
         }
         public Game()
         {
@@ -167,6 +183,7 @@ namespace ChessPosition
 
             ResetPosition();
             PGNSource = "";
+            GameTerm = new PGNTerminator(PGNTerminator.terminators[ (int)PGNTerminator.TerminatorTypes.InProgress ]);
 
             RatingWhite = RatingBlack = NoRating;
         }
@@ -232,15 +249,21 @@ namespace ChessPosition
 
         private void HandleTag(PGNTag t)
         {
+            string valString = t.value;
+            if (valString.Length >= 2 && valString[0] == '\"' && valString[valString.Length - 1] == '\"')
+            {
+                valString = valString.Substring(1);
+                valString = valString.Substring(0, valString.Length - 1);
+            }
             if (Tags.ContainsKey(t.key))
-                Tags[t.key] = t.value;
+                Tags[t.key] = valString;
             else
-                Tags.Add(t.key, t.value);
+                Tags.Add(t.key, valString);
 
-            if ((t.key == "WhiteElo" || t.key == "WhiteUSCF") && t.value.Trim().Length > 0)
-                RatingWhite = Convert.ToInt32(t.value.Substring(1, t.value.Length-2));
-            if ((t.key == "BlackElo" || t.key == "BlackUSCF") && t.value.Trim().Length > 0)
-                RatingBlack = Convert.ToInt32(t.value.Substring(1, t.value.Length - 2));
+            if ((t.key == "WhiteElo" || t.key == "WhiteUSCF") && valString.Length > 0)
+                RatingWhite = Convert.ToInt32(valString);
+            if ((t.key == "BlackElo" || t.key == "BlackUSCF") && valString.Length > 0)
+                RatingBlack = Convert.ToInt32(valString);
         }
 
         public string ToFEN()
@@ -251,8 +274,7 @@ namespace ChessPosition
         public Ply CreateMove(Square src, Square dest)
         {
             Ply outPly = new Ply(src, dest);
-            outPly.refToken = new PGNToken();
-            outPly.refToken.tokenType = PGNTokenType.MoveString;
+            outPly.refToken = new PGNMoveString(src.ToString() + dest.ToString());
 
             Piece thisPc = CurrentPosition.PieceAt(src);
             Piece capPc = CurrentPosition.PieceAt(dest);
@@ -286,7 +308,6 @@ namespace ChessPosition
 
             // move
             outPly.refToken.tokenString = thisPc.piece == Piece.PieceType.Pawn ? "" : thisPc.ToString();
-
 
             // constraining piece... or it's a capture with a P, need to state the source...
             if (options.Count > 1 || (options.Count == 1 && capPc != null && thisPc.piece == Piece.PieceType.Pawn))
@@ -323,9 +344,9 @@ namespace ChessPosition
         private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
         private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
 
-        public Ply HandleMove(PGNMoveString token)
+        public Ply HandleMove(PGNMoveString token, List<Ply> curPlyCollection, int curPlyNumber)
         {
-            int curPlyNumber = Plies.Count + 1;
+            curPlyNumber++;
             int curMoveNumber = (curPlyNumber - 1) / 2;
 
             string locString = token.value;
@@ -341,23 +362,24 @@ namespace ChessPosition
                 }
             }
 
-            Ply curPly = new Ply();
+            Ply curPly = null;
             if (castleMarkers.Contains(locString))
             {
                 // src / dest squares should be easy here
-                curPly.Number = curPlyNumber;
                 Square.Rank Krank = curPlyNumber % 2 == 1 ? Square.Rank.R1 : Square.Rank.R8;
                 if (locString == castleMarkers[0]) // K-Side
                 {
-                    curPly.src = new Square(Krank, Square.File.FE);
-                    curPly.dest = new Square(Krank, Square.File.FG);
-                    Plies.Add(curPly);
+                    curPly = new Ply(
+                        new Square(Krank, Square.File.FE), 
+                        new Square(Krank, Square.File.FG));
+                    curPlyCollection.Add(curPly);
                 }
                 if (locString == castleMarkers[1]) // Q-Side
                 {
-                    curPly.src = new Square(Krank, Square.File.FE);
-                    curPly.dest = new Square(Krank, Square.File.FC);
-                    Plies.Add(curPly);
+                    curPly = new Ply(
+                        new Square(Krank, Square.File.FE),
+                        new Square(Krank, Square.File.FC));
+                    curPlyCollection.Add(curPly);
                 }
             }
             else
@@ -406,10 +428,10 @@ namespace ChessPosition
                             options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, Square.Rank.NONE, Square.File.NONE);
                             if (options.Count != 1)
                             {
-                                System.Console.WriteLine("couldn't unambiguously process move <no pc for target> " + token);
+                                System.Console.WriteLine("couldn't unambiguously process move <no pc for target> " + token.tokenString);
                                 return null;
                             }
-                            Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
+                            curPlyCollection.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                         }
                         else
                         {
@@ -450,7 +472,7 @@ namespace ChessPosition
                                 return null;
                             }
                             else
-                                Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
+                                curPlyCollection.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                         }
                         break;
                     case 3:
@@ -466,7 +488,7 @@ namespace ChessPosition
                             return null;
                         }
 
-                        Plies.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
+                        curPlyCollection.Add(curPly = new Ply(options[0], TargetSquare, promoPiece));
                         break;
                     case 4:
                         SourceSquare.col = (byte)(locString[0] - 'a');
@@ -479,11 +501,14 @@ namespace ChessPosition
                             System.Console.WriteLine("couldn't find specified piece for move  " + token);
                             return null;
                         }
-                        Plies.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
+                        curPlyCollection.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
                         break;
                 }
             }
+            curPly.Number = curPlyNumber; 
+            curPly.refToken = token;
             CurrentPosition.MakeMove(curPly);
+            curPly.refToken.isCheck = CurrentPosition.IsCheck();
             curPlyNumber++;
             return curPly;
         }
@@ -543,6 +568,18 @@ namespace ChessPosition
             sw.WriteLine();
             if (curLineLength > 0)
                 sw.WriteLine();
+        }
+        private List<Ply> HandleVariation(List<PGNToken> var, List<Ply> curPlyCollection, int curPlyNumber)
+        {
+            /// the token contains any embedded MoveText
+            /// simply turn them into Plies or add to existing plies as necessary, and return the set
+            List<Ply> outPly = new List<Ply>();
+            Ply curPly = null;
+            foreach (PGNToken token in var)
+            {
+                BuildPlyFromToken(token, outPly, ref curPly, curPlyNumber+outPly.Count);
+            }
+            return outPly;
         }
     }
 }

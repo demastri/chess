@@ -566,7 +566,7 @@ namespace PGNViewer
                 int thisReflTime = 0;
 
                 corrGridView.Rows[i / 2].Cells["MoveNbr"].Value = 1 + i / 2;
-                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value = p.refToken.tokenString;
+                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value = p.refToken.value;
                 if (p.comments != null)
                 {
                     DateTime thisMoveTime = CommentTime(p.comments);
@@ -642,10 +642,10 @@ namespace PGNViewer
                 MessageBox.Show("There was a problem with the provided move");
                 return;
             }
-            PGNMoveString moveStr = new PGNMoveString(possMove, 0);
+            PGNMoveString moveStr = new PGNMoveString(possMove);
             curGame.ResetPosition();
             curGame.AdvancePosition(curGame.Plies.Count);
-            if ((newMove = curGame.HandleMove(moveStr)) == null)
+            if ((newMove = curGame.HandleMove(moveStr, curGame.Plies, curGame.Plies.Count)) == null)
             {
                 MessageBox.Show("There was a problem with the provided move");
                 return;
@@ -694,7 +694,7 @@ namespace PGNViewer
             newMove.refToken.startLocation = PGNText.Text.Length;
             PGNText.Text += possMove;
 
-            PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"), 0);
+            PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"));
             curGame.PGNtokens.Add(timeComment);
             PGNText.Text += timeComment.tokenString + " ";
             newMove.comments.Add( timeComment );

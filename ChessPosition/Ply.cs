@@ -11,12 +11,11 @@ namespace ChessPosition
         public int Number;
         public int MoveNumber { get { return Number / 2 + 1; } }
 
-
         public Square src;
         public Square dest;
         public Piece promo;
 
-        public PGNToken refToken;
+        public PGNMoveString refToken;
         public List<PGNComment> comments;
         public List<List<Ply>> variation;
 
