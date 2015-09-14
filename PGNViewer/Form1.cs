@@ -151,6 +151,7 @@ namespace PGNViewer
             AnalysisEngine = null;
             timer1.Start();
 
+            GameRef = new List<Game>();
             SetMode(Settings.AppSettings["StartMode"]);
             OpenLastFile();
         }
