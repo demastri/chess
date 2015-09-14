@@ -55,6 +55,17 @@ namespace PGNViewer
         {
             curPGNFileLoc = fn;
             GameRef = Game.ReadPGNFile(curPGNFileLoc);
+
+            UpdateGameListDisplay();
+            DrawBoard();
+            UpdateCorrespondence();
+            HighlightPGNMove();
+            HighlightCorrMove();
+            UpdateAnalysis();
+            UpdateFormTitle();
+        }
+        private void UpdateGameListDisplay()
+        {
             GameList.Nodes.Clear();
             if (curDisplayMode == 3)    // corr
             {
@@ -64,27 +75,32 @@ namespace PGNViewer
                 foreach (Game g in GameRef)
                 {
                     int waitDays = (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comments)).Days;
-                    
+
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
-                    string s = g.Tags["Date"] + " (" + ((int)((g.Plies.Count-1)/2)+1) + " m - "+waitDays.ToString()+" d) " + g.Tags["White"] + "-" + g.Tags["Black"];
+                    string s = g.Tags["Date"] + " (" + ((int)((g.Plies.Count - 1) / 2) + 1) + " m - " + waitDays.ToString() + " d) " + g.Tags["White"] + "-" + g.Tags["Black"];
+
+                    TreeNode thisGame = new TreeNode(s);
+                    thisGame.Tag = g;
+
                     if (g.Tags["Result"] == "*" || g.Tags["Result"] == "")
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
                         {
                             int i = FindInsertIndex(inProgOnMoveNode.Nodes, waitDays, true);
-                            inProgOnMoveNode.Nodes.Insert(i, s);
+                            inProgOnMoveNode.Nodes.Insert(i, thisGame);
                         }
                         else
                         {
                             int i = FindInsertIndex(inProgWaitingNode.Nodes, waitDays, true);
-                            inProgWaitingNode.Nodes.Insert(i, s);
+                            inProgWaitingNode.Nodes.Insert(i, thisGame);
                         }
                     }
                     else
                     {
                         s = g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] + " : " + g.Tags["Result"];
-                        complNode.Nodes.Add(s, s);
+                        thisGame.Text = s;
+                        complNode.Nodes.Add(thisGame);
                     }
                 }
             }
@@ -92,16 +108,12 @@ namespace PGNViewer
             {
                 foreach (Game g in GameRef)
                 {
-                    GameList.Nodes.Add(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                    TreeNode thisGame = new TreeNode(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                    thisGame.Tag = g;
+                    GameList.Nodes.Add(thisGame);
                 }
             }
             curGame = null;
-            DrawBoard();
-            UpdateCorrespondence();
-            HighlightPGNMove();
-            HighlightCorrMove();
-            UpdateAnalysis();
-            UpdateFormTitle();
         }
         private int FindInsertIndex(TreeNodeCollection n, int ageInDays, bool decreasing)
         {
@@ -446,6 +458,7 @@ namespace PGNViewer
                 DisableAnalysis();
                 EnableCorrespondence();
             }
+            UpdateGameListDisplay();
 
         }
         private void DisableCorrespondence()
@@ -506,9 +519,10 @@ namespace PGNViewer
             else
                 corrTemplateList.SelectedIndex = corrTemplateList.Items.Count - 1;
         }
-
+        bool updatingDisplay = false;
         private void UpdateCorrespondence()
         {
+            updatingDisplay = true;
             // follow highlighted move from pgn viewer
             // enter move as W/B
             // enter move time as W/B - button for "~now"
@@ -602,6 +616,9 @@ namespace PGNViewer
             ReflTimeLabel.Text = "Reflection Time:  Tot/Used/Rem (W/B): " + Environment.NewLine +
                 totalCorrTimeW.ToString() + " / " + usedCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString() + "     " +
                 totalCorrTimeB.ToString() + " / " + usedCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
+
+            resultCombo.Text = curGame.GameTerm.value;
+            updatingDisplay = false;
         }
 
         private void CorrTimeNow_Click(object sender, EventArgs e)
@@ -933,7 +950,7 @@ namespace PGNViewer
                             break;
                         case "PGNSource":
                             // actually just move numbers and moves here...
-                            refStr = refStr.Replace(token, "<br>" + curGame.BuildMoveList() + "<br><br>");
+                            refStr = refStr.Replace(token, "<br>" + curGame.GeneratePGNSource((int)Game.PGNOptions.MoveListOnly) + "<br><br>");
                             break;
                         case "Diagram":
                             // pull the current text from the board display
@@ -998,39 +1015,11 @@ namespace PGNViewer
             PGNText.Text = "";
             curGame = null;
             PGNText.Text = "";
-            bool gameNode = false;
-            if (GameList.SelectedNode != null)
+            if (GameList.SelectedNode != null && GameList.SelectedNode.Tag != null)
             {
-                string testStr = GameList.SelectedNode.Text;
-                int l = testStr.IndexOf('(');
-                int r = testStr.IndexOf(')');
-                if ((gameNode = (l >= 0 && r >= 0)))
-                {
-                    testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
-                }
-                else
-                {
-                    l = testStr.IndexOf(':');
-                    if ((gameNode = (l >= 0)))
-                    {
-                        testStr = testStr.Substring(0, l - 1);
-                    }
-                }
-
-                if (gameNode)
-                {
-                    foreach (Game g in GameRef)
-                        if (g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] == testStr)
-                        {
-                            curGame = g;
-                            break;
-                        }
-                    if (curGame != null)
-                    {
-                        PGNText.Text = curGame.PGNSource;
-                        curGame.ResetPosition();
-                    }
-                }
+                curGame = (Game)GameList.SelectedNode.Tag;
+                PGNText.Text = curGame.PGNSource;
+                curGame.ResetPosition();
             }
             if (curGame != null)
             {
@@ -1204,6 +1193,24 @@ namespace PGNViewer
         private void corrName_TextChanged(object sender, EventArgs e)
         {
             Settings.AppSettings["MyName"] = corrName.Text;
+        }
+
+        private void PopMoveButton_Click(object sender, EventArgs e)
+        {
+            curGame.Plies.RemoveAt(curGame.Plies.Count - 1);
+            Game.SavePGNFile(curPGNFileLoc, GameRef);
+            ReloadGamesFromFile();
+        }
+
+        private void resultCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            curGame.Tags["Result"] = (string)resultCombo.SelectedItem;
+            curGame.GameTerm = new PGNTerminator((string)resultCombo.SelectedItem);
+            if (!updatingDisplay)
+            {
+                Game.SavePGNFile(curPGNFileLoc, GameRef);
+                ReloadGamesFromFile();
+            }
         }
     }
 }

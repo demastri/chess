@@ -83,6 +83,9 @@
             this.corrTZ = new System.Windows.Forms.TextBox();
             this.corrTZLabel = new System.Windows.Forms.Label();
             this.corrTemplateList = new System.Windows.Forms.ComboBox();
+            this.PopMoveButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.resultCombo = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             this.SuspendLayout();
@@ -566,7 +569,7 @@
             this.corrName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrName.Location = new System.Drawing.Point(672, 259);
             this.corrName.Name = "corrName";
-            this.corrName.Size = new System.Drawing.Size(168, 20);
+            this.corrName.Size = new System.Drawing.Size(78, 20);
             this.corrName.TabIndex = 25;
             this.corrName.Text = "SomeName";
             this.corrName.TextChanged += new System.EventHandler(this.corrName_TextChanged);
@@ -574,7 +577,7 @@
             // corrTZ
             // 
             this.corrTZ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.corrTZ.Location = new System.Drawing.Point(903, 258);
+            this.corrTZ.Location = new System.Drawing.Point(873, 236);
             this.corrTZ.Name = "corrTZ";
             this.corrTZ.Size = new System.Drawing.Size(47, 20);
             this.corrTZ.TabIndex = 27;
@@ -584,7 +587,7 @@
             // 
             this.corrTZLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.corrTZLabel.AutoSize = true;
-            this.corrTZLabel.Location = new System.Drawing.Point(843, 261);
+            this.corrTZLabel.Location = new System.Drawing.Point(824, 239);
             this.corrTZLabel.Name = "corrTZLabel";
             this.corrTZLabel.Size = new System.Drawing.Size(43, 13);
             this.corrTZLabel.TabIndex = 26;
@@ -605,11 +608,52 @@
             this.corrTemplateList.Text = "None";
             this.corrTemplateList.SelectedIndexChanged += new System.EventHandler(this.corrTemplateList_SelectedIndexChanged);
             // 
+            // PopMoveButton
+            // 
+            this.PopMoveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PopMoveButton.Location = new System.Drawing.Point(964, 263);
+            this.PopMoveButton.Name = "PopMoveButton";
+            this.PopMoveButton.Size = new System.Drawing.Size(68, 23);
+            this.PopMoveButton.TabIndex = 29;
+            this.PopMoveButton.Text = "Pop Move";
+            this.PopMoveButton.UseVisualStyleBackColor = true;
+            this.PopMoveButton.Click += new System.EventHandler(this.PopMoveButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(824, 266);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 13);
+            this.label1.TabIndex = 30;
+            this.label1.Text = "Update Result";
+            // 
+            // resultCombo
+            // 
+            this.resultCombo.AllowDrop = true;
+            this.resultCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.resultCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.resultCombo.FormattingEnabled = true;
+            this.resultCombo.Items.AddRange(new object[] {
+            "*",
+            "1-0",
+            "0-1",
+            "1/2-1/2"});
+            this.resultCombo.Location = new System.Drawing.Point(905, 262);
+            this.resultCombo.Name = "resultCombo";
+            this.resultCombo.Size = new System.Drawing.Size(46, 21);
+            this.resultCombo.TabIndex = 31;
+            this.resultCombo.SelectedIndexChanged += new System.EventHandler(this.resultCombo_SelectedIndexChanged);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 484);
+            this.Controls.Add(this.resultCombo);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.PopMoveButton);
             this.Controls.Add(this.corrTemplateList);
             this.Controls.Add(this.corrTZ);
             this.Controls.Add(this.corrTZLabel);
@@ -707,6 +751,9 @@
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem openLastFileMenu;
+        private System.Windows.Forms.Button PopMoveButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox resultCombo;
     }
 }
 

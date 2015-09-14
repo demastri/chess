@@ -32,7 +32,6 @@ namespace ChessPosition
 
         public static void SavePGNFile(string PGNFileLoc, List<Game> games)
         {
-            return;
             StreamWriter tr = new StreamWriter(PGNFileLoc);
             foreach (Game g in games)
                 g.Save(tr);
@@ -99,37 +98,59 @@ namespace ChessPosition
                 case PGNTokenType.MoveString:
                     lastPly = HandleMove((PGNMoveString)token, curPlyCollection, curPlyNumber);
                     if (((PGNMoveString)token).variations != null)
+                    {
+                        Position varStartPosition = new Position(CurrentPosition);
                         foreach (List<PGNToken> var in ((PGNMoveString)token).variations)
                         {
-                            ResetPosition();
-                            AdvancePosition(curPlyNumber);
+                            CurrentPosition = new Position(varStartPosition);
                             List<Ply> varPlies = HandleVariation(var, curPlyCollection, curPlyNumber);
                             if (lastPly.variation == null)
                                 lastPly.variation = new List<List<Ply>>();
                             lastPly.variation.Add(varPlies);
                         }
+                        CurrentPosition = new Position(varStartPosition);
+                    }
                     break;
             }
         }
 
-        private string GeneratePGNSource()
+        public enum PGNOptions { IncludeTags=1, IncludeMoves=2, IncludeComments=4, IncludeVariations=8, IncludeAll=15, SimpleGameScore=3, MoveListOnly=2 };
+
+        private int SelectedOptions = (int)PGNOptions.IncludeAll;
+        public string GeneratePGNSource()
+        {
+            return GeneratePGNSource(-1, (int)PGNOptions.IncludeAll);
+        }
+        public string GeneratePGNSource(int options)
+        {
+            return GeneratePGNSource(-1, options);
+        }
+        public string GeneratePGNSource(int newLineTrigger, int options)
         {
             string outString = "";
             // tags
-            foreach (string tagKey in Tags.Keys)
-                outString += "[" + tagKey + "\"" + Tags[tagKey] + "\"]" + Environment.NewLine;
+            if ( (options & (int)PGNOptions.IncludeTags) != 0 )
+            {
+                foreach (string tagKey in Tags.Keys)
+                    outString += "[" + tagKey + " \"" + Tags[tagKey] + "\"]" + Environment.NewLine;
+                outString += Environment.NewLine;
+            }
 
             // moves
-            outString += GeneratePGNSource(Plies, 0, outString.Length);
+            if ((options & (int)PGNOptions.IncludeMoves) != 0)
+            {
+                outString += GeneratePGNSource(Plies, 0, outString.Length, newLineTrigger, options);
 
-            // term
-            outString += GameTerm.tokenString;
+                // term
+                outString += GameTerm.value + Environment.NewLine + Environment.NewLine;
+            }
 
             return outString;
         }
-        private string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen)
+        private string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, int options)
         {
             string outString = "";
+            int curLineLength = 0;
 
             // moves
             foreach (Ply ply in variation)
@@ -137,26 +158,62 @@ namespace ChessPosition
                 bool WOnMove = (curPly % 2 == 0);
                 int curMove = (curPly / 2 + 1);
                 if (WOnMove)
+                {
                     outString += curMove.ToString() + ".";
+                    curLineLength += curMove.ToString().Length + 1;
+                }
                 ply.refToken.startLocation = baseStrLen + outString.Length;
                 outString += ply.refToken.value + " ";
+                curLineLength += ply.refToken.value.Length + 1;
 
-                foreach (PGNComment comment in ply.comments)
-                    if (comment.isBraceComment)
-                        outString += "{" + comment.value + "} ";
-                    else
-                        outString += "; " + comment.value + Environment.NewLine;
+                if ((options & (int)PGNOptions.IncludeComments) != 0)
+                {
+                    foreach (PGNComment comment in ply.comments)
+                        if (comment.isBraceComment)
+                        {
+                            outString += "{" + comment.value + "} ";
+                            curLineLength += comment.value.Length + 2;
+                        }
+                        else
+                        {
+                            outString += "; " + comment.value + Environment.NewLine;
+                            curLineLength = 0;
+                        }
+                }
 
-                if (ply.refToken.variations != null)
-                    foreach (List<PGNToken> subVar in ply.refToken.variations)
+                bool useToken = false;
+
+                if ((options & (int)PGNOptions.IncludeVariations) != 0)
+                {
+                    if (useToken)
                     {
-                        outString += "(";
-                        foreach (PGNToken t in subVar)
-                            outString += t.tokenString + " ";
-                        if (outString[outString.Length - 1] == ' ')
-                            outString = outString.Substring(0, outString.Length - 1);
-                        outString += ") ";
+                        if (ply.refToken.variations != null)
+                            foreach (List<PGNToken> subVar in ply.refToken.variations)  // ### has to actually to be foreach List<Ply> subVar in ply.variations)
+                            {
+                                outString += "(";
+                                foreach (PGNToken t in subVar)
+                                    outString += t.tokenString + " ";
+                                outString = outString.Trim();
+                                outString += ") ";
+                            }
                     }
+                    else
+                    {
+                        if (ply.variation != null)
+                            foreach (List<Ply> subVar in ply.variation)  // ### has to actually to be foreach List<Ply> subVar in ply.variations)
+                            {
+                                string varString = GeneratePGNSource(subVar, curPly, outString.Length + 1, -1, options).Trim();
+                                outString += "(" + varString + ") ";
+                                curLineLength += varString.Length;
+                            }
+                    }
+                }
+
+                if (curLineLength > newLineTrigger && newLineTrigger > 0)
+                {
+                    outString += Environment.NewLine;
+                    curLineLength = 0;
+                }
 
                 curPly++;
             }
@@ -349,7 +406,7 @@ namespace ChessPosition
             curPlyNumber++;
             int curMoveNumber = (curPlyNumber - 1) / 2;
 
-            string locString = token.value;
+            string locString = token.value.Trim();
 
             for (int i = 0; i < moveDecorators.Count; i++)
             {
@@ -468,7 +525,7 @@ namespace ChessPosition
                             }
                             if (SourceSquare == null)
                             {
-                                System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token);
+                                System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + token.tokenString);
                                 return null;
                             }
                             else
@@ -484,7 +541,7 @@ namespace ChessPosition
                         // at this point, there is a restriction on either row or col to validate
                         if (options.Count != 1)
                         {
-                            System.Console.WriteLine("couldn't unambiguously process partially constrained move  " + token);
+                            System.Console.WriteLine("couldn't unambiguously process partially constrained move  " + token.tokenString);
                             return null;
                         }
 
@@ -498,7 +555,7 @@ namespace ChessPosition
                         options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, (Square.Rank)SourceSquare.row, (Square.File)SourceSquare.col);
                         if (!options.Contains(SourceSquare) || options.Count != 1)
                         {
-                            System.Console.WriteLine("couldn't find specified piece for move  " + token);
+                            System.Console.WriteLine("couldn't find specified piece for move  " + token.tokenString);
                             return null;
                         }
                         curPlyCollection.Add(curPly = new Ply(SourceSquare, TargetSquare, promoPiece));
@@ -536,38 +593,8 @@ namespace ChessPosition
 
         public void Save(StreamWriter sw)
         {
-            int curLineLength = 0;
-            int lineLengthTrigger = 90;
-            bool wasatag = false;
-            foreach (PGNToken p in PGNtokens)
-            {
-                // start new move on a new line if needed
-                if ((wasatag && p.tokenType != PGNTokenType.Tag) || curLineLength >= lineLengthTrigger && p.tokenType == PGNTokenType.MoveNumber)
-                {
-                    wasatag = false;
-                    sw.WriteLine();
-                    curLineLength = 0;
-                }
-
-                sw.Write(p.tokenString.Trim());
-                curLineLength += p.tokenString.Trim().Length;
-
-                if (p.tokenType != PGNTokenType.MoveNumber)
-                {
-                    sw.Write(" ");
-                    curLineLength++;
-                }
-
-                if (p.tokenType == PGNTokenType.Tag)
-                {
-                    wasatag = true;
-                    sw.WriteLine();
-                    curLineLength = 0;
-                }
-            }
-            sw.WriteLine();
-            if (curLineLength > 0)
-                sw.WriteLine();
+            int defaultLineTrigger = 90;
+            sw.Write(GeneratePGNSource(defaultLineTrigger));
         }
         private List<Ply> HandleVariation(List<PGNToken> var, List<Ply> curPlyCollection, int curPlyNumber)
         {
