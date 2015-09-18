@@ -147,7 +147,7 @@ namespace ChessPosition
 
             return outString;
         }
-        private string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, int options)
+        public string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, int options)
         {
             string outString = "";
             int curLineLength = 0;
@@ -155,6 +155,25 @@ namespace ChessPosition
             // moves
             foreach (Ply ply in variation)
             {
+                string plyString = ply.GeneratePGNSource(this, curPly, baseStrLen, options);
+                ply.refToken.startLocation = baseStrLen + outString.Length;
+                int dotLoc = plyString.IndexOf('.');
+
+                if (dotLoc >= 0 && dotLoc < 6)
+                    ply.refToken.startLocation += dotLoc+1;
+                outString += plyString;
+                curLineLength += plyString.Length;
+
+                if (curLineLength > newLineTrigger && newLineTrigger > 0)
+                {
+                    outString += Environment.NewLine;
+                    curLineLength = 0;
+                }
+
+                curPly++;
+
+                continue;
+
                 bool WOnMove = (curPly % 2 == 0);
                 int curMove = (curPly / 2 + 1);
                 if (WOnMove)
@@ -163,6 +182,7 @@ namespace ChessPosition
                     curLineLength += curMove.ToString().Length + 1;
                 }
                 ply.refToken.startLocation = baseStrLen + outString.Length;
+
                 outString += ply.refToken.value + " ";
                 curLineLength += ply.refToken.value.Length + 1;
 
@@ -594,7 +614,7 @@ namespace ChessPosition
         public void Save(StreamWriter sw)
         {
             int defaultLineTrigger = 90;
-            sw.Write(GeneratePGNSource(defaultLineTrigger));
+            sw.Write(GeneratePGNSource(defaultLineTrigger, (int)PGNOptions.IncludeAll));
         }
         private List<Ply> HandleVariation(List<PGNToken> var, List<Ply> curPlyCollection, int curPlyNumber)
         {

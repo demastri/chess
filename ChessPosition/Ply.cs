@@ -40,5 +40,44 @@ namespace ChessPosition
             promo = p;
             comments = new List<PGNComment>();
         }
+        public string GeneratePGNSource(Game refGame, int curPly, int baseStrLen, int options)
+        {
+            string outString = "";
+
+            bool WOnMove = (curPly % 2 == 0);
+            int curMove = (curPly / 2 + 1);
+            if (WOnMove)
+            {
+                outString += curMove.ToString() + ".";
+            }
+            refToken.startLocation = baseStrLen + outString.Length;
+
+            outString += refToken.value + " ";
+
+            if ((options & (int)Game.PGNOptions.IncludeComments) != 0)
+            {
+                foreach (PGNComment comment in comments)
+                    if (comment.isBraceComment)
+                    {
+                        outString += "{" + comment.value + "} ";
+                    }
+                    else
+                    {
+                        outString += "; " + comment.value + Environment.NewLine;
+                    }
+            }
+
+            if ((options & (int)Game.PGNOptions.IncludeVariations) != 0)
+            {
+                    if (variation != null)
+                        foreach (List<Ply> subVar in variation)  // ### has to actually to be foreach List<Ply> subVar in ply.variations)
+                        {
+                            string varString = refGame.GeneratePGNSource(subVar, curPly, outString.Length + 1, -1, options).Trim();
+                            outString += "(" + varString + ") ";
+                        }
+            }
+            return outString;
+        }
+
     }
 }

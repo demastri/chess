@@ -38,7 +38,7 @@ namespace ChessPosition
         
         }
 
-        public int GameCount { get { return games.Count; } }
+        public int GameCount { get { return games == null ? 0 : games.Count; } }
 
         public void LoadGame(int i)
         {

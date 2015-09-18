@@ -49,7 +49,7 @@
     <Sentence ID="4000" Name="GameTerminator" Pattern="Draw"/>
     <Sentence ID="4000" Name="GameTerminator" Pattern="InProgress"/>
 
-    <Sentence ID="1000" Name="Game" Pattern="[_|][TagSection|][_|]MoveSection[_|]GameTerminator"/>
+    <Sentence ID="1000" Name="Game" Pattern="[_|][TagSection|][_|][MoveSection|][_|]GameTerminator"/>
 
   </Sentences>
 </Grammar>

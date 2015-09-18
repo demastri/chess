@@ -74,7 +74,7 @@ namespace PGNViewer
                 complNode = GameList.Nodes.Add("Complete");
                 foreach (Game g in GameRef)
                 {
-                    int waitDays = (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comments)).Days;
+                    int waitDays = g.Plies.Count <= 0 ? 0 : (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comments)).Days;
 
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
@@ -181,14 +181,13 @@ namespace PGNViewer
         private void DrawBoard()
         {
             CleanupDrag();
+            float maxFontWide = boardDisplay.Width / (10f * 1.82f);
+            float maxFontHigh = boardDisplay.Height / (10f * 1.5f);
+            float maxFont = maxFontWide < maxFontHigh ? maxFontWide : maxFontHigh;
 
-            int limitingSize = boardDisplay.Width < boardDisplay.Height ? boardDisplay.Width : boardDisplay.Height;
-            double fontFactor = 13.75;
-            int fontSize = (int)(limitingSize / fontFactor);
-
-            if (fontSize == 0)
+            if (maxFont < 0.005)
                 return;
-            boardDisplay.Font = new Font(pfc.Families[0], fontSize);
+            boardDisplay.Font = new Font(pfc.Families[0], maxFont);
 
             string emptyBoard =
                   "!\"\"\"\"\"\"\"\"#" + Environment.NewLine // top line
@@ -201,6 +200,18 @@ namespace PGNViewer
                 + "á + + + +%" + Environment.NewLine
                 + "à+ + + + %" + Environment.NewLine    // a-rank with rank ID
                 + "/èéêëìíîï)" + Environment.NewLine;    // bottom line w/fileID
+
+            Graphics gr = boardDisplay.CreateGraphics();
+            Dictionary<char, SizeF> charWidths = new Dictionary<char, SizeF>();
+            foreach (char c in emptyBoard)
+            {
+
+                if (charWidths.ContainsKey(c))
+                    continue;
+                charWidths.Add(c, gr.MeasureString(c.ToString(), boardDisplay.Font));
+
+                float ckFont = boardDisplay.Width / (float)gr.MeasureString("!\"\"\"\"\"\"\"\"#", boardDisplay.Font).ToSize().Width;
+            }
 
             if (ckInvertBoard.Checked)
             {
@@ -794,7 +805,7 @@ namespace PGNViewer
             {
                 // (05/10/2015 1224)
                 DateTime thisTime;
-                if (DateTime.TryParseExact(comment.tokenString, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
+                if (DateTime.TryParseExact(comment.value, "MM/dd/yyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
                     return cmts.IndexOf(comment);
             } 
             return -1;
@@ -805,7 +816,7 @@ namespace PGNViewer
             if( index >= 0 )
             {
                 DateTime thisTime;
-                DateTime.TryParseExact(cmts[index].tokenString, "{MM/dd/yyyy HHmm}", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime);
+                DateTime.TryParseExact(cmts[index].value, "MM/dd/yyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime);
                 return thisTime;
             }
             return DateTime.MinValue;
@@ -814,7 +825,7 @@ namespace PGNViewer
         {
             int index = FindTimeComment(cmts);
             if (index >= 0)
-                return cmts[index].tokenString;
+                return cmts[index].value;
             return "";
         }
         private string ReplaceTags(string refStr)
