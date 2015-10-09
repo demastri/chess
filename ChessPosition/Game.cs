@@ -30,13 +30,35 @@ namespace ChessPosition
         Dictionary<PositionHash, int> repetitions;
         private int progressCounter;
 
+        public static void SaveGameFile(string GameFileLoc, List<Game> games)
+        {
+            StreamWriter tr = new StreamWriter(GameFileLoc);
+            foreach (Game g in games)
+                g.SaveCompact(tr);
+            tr.Flush();
+            tr.Close();
+        }
         public static void SavePGNFile(string PGNFileLoc, List<Game> games)
         {
             StreamWriter tr = new StreamWriter(PGNFileLoc);
             foreach (Game g in games)
-                g.Save(tr);
+                g.SavePGN(tr);
             tr.Flush();
             tr.Close();
+            // test
+            SaveGameFile(PGNFileLoc + ".gam", games);
+        }
+        public static List<Game> ReadGameFile(string GameFileLoc)
+        {
+            List<Game> GameRef = new List<Game>();
+            if (GameFileLoc != "" && File.Exists(GameFileLoc))
+            {
+                StreamReader tr = new StreamReader(GameFileLoc);
+                while (!tr.EndOfStream)
+                    GameRef.Add(new Game(tr));
+                tr.Close();
+            }
+            return GameRef;
         }
         public static List<Game> ReadPGNFile(string PGNFileLoc)
         {
@@ -54,6 +76,82 @@ namespace ChessPosition
             }
             return GameRef;
         }
+
+        public Game(StreamReader tr)
+        {
+            // ### read it here...
+            InitGame();
+            bool done = false;
+            while (!done && !tr.EndOfStream)
+            {
+                string compactToken;
+                string lastTokenName;
+                compactToken = ReadNextCompactTokenString(tr);
+                lastTokenName = ParseCompactTokenString(compactToken);
+
+                if (lastTokenName == "Term")
+                    done = true;
+            }
+        }
+        public static string ReadNextCompactTokenString(StreamReader tr)
+        {
+            string outToken = "";
+            // every time this runs, the next usable character should be a '['
+            bool inToken = false;
+            while (!inToken && !tr.EndOfStream)
+                inToken = (tr.Read() == (int)'[');
+            if (inToken)
+            {
+                int lBraceCount = 1;
+                int nextChar = 0;
+                while (!tr.EndOfStream && nextChar != ']' && lBraceCount == 0)
+                {
+                    nextChar = tr.Read();
+                    if (nextChar == '[')
+                        lBraceCount++;
+                    if (nextChar == ']')
+                        lBraceCount--;
+                    outToken += ((char)nextChar).ToString();
+                }
+                if (tr.EndOfStream)
+                    return "";
+                outToken = outToken.Substring(0, outToken.Length - 1);  // strip off the last brace
+            }
+            return outToken;
+        }
+        public static string ReadNextCompactTokenString(string s)
+        {
+            return ReadNextCompactTokenString(new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(s))));
+        }
+        private string ParseCompactTokenString(string compactToken)
+        {
+            string name = "None";
+            if (compactToken.IndexOf("Tag") == 0)
+            {
+                int lbr = compactToken.IndexOf('<');
+                int rbr = compactToken.IndexOf('>');
+                string key = compactToken.Substring(lbr + 1, rbr - lbr - 1);
+                lbr = compactToken.IndexOf('<', lbr + 1);
+                rbr = compactToken.IndexOf('>', rbr + 1);
+                string val = compactToken.Substring(lbr + 1, rbr - lbr - 1);
+                Tags.Add(key, val);
+                name = "Tag";
+            }
+            if (compactToken.IndexOf("Ply") == 0)
+            {
+                Plies.Add(new Ply(compactToken));
+                name = "Ply";
+            }
+            if (compactToken.IndexOf("Term") == 0)
+            {
+                int lbr = compactToken.IndexOf('<');
+                int rbr = compactToken.IndexOf('>');
+                GameTerm = new PGNTerminator(compactToken.Substring(lbr + 1, rbr - lbr - 1));
+                name = "Term";
+            }
+            return name;
+        }
+
 
         public Game(PGNTokenizer pgt)
         {
@@ -76,7 +174,7 @@ namespace ChessPosition
                 return;
             }
         }
-        private void BuildPlyFromToken(PGNToken token, List<Ply> curPlyCollection, ref Ply lastPly, int curPlyNumber) 
+        private void BuildPlyFromToken(PGNToken token, List<Ply> curPlyCollection, ref Ply lastPly, int curPlyNumber)
         {
             switch (token.tokenType)
             {
@@ -114,22 +212,39 @@ namespace ChessPosition
             }
         }
 
-        public enum PGNOptions { IncludeTags=1, IncludeMoves=2, IncludeComments=4, IncludeVariations=8, IncludeAll=15, SimpleGameScore=3, MoveListOnly=2 };
-
-        private int SelectedOptions = (int)PGNOptions.IncludeAll;
-        public string GeneratePGNSource()
-        {
-            return GeneratePGNSource(-1, (int)PGNOptions.IncludeAll);
-        }
-        public string GeneratePGNSource(int options)
-        {
-            return GeneratePGNSource(-1, options);
-        }
-        public string GeneratePGNSource(int newLineTrigger, int options)
+        public string GenerateCompactSource()
         {
             string outString = "";
             // tags
-            if ( (options & (int)PGNOptions.IncludeTags) != 0 )
+            foreach (string tagKey in Tags.Keys)
+                outString += "[Tag Name<" + tagKey + "> Val<" + Tags[tagKey] + ">]";
+
+            // moves
+            foreach (Ply p in Plies)
+                outString += p.GenerateCompactSource();
+
+            // term
+            outString += "[Term Val<" + GameTerm.value + ">]";
+
+            return outString;
+        }
+
+        public enum GameSaveOptions { IncludeTags = 1, IncludeMoves = 2, IncludeComments = 4, IncludeVariations = 8, IncludeAll = 15, SimpleGameScore = 3, MoveListOnly = 2 };
+
+        private GameSaveOptions SelectedOptions = GameSaveOptions.IncludeAll;
+        public string GeneratePGNSource()
+        {
+            return GeneratePGNSource(-1, GameSaveOptions.IncludeAll);
+        }
+        public string GeneratePGNSource(GameSaveOptions options)
+        {
+            return GeneratePGNSource(-1, options);
+        }
+        public string GeneratePGNSource(int newLineTrigger, GameSaveOptions options)
+        {
+            string outString = "";
+            // tags
+            if (((int)options & (int)GameSaveOptions.IncludeTags) != 0)
             {
                 foreach (string tagKey in Tags.Keys)
                     outString += "[" + tagKey + " \"" + Tags[tagKey] + "\"]" + Environment.NewLine;
@@ -137,7 +252,7 @@ namespace ChessPosition
             }
 
             // moves
-            if ((options & (int)PGNOptions.IncludeMoves) != 0)
+            if (((int)options & (int)GameSaveOptions.IncludeMoves) != 0)
             {
                 outString += GeneratePGNSource(Plies, 0, outString.Length, newLineTrigger, options);
 
@@ -147,7 +262,7 @@ namespace ChessPosition
 
             return outString;
         }
-        public string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, int options)
+        public string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, GameSaveOptions options)
         {
             string outString = "";
             int curLineLength = 0;
@@ -160,7 +275,7 @@ namespace ChessPosition
                 int dotLoc = plyString.IndexOf('.');
 
                 if (dotLoc >= 0 && dotLoc < 6)
-                    ply.refToken.startLocation += dotLoc+1;
+                    ply.refToken.startLocation += dotLoc + 1;
                 outString += plyString;
                 curLineLength += plyString.Length;
 
@@ -186,7 +301,7 @@ namespace ChessPosition
                 outString += ply.refToken.value + " ";
                 curLineLength += ply.refToken.value.Length + 1;
 
-                if ((options & (int)PGNOptions.IncludeComments) != 0)
+                if (((int)options & (int)GameSaveOptions.IncludeComments) != 0)
                 {
                     foreach (PGNComment comment in ply.comments)
                         if (comment.isBraceComment)
@@ -203,7 +318,7 @@ namespace ChessPosition
 
                 bool useToken = false;
 
-                if ((options & (int)PGNOptions.IncludeVariations) != 0)
+                if (((int)options & (int)GameSaveOptions.IncludeVariations) != 0)
                 {
                     if (useToken)
                     {
@@ -260,7 +375,7 @@ namespace ChessPosition
 
             ResetPosition();
             PGNSource = "";
-            GameTerm = new PGNTerminator(PGNTerminator.terminators[ (int)PGNTerminator.TerminatorTypes.InProgress ]);
+            GameTerm = new PGNTerminator(PGNTerminator.terminators[(int)PGNTerminator.TerminatorTypes.InProgress]);
 
             RatingWhite = RatingBlack = NoRating;
         }
@@ -447,7 +562,7 @@ namespace ChessPosition
                 if (locString == castleMarkers[0]) // K-Side
                 {
                     curPly = new Ply(
-                        new Square(Krank, Square.File.FE), 
+                        new Square(Krank, Square.File.FE),
                         new Square(Krank, Square.File.FG));
                     curPlyCollection.Add(curPly);
                 }
@@ -582,7 +697,7 @@ namespace ChessPosition
                         break;
                 }
             }
-            curPly.Number = curPlyNumber; 
+            curPly.Number = curPlyNumber;
             curPly.refToken = token;
             CurrentPosition.MakeMove(curPly);
             curPly.refToken.isCheck = CurrentPosition.IsCheck();
@@ -611,10 +726,14 @@ namespace ChessPosition
             return outStr;
         }
 
-        public void Save(StreamWriter sw)
+        public void SavePGN(StreamWriter sw)
         {
             int defaultLineTrigger = 90;
-            sw.Write(GeneratePGNSource(defaultLineTrigger, (int)PGNOptions.IncludeAll));
+            sw.Write(GeneratePGNSource(defaultLineTrigger, GameSaveOptions.IncludeAll));
+        }
+        public void SaveCompact(StreamWriter sw)
+        {
+            sw.Write(GenerateCompactSource());
         }
         private List<Ply> HandleVariation(List<PGNToken> var, List<Ply> curPlyCollection, int curPlyNumber)
         {
@@ -624,7 +743,7 @@ namespace ChessPosition
             Ply curPly = null;
             foreach (PGNToken token in var)
             {
-                BuildPlyFromToken(token, outPly, ref curPly, curPlyNumber+outPly.Count);
+                BuildPlyFromToken(token, outPly, ref curPly, curPlyNumber + outPly.Count);
             }
             return outPly;
         }

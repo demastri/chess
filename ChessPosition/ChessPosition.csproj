@@ -81,8 +81,12 @@
     <None Include="Sample.pgn" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PGNSchema.xml">
+    <Content Include="Parser\Grammars\CompactTokenSchema.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Parser\Grammars\PGNSchema.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

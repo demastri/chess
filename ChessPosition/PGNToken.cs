@@ -129,6 +129,7 @@ namespace ChessPosition
             return outTokens;
         }
     }
+
     public class PGNTag : PGNToken
     {
         public string key;
@@ -174,7 +175,6 @@ namespace ChessPosition
                 tokenType = PGNTokenType.Invalid;
                 key = value = "";
             }
-
         }
     }
     public class PGNMoveNumber : PGNToken
@@ -238,19 +238,19 @@ namespace ChessPosition
                 isBraceComment = false;
                 value = s.Substring(1);
             }
-            if (s[0] == '{' && s[s.Length-1] == '}')   // embedded comment
+            if (s[0] == '{' && s[s.Length - 1] == '}')   // embedded comment
             {
                 isBraceComment = true;
-                value = s.Substring(1, s.Length-2);
+                value = s.Substring(1, s.Length - 2);
             }
-        
+
         }
     }
 
     public class PGNTerminator : PGNToken
     {
         public static List<string> terminators = new List<string>() { "1-0", "0-1", "1/2-1/2", "*" };
-        public enum TerminatorTypes { WWin=0, BWin=1, Draw=2, InProgress=3 };
+        public enum TerminatorTypes { WWin = 0, BWin = 1, Draw = 2, InProgress = 3 };
         public PGNTerminator(string s)
         {
             tokenType = PGNTokenType.Terminator;

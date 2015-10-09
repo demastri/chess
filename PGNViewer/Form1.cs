@@ -36,6 +36,7 @@ namespace PGNViewer
         TreeNode inProgOnMoveNode = null;
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
+        bool saveFileOnUpdate = false;
 
         int[] refCorrTimeControl = { 10, 30 };
         int[] corrTimeControl = { 10, 30 };
@@ -63,6 +64,8 @@ namespace PGNViewer
             HighlightCorrMove();
             UpdateAnalysis();
             UpdateFormTitle();
+
+            saveToolStripMenuItem.Enabled = true;
         }
         private void UpdateGameListDisplay()
         {
@@ -125,8 +128,8 @@ namespace PGNViewer
                 int r = s.IndexOf(" d)");
                 if (l >= 0 && r >= 0)
                 {
-                    int thisDay = Convert.ToInt32(s.Substring(l+3, r-l-3));
-                    if( (decreasing && thisDay <= ageInDays) || (!decreasing && thisDay >= ageInDays) )
+                    int thisDay = Convert.ToInt32(s.Substring(l + 3, r - l - 3));
+                    if ((decreasing && thisDay <= ageInDays) || (!decreasing && thisDay >= ageInDays))
                         return outIndex;
                 }
             }
@@ -449,7 +452,7 @@ namespace PGNViewer
                 mode = Settings.AppSettings["StartMode"] = "correspondence";
 
             // save for next start (if this isn't a load...
-            if( curDisplayMode != -1 )
+            if (curDisplayMode != -1)
                 Settings.AppSettings["StartMode"] = mode;
 
             if (viewerToolStripMenuItem.Checked = (mode == "viewer"))
@@ -489,6 +492,8 @@ namespace PGNViewer
             ReflTimeLabel.Visible = CorrPublish.Visible = CorrUpdate.Visible =
             CorrMoveNbr.Visible = CorrLabel.Visible = CorrMoveText.Visible = CorrMoveTime.Visible = CorrTimeNow.Visible = true;
 
+            CorrUpdate.Enabled = false;
+
             InitCorrContext();
             InitCorrTemplateList();
         }
@@ -526,7 +531,7 @@ namespace PGNViewer
             }
             // this is ok - if a setting exists, use that ###.
             string defaultTemplate = Settings.AppSettings["CorrTemplate"];
-            if (defaultTemplate != null && corrTemplateList.Items.Contains(defaultTemplate) )
+            if (defaultTemplate != null && corrTemplateList.Items.Contains(defaultTemplate))
                 corrTemplateList.SelectedItem = defaultTemplate;
             else
                 corrTemplateList.SelectedIndex = corrTemplateList.Items.Count - 1;
@@ -570,14 +575,14 @@ namespace PGNViewer
                 int l = testStr.IndexOf('/');
                 if (l >= 0)
                 {
-                    corrTimeControl[0] = Convert.ToInt32( testStr.Substring(0, l) );
-                    corrTimeControl[1] = Convert.ToInt32(testStr.Substring(l+1));
+                    corrTimeControl[0] = Convert.ToInt32(testStr.Substring(0, l));
+                    corrTimeControl[1] = Convert.ToInt32(testStr.Substring(l + 1));
                 }
             }
 
 
             DateTime lastMoveTime = DateTime.MinValue;
-            totalCorrTimeW = corrTimeControl[1] + (corrTimeControl[1] * (curGame.Plies.Count / (2*corrTimeControl[0])));
+            totalCorrTimeW = corrTimeControl[1] + (corrTimeControl[1] * (curGame.Plies.Count / (2 * corrTimeControl[0])));
             totalCorrTimeB = corrTimeControl[1] + (corrTimeControl[1] * ((curGame.Plies.Count - 1) / (2 * corrTimeControl[0])));
             usedCorrTimeW = 0;
             usedCorrTimeB = 0;
@@ -602,7 +607,7 @@ namespace PGNViewer
                         thisReflTime = refl.Days;
                     }
                     // should be a time value
-                    corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "WMoveTime" : "BMoveTime"].Value = CommentTimeString( p.comments );
+                    corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "WMoveTime" : "BMoveTime"].Value = CommentTimeString(p.comments);
                     lastMoveTime = thisMoveTime;
                 }
                 else
@@ -726,14 +731,17 @@ namespace PGNViewer
             PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"));
             curGame.PGNtokens.Add(timeComment);
             PGNText.Text += timeComment.tokenString + " ";
-            newMove.comments.Add( timeComment );
+            newMove.comments.Add(timeComment);
 
             PGNText.Text += Environment.NewLine;
 
             if (termToken != null)
                 curGame.PGNtokens.Add(termToken);
 
+            DrawBoard();
             UpdateCorrespondence();
+            HighlightPGNMove();
+            HighlightCorrMove();
 
             // move to the end...
             curGame.ResetPosition();
@@ -743,18 +751,21 @@ namespace PGNViewer
             HighlightCorrMove();
 
             // save the updated game / file
-            Game.SavePGNFile(curPGNFileLoc, GameRef);
+            if (saveFileOnUpdate)
+            {
+                Game.SavePGNFile(curPGNFileLoc, GameRef);
+                ReloadGamesFromFile();
 
-            ReloadGamesFromFile();
-
-            TreeNode n = FindGameNode(GameList.Nodes, selectedText);
-            GameList.SelectedNode = n;
-            GameList_SelectedIndexChanged(null, null);
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                GameList_SelectedIndexChanged(null, null);
+            }
 
             CorrMoveText.Text = "";
+            CorrUpdate.Enabled = false;
         }
 
-        private TreeNode FindGameNode (TreeNodeCollection list, string text)
+        private TreeNode FindGameNode(TreeNodeCollection list, string text)
         {
             foreach (TreeNode node in list)
             {
@@ -807,13 +818,13 @@ namespace PGNViewer
                 DateTime thisTime;
                 if (DateTime.TryParseExact(comment.value, "MM/dd/yyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime))
                     return cmts.IndexOf(comment);
-            } 
+            }
             return -1;
         }
         private DateTime CommentTime(List<PGNComment> cmts)
         {
-            int index = FindTimeComment( cmts );
-            if( index >= 0 )
+            int index = FindTimeComment(cmts);
+            if (index >= 0)
             {
                 DateTime thisTime;
                 DateTime.TryParseExact(cmts[index].value, "MM/dd/yyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime);
@@ -962,7 +973,7 @@ namespace PGNViewer
                             break;
                         case "PGNSource":
                             // actually just move numbers and moves here...
-                            refStr = refStr.Replace(token, "<br>" + curGame.GeneratePGNSource((int)Game.PGNOptions.MoveListOnly) + "<br><br>");
+                            refStr = refStr.Replace(token, "<br>" + curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly) + "<br><br>");
                             break;
                         case "Diagram":
                             // pull the current text from the board display
@@ -1112,8 +1123,10 @@ namespace PGNViewer
         }
         bool inDrag = false;
         int dragStartPosition = -1;
+        int dragEndPosition = -1;
         Square dragStartSquare = null;
         Square dragEndSquare = null;
+        Cursor refCursor = null;
         private void InitDrag(MouseEventArgs e)
         {
             int rowLength = 12;
@@ -1135,7 +1148,7 @@ namespace PGNViewer
             int rowBoardOffset = 1;
             int startIndex = boardDisplay.GetCharIndexFromPosition(clickPos);
 
-            boardDisplay.SelectionStart = startIndex;
+            dragStartPosition = boardDisplay.SelectionStart = startIndex;
             boardDisplay.SelectionLength = 1;
 
             byte thisRow = (byte)(8 - startIndex / rowLength);
@@ -1150,19 +1163,19 @@ namespace PGNViewer
             if (!inDrag)   // start one...
             {
                 // use last clicked location as the point
-                dragStartSquare = new Square( thisRow, thisCol );
+                dragStartSquare = new Square(thisRow, thisCol);
                 inDrag = true;
 
                 CorrMoveText.Text = "st->" + dragStartSquare.ToString();
             }
             else  // end one
             {
-                dragEndSquare = new Square( thisRow, thisCol );
+                dragEndSquare = new Square(thisRow, thisCol);
 
                 // at this point, generate the appropriate move text and populate the proposed move text box
                 // Piece-target square, augmented for source square, capture - including ep, castle
 
-                Ply p = curGame.CreateMove( dragStartSquare, dragEndSquare );
+                Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
                 CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
 
                 CleanupDrag();
@@ -1171,8 +1184,13 @@ namespace PGNViewer
         }
         private void CleanupDrag()
         {
+            dragStartPosition = -1;
             dragStartSquare = dragEndSquare = null;
             inDrag = false;
+
+            if (refCursor != null)
+                this.Cursor = refCursor;
+            CorrUpdate.Enabled = false;
         }
         private void boardDisplay_Click(object sender, EventArgs e)
         {
@@ -1190,9 +1208,9 @@ namespace PGNViewer
             openLastFile = (Settings.AppSettings["OpenLast"] == "y");
             openLastFileMenu.Checked = openLastFile;
 
-            if( openLastFile && Settings.AppSettings.Count("MRUList") > 0)
+            if (openLastFile && Settings.AppSettings.Count("MRUList") > 0)
             {
-                LoadGamesFromFile(Settings.AppSettings["MRUList", Settings.AppSettings.Count("MRUList")-1]);
+                LoadGamesFromFile(Settings.AppSettings["MRUList", Settings.AppSettings.Count("MRUList") - 1]);
             }
         }
 
@@ -1210,19 +1228,134 @@ namespace PGNViewer
         private void PopMoveButton_Click(object sender, EventArgs e)
         {
             curGame.Plies.RemoveAt(curGame.Plies.Count - 1);
-            Game.SavePGNFile(curPGNFileLoc, GameRef);
-            ReloadGamesFromFile();
+            if (saveFileOnUpdate)
+            {
+                Game.SavePGNFile(curPGNFileLoc, GameRef);
+                ReloadGamesFromFile();
+            }
+            else
+            {
+                curGame.ResetPosition();
+                curGame.AdvancePosition(curGame.Plies.Count);
+                DrawBoard();
+                HighlightPGNMove();
+                HighlightCorrMove();
+            }
         }
 
         private void resultCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             curGame.Tags["Result"] = (string)resultCombo.SelectedItem;
             curGame.GameTerm = new PGNTerminator((string)resultCombo.SelectedItem);
-            if (!updatingDisplay)
+            if (!updatingDisplay && saveFileOnUpdate)
             {
                 Game.SavePGNFile(curPGNFileLoc, GameRef);
                 ReloadGamesFromFile();
             }
+            else
+            {
+                curGame.ResetPosition();
+                curGame.AdvancePosition(curGame.Plies.Count);
+                DrawBoard();
+                HighlightPGNMove();
+                HighlightCorrMove();
+            }
+        }
+
+        private Square GetBoardPositionFromMouseLocation(MouseEventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+
+            int rowLength = 12;
+            int rowBoardOffset = 1;
+            int startIndex = GetCharIndexFromMouseLocation(e);
+
+            dragStartPosition = boardDisplay.SelectionStart = startIndex;
+            boardDisplay.SelectionLength = 1;
+
+            byte thisRow = (byte)(8 - startIndex / rowLength);
+            byte thisCol = (byte)((startIndex % rowLength) - rowBoardOffset);
+
+            if (ckInvertBoard.Checked)
+            {
+                thisRow = (byte)(7 - thisRow);
+                thisCol = (byte)(7 - thisCol);
+            }
+
+            return new Square(thisRow, thisCol);
+        }
+        private int GetCharIndexFromMouseLocation(MouseEventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            Point clickPos = me.Location;
+            clickPos.X -= (int)(boardDisplay.Font.Size / 2.01); // by default, if you're on the right half of a char, it'll select the next one, fix that.
+
+            return boardDisplay.GetCharIndexFromPosition(clickPos);
+        }
+
+
+        private void boardDisplay_MouseDown(object sender, MouseEventArgs e)
+        {
+            Square boardPos = GetBoardPositionFromMouseLocation(e);
+            Piece refPc = (curGame.CurrentPosition.board.ContainsKey(boardPos) ? curGame.CurrentPosition.board[boardPos] : null);
+
+            if (!inDrag && refPc != null && refPc.color == curGame.CurrentPosition.onMove)   // start one...
+            {
+                // use last clicked location as the point
+                dragStartSquare = boardPos;
+                inDrag = true;
+
+                CorrMoveText.Text = "st->" + dragStartSquare.ToString();
+
+                int startIndex = GetCharIndexFromMouseLocation(e);
+                // at this point we can also change the cursor...
+                refCursor = this.Cursor;
+                this.Cursor = new Cursor("Resources/Piece.cur");
+
+                dragStartPosition = boardDisplay.SelectionStart = startIndex;
+                boardDisplay.SelectionLength = 1;
+                CorrUpdate.Enabled = true;
+            }
+            else  // end one
+            {
+                CleanupDrag();
+            }
+        }
+
+        private void boardDisplay_MouseUp(object sender, MouseEventArgs e)
+        {
+            Square boardPos = GetBoardPositionFromMouseLocation(e);
+
+            if (inDrag)   // end one...
+            {
+                dragEndSquare = boardPos;
+
+                // at this point, generate the appropriate move text and populate the proposed move text box
+                // Piece-target square, augmented for source square, capture - including ep, castle
+
+                Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
+                CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
+                dragEndPosition = GetCharIndexFromMouseLocation(e);
+                boardDisplay.SelectionStart = dragEndPosition;
+                boardDisplay.SelectionLength = 1;
+
+                CorrUpdate_Click(null, null);
+            }
+            CleanupDrag();
+        }
+
+        private void boardDisplay_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (inDrag)
+            {
+                boardDisplay.SelectionStart = dragStartPosition;
+                boardDisplay.SelectionLength = 1;
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Game.SavePGNFile(curPGNFileLoc, GameRef);
         }
     }
 }
