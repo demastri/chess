@@ -37,6 +37,7 @@ namespace PGNViewer
         TreeNode inProgWaitingNode = null;
         TreeNode complNode = null;
         bool saveFileOnUpdate = false;
+        bool FileHasChanged = false;
 
         int[] refCorrTimeControl = { 10, 30 };
         int[] corrTimeControl = { 10, 30 };
@@ -66,6 +67,7 @@ namespace PGNViewer
             UpdateFormTitle();
 
             saveToolStripMenuItem.Enabled = true;
+            FileHasChanged = false;
         }
         private void UpdateGameListDisplay()
         {
@@ -1340,6 +1342,7 @@ namespace PGNViewer
                 boardDisplay.SelectionLength = 1;
 
                 CorrUpdate_Click(null, null);
+                FileHasChanged = true;
             }
             CleanupDrag();
         }
@@ -1355,7 +1358,25 @@ namespace PGNViewer
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Game.SavePGNFile(curPGNFileLoc, GameRef);
+            if( FileHasChanged )
+                Game.SavePGNFile(curPGNFileLoc, GameRef);
+            FileHasChanged = false;
+        }
+
+        private void PGNViewer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown) return;
+
+            if( FileHasChanged )
+            // Confirm user wants to close
+            switch (MessageBox.Show(this, "There are unsaved changes,\nare you sure you want to close?", "Closing", MessageBoxButtons.YesNo))
+            {
+                case DialogResult.No:
+                    e.Cancel = true;
+                    break;
+                default:
+                    break;
+            }        
         }
     }
 }

@@ -135,6 +135,11 @@ namespace ChessPosition
         public string key;
         public string value;
 
+        static public Dictionary<string, string> ToDict(List<PGNTag> tags)
+        {
+            return tags.ToDictionary(g => g.key, g => g.value);
+        }
+
         public PGNTag(string k, string v)
         {
             key = k;
