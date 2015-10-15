@@ -1340,6 +1340,15 @@ namespace PGNViewer
                 boardDisplay.SelectionLength = 1;
 
                 CorrUpdate_Click(null, null);
+
+                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+                UpdateGameListDisplay();
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                GameList_SelectedIndexChanged(null, null);
+
+                CorrMoveText.Text = "";
+                CorrUpdate.Enabled = false;
             }
             CleanupDrag();
         }
