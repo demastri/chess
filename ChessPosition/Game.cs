@@ -30,6 +30,24 @@ namespace ChessPosition
         Dictionary<PositionHash, int> repetitions;
         private int progressCounter;
 
+        public static List<Game> FindGame(List<PGNTag> tags, List<Game> games)
+        {
+            List<Game> outList = new List<Game>();
+            foreach (Game g in games)
+            {
+                bool ok = true;
+                foreach (PGNTag tag in tags)
+                    if (!g.Tags.ContainsKey(tag.key) || g.Tags[tag.key] != tag.value)
+                    {
+                        ok = false;
+                        break;
+                    }
+                if (ok)
+                    outList.Add(g);
+            }
+            return outList;
+        }
+
         public static void SaveGameFile(string GameFileLoc, List<Game> games)
         {
             StreamWriter tr = new StreamWriter(GameFileLoc);
