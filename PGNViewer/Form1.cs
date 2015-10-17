@@ -1239,9 +1239,20 @@ namespace PGNViewer
             {
                 curGame.ResetPosition();
                 curGame.AdvancePosition(curGame.Plies.Count);
+
+                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+
+                UpdateGameListDisplay();
+
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                GameList_SelectedIndexChanged(null, null);
+
                 DrawBoard();
                 HighlightPGNMove();
                 HighlightCorrMove();
+
+                FileHasChanged = true;
             }
         }
 
@@ -1341,7 +1352,15 @@ namespace PGNViewer
                 boardDisplay.SelectionStart = dragEndPosition;
                 boardDisplay.SelectionLength = 1;
 
+                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+
                 CorrUpdate_Click(null, null);
+                UpdateGameListDisplay();
+
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                GameList_SelectedIndexChanged(null, null);
+
                 FileHasChanged = true;
             }
             CleanupDrag();
