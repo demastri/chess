@@ -186,8 +186,13 @@ namespace PGNViewer
         private void DrawBoard()
         {
             CleanupDrag();
+            string WPawns = "pppppppp" + Environment.NewLine;
+            string WPieces = "rrnnbbq" + Environment.NewLine;
+            string BPawns = "oooooooo" + Environment.NewLine;
+            string BPieces = "ttmmvvw" + Environment.NewLine;
+
             float maxFontWide = boardDisplay.Width / (10f * 1.82f);
-            float maxFontHigh = boardDisplay.Height / (10f * 1.5f);
+            float maxFontHigh = boardDisplay.Height / (14f * 1.5f);
             float maxFont = maxFontWide < maxFontHigh ? maxFontWide : maxFontHigh;
 
             if (maxFont < 0.005)
@@ -238,14 +243,35 @@ namespace PGNViewer
             {
                 foreach (Square sq in curGame.CurrentPosition.board.Keys)
                 {
-                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, curGame.CurrentPosition.board[sq]);
+                    Piece thisPc = curGame.CurrentPosition.board[sq];
+                    char thisPcChar = Char.ToLower(thisPc.ToChess7Char);
+                    if (thisPc.piece == Piece.PieceType.Pawn)
+                    {
+                        string refStr = (thisPc.color == PlayerEnum.White ? WPawns : BPawns).Substring(1);
+                        if (thisPc.color == PlayerEnum.White)
+                            WPawns = refStr;
+                        else
+                            BPawns = refStr;
+                    }
+                    else if( thisPc.piece != Piece.PieceType.King )
+                    {
+                        string refStr = (thisPc.color == PlayerEnum.White ? WPieces : BPieces);
+
+                        int loc = refStr.IndexOf(thisPcChar);
+                        refStr = refStr.Substring(0, loc) + refStr.Substring(loc + 1);
+                        if (thisPc.color == PlayerEnum.White)
+                            WPieces = refStr;
+                        else
+                            BPieces = refStr;
+                    }
+
+                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, thisPc);
                 }
                 FENText.Text = curGame.ToFEN();
             }
             else
                 FENText.Text = "";
-
-            boardDisplay.Text = thisBoard;
+            boardDisplay.Text = thisBoard + WPieces + WPawns + BPawns + BPieces;
             boardDisplay.Select(0, 0);
         }
 
@@ -776,7 +802,7 @@ namespace PGNViewer
                 int r = testStr.IndexOf(')');
                 if (testStr.IndexOf(text) >= 0)
                     return node;
-                
+
                 if (l >= 0 && r >= 0)
                 {
                     testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
@@ -1263,7 +1289,7 @@ namespace PGNViewer
         {
             curGame.Tags["Result"] = (string)resultCombo.SelectedItem;
             curGame.GameTerm = new PGNTerminator((string)resultCombo.SelectedItem);
-            foreach( PGNToken t in curGame.PGNtokens )
+            foreach (PGNToken t in curGame.PGNtokens)
                 if (t.tokenType == PGNTokenType.Terminator)
                 {
                     curGame.PGNtokens.Remove(t);
@@ -1398,7 +1424,7 @@ namespace PGNViewer
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if( FileHasChanged )
+            if (FileHasChanged)
                 Game.SavePGNFile(curPGNFileLoc, GameRef);
             FileHasChanged = false;
         }
@@ -1407,16 +1433,16 @@ namespace PGNViewer
         {
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
-            if( FileHasChanged )
-            // Confirm user wants to close
-            switch (MessageBox.Show(this, "There are unsaved changes,\nare you sure you want to close?", "Closing", MessageBoxButtons.YesNo))
-            {
-                case DialogResult.No:
-                    e.Cancel = true;
-                    break;
-                default:
-                    break;
-            }        
+            if (FileHasChanged)
+                // Confirm user wants to close
+                switch (MessageBox.Show(this, "There are unsaved changes,\nare you sure you want to close?", "Closing", MessageBoxButtons.YesNo))
+                {
+                    case DialogResult.No:
+                        e.Cancel = true;
+                        break;
+                    default:
+                        break;
+                }
         }
     }
 }
