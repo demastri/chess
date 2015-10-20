@@ -774,6 +774,9 @@ namespace PGNViewer
                 string testStr = node.Text;
                 int l = testStr.IndexOf('(');
                 int r = testStr.IndexOf(')');
+                if (testStr.IndexOf(text) >= 0)
+                    return node;
+                
                 if (l >= 0 && r >= 0)
                 {
                     testStr = testStr.Substring(0, l - 1) + testStr.Substring(r + 1);
@@ -1260,6 +1263,16 @@ namespace PGNViewer
         {
             curGame.Tags["Result"] = (string)resultCombo.SelectedItem;
             curGame.GameTerm = new PGNTerminator((string)resultCombo.SelectedItem);
+            foreach( PGNToken t in curGame.PGNtokens )
+                if (t.tokenType == PGNTokenType.Terminator)
+                {
+                    curGame.PGNtokens.Remove(t);
+                    break;
+                }
+            curGame.PGNtokens.Add(curGame.GameTerm);
+            Game oldGame = curGame;
+
+            curGame.PGNSource = curGame.GeneratePGNSource();
             if (!updatingDisplay && saveFileOnUpdate)
             {
                 Game.SavePGNFile(curPGNFileLoc, GameRef);
@@ -1267,11 +1280,19 @@ namespace PGNViewer
             }
             else
             {
-                curGame.ResetPosition();
-                curGame.AdvancePosition(curGame.Plies.Count);
+                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+
+                UpdateGameListDisplay();
+
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                GameList_SelectedIndexChanged(null, null);
+
                 DrawBoard();
                 HighlightPGNMove();
                 HighlightCorrMove();
+
+                FileHasChanged = true;
             }
         }
 
