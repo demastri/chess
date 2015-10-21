@@ -55,22 +55,22 @@ namespace PGNViewer
         }
         private void LoadGamesFromFile(string fn)
         {
+            updatingDisplay = true;
             curPGNFileLoc = fn;
             GameRef = Game.ReadPGNFile(curPGNFileLoc);
-
-            UpdateGameListDisplay();
-            DrawBoard();
-            UpdateCorrespondence();
-            HighlightPGNMove();
-            HighlightCorrMove();
-            UpdateAnalysis();
-            UpdateFormTitle();
-
+            curGame = null;
             saveToolStripMenuItem.Enabled = true;
-            FileHasChanged = false;
+
+            Redraw(true, false, false, false);
         }
         private void UpdateGameListDisplay()
         {
+            GameList.AfterSelect -= new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
+
+            string selectedText = "";
+            if( curGame != null )
+                selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+
             GameList.Nodes.Clear();
             if (curDisplayMode == 3)    // corr
             {
@@ -118,7 +118,16 @@ namespace PGNViewer
                     GameList.Nodes.Add(thisGame);
                 }
             }
-            curGame = null;
+
+            if (curGame != null)
+            {
+                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
+                GameList.SelectedNode = n;
+                UpdatePGNText();
+                SetInitialPosition();
+            }
+            GameList.ExpandAll();
+            GameList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
         }
         private int FindInsertIndex(TreeNodeCollection n, int ageInDays, bool decreasing)
         {
@@ -180,7 +189,6 @@ namespace PGNViewer
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontMemPointer);
 
             boardDisplay.Font = new Font(pfc.Families[0], 16);
-            DrawBoard();
         }
 
         private void DrawBoard()
@@ -335,7 +343,7 @@ namespace PGNViewer
                     curMoveTextStart -= lastToken.tokenString.Length;
             }
         }
-        private void HighlightCorrMove()
+        private void HighlightCorrMoveInGrid()
         {
             if (curGame == null)
                 return;
@@ -452,10 +460,7 @@ namespace PGNViewer
                 curGame.ResetPosition();
             else
                 curGame.AdvancePosition(rel);
-            DrawBoard();
-            HighlightPGNMove();
-            HighlightCorrMove();
-            UpdateAnalysis();
+            Redraw(false, false, false, false);
         }
 
         private void viewerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -501,8 +506,7 @@ namespace PGNViewer
                 DisableAnalysis();
                 EnableCorrespondence();
             }
-            UpdateGameListDisplay();
-
+            Redraw(false, false, false, false);
         }
         private void DisableCorrespondence()
         {
@@ -567,7 +571,6 @@ namespace PGNViewer
         bool updatingDisplay = false;
         private void UpdateCorrespondence()
         {
-            updatingDisplay = true;
             // follow highlighted move from pgn viewer
             // enter move as W/B
             // enter move time as W/B - button for "~now"
@@ -663,7 +666,6 @@ namespace PGNViewer
                 totalCorrTimeB.ToString() + " / " + usedCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
 
             resultCombo.Text = curGame.GameTerm.value;
-            updatingDisplay = false;
         }
 
         private void CorrTimeNow_Click(object sender, EventArgs e)
@@ -677,8 +679,6 @@ namespace PGNViewer
 
         private void CorrUpdate_Click(object sender, EventArgs e)
         {
-            string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
-
             string possMove = CorrMoveText.Text + " ";
             DateTime possTime = CorrMoveTime.Value;
 
@@ -754,40 +754,34 @@ namespace PGNViewer
 
             curGame.PGNtokens.Add(moveStr);
             newMove.refToken.startLocation = PGNText.Text.Length;
-            PGNText.Text += possMove;
-
+            
             PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"));
             curGame.PGNtokens.Add(timeComment);
+            
+            PGNText.Text += possMove;
             PGNText.Text += timeComment.tokenString + " ";
             newMove.comments.Add(timeComment);
 
             PGNText.Text += Environment.NewLine;
 
+            PGNText.Text = (curGame.PGNSource = curGame.GeneratePGNSource()) + Environment.NewLine;
+
             if (termToken != null)
                 curGame.PGNtokens.Add(termToken);
-
-            DrawBoard();
-            UpdateCorrespondence();
-            HighlightPGNMove();
-            HighlightCorrMove();
 
             // move to the end...
             curGame.ResetPosition();
             curGame.AdvancePosition(curGame.Plies.Count);
-            DrawBoard();
-            HighlightPGNMove();
-            HighlightCorrMove();
 
             // save the updated game / file
             if (saveFileOnUpdate)
             {
                 Game.SavePGNFile(curPGNFileLoc, GameRef);
                 ReloadGamesFromFile();
-
-                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
-                GameList.SelectedNode = n;
-                GameList_SelectedIndexChanged(null, null);
+                Redraw(true, false, true, false);
             }
+            else
+                Redraw(false, false, true, false);
 
             CorrMoveText.Text = "";
             CorrUpdate.Enabled = false;
@@ -1061,38 +1055,40 @@ namespace PGNViewer
 
         private void PGNViewer_Resize(object sender, EventArgs e)
         {
-            DrawBoard();
-
+            Redraw(false, false, false, false);
         }
 
         private void ckInvertBoard_Click(object sender, EventArgs e)
         {
-            DrawBoard();
+            Redraw(false, false, false, false);
         }
 
         private void GameList_SelectedIndexChanged(object sender, TreeViewEventArgs e)
         {
-            PGNText.Text = "";
+            UpdatePGNText();
+            SetInitialPosition();
+            Redraw(false, true, false, false);
+        }
+        private void UpdatePGNText()
+        {
             curGame = null;
             PGNText.Text = "";
             if (GameList.SelectedNode != null && GameList.SelectedNode.Tag != null)
             {
                 curGame = (Game)GameList.SelectedNode.Tag;
                 PGNText.Text = curGame.PGNSource;
-                curGame.ResetPosition();
             }
+        }
+        private void SetInitialPosition()
+        {
             if (curGame != null)
             {
                 ckInvertBoard.Checked = (curGame.Tags["Black"] == corrName.Text);
                 if (curGame.Tags["Result"] == "*" || curGame.Tags["Result"] == "")
                     curGame.AdvancePosition(curGame.Plies.Count);
+                else
+                    curGame.ResetPosition();
             }
-            DrawBoard();
-            HighlightPGNMove();
-            UpdateCorrespondence();
-            HighlightCorrMove();
-            UpdateAnalysis();
-            UpdateFormTitle();
         }
         private void UpdateFormTitle()
         {
@@ -1275,19 +1271,7 @@ namespace PGNViewer
                 curGame.ResetPosition();
                 curGame.AdvancePosition(curGame.Plies.Count);
 
-                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
-
-                UpdateGameListDisplay();
-
-                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
-                GameList.SelectedNode = n;
-                GameList_SelectedIndexChanged(null, null);
-
-                DrawBoard();
-                HighlightPGNMove();
-                HighlightCorrMove();
-
-                FileHasChanged = true;
+                Redraw(false, false, true, false);
             }
         }
 
@@ -1312,19 +1296,7 @@ namespace PGNViewer
             }
             else
             {
-                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
-
-                UpdateGameListDisplay();
-
-                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
-                GameList.SelectedNode = n;
-                GameList_SelectedIndexChanged(null, null);
-
-                DrawBoard();
-                HighlightPGNMove();
-                HighlightCorrMove();
-
-                FileHasChanged = true;
+                Redraw(false, false, false, true);
             }
         }
 
@@ -1405,16 +1377,7 @@ namespace PGNViewer
                 boardDisplay.SelectionStart = dragEndPosition;
                 boardDisplay.SelectionLength = 1;
 
-                string selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
-
-                CorrUpdate_Click(null, null);
-                UpdateGameListDisplay();
-
-                TreeNode n = FindGameNode(GameList.Nodes, selectedText);
-                GameList.SelectedNode = n;
-                GameList_SelectedIndexChanged(null, null);
-
-                FileHasChanged = true;
+                CorrUpdate_Click(null, null);   // updates the display as well (calls Redraw)
             }
             CleanupDrag();
         }
@@ -1449,6 +1412,19 @@ namespace PGNViewer
                     default:
                         break;
                 }
+        }
+        private void Redraw( bool newFile, bool newGame, bool newMove, bool newMetaData )   // if curGame is in a consistent state here, we should be able to update it based on actions, then call this method - done.
+        {
+            if( newFile || newMove || newMetaData )
+                UpdateGameListDisplay();    // refreshes the game list on the left side of the display - doesn't select a game...
+            DrawBoard();                // updates the board for the curGame.curPosition
+            UpdateCorrespondence();     // this loads all moves into the corr grid, updates refl time text and per move, and resultsCombo based on curGame.GameTerm.value
+            HighlightPGNMove();         // updates the board for the curGame.curPly
+            HighlightCorrMoveInGrid();  // highlights the appropriate position in the corr Grid
+            UpdateAnalysis();           // if the analysis engine is running, update the position it's looking at
+            UpdateFormTitle();
+            if (newMove || newMetaData)
+                FileHasChanged = true;
         }
     }
 }
