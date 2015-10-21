@@ -1009,6 +1009,12 @@ namespace PGNViewer
                         case "Diagram":
                             // pull the current text from the board display
                             string boardText = boardDisplay.Text;
+
+                            int thisIndex = 0;
+                            for (int i = 0; i < 10; i++)
+                                thisIndex = boardText.IndexOf(Environment.NewLine, thisIndex+1);
+                            boardText = boardText.Substring(0, thisIndex);
+
                             // draw it into a picture box (font/size)
                             PictureBox outBox = new PictureBox();
                             outBox.Width = outBox.Height = 150;
