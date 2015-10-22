@@ -87,8 +87,12 @@
             this.PopMoveButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.resultCombo = new System.Windows.Forms.ComboBox();
+            this.tagEditorGrid = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tagEditorGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // boardDisplay
@@ -267,12 +271,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PGNText.Enabled = false;
             this.PGNText.HideSelection = false;
-            this.PGNText.Location = new System.Drawing.Point(352, 311);
+            this.PGNText.Location = new System.Drawing.Point(578, 311);
             this.PGNText.Multiline = true;
             this.PGNText.Name = "PGNText";
             this.PGNText.ReadOnly = true;
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.PGNText.Size = new System.Drawing.Size(681, 161);
+            this.PGNText.Size = new System.Drawing.Size(455, 161);
             this.PGNText.TabIndex = 3;
             this.PGNText.Click += new System.EventHandler(this.PGNText_Click);
             // 
@@ -313,11 +317,11 @@
             // 
             this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FENText.Location = new System.Drawing.Point(352, 285);
+            this.FENText.Location = new System.Drawing.Point(578, 285);
             this.FENText.Name = "FENText";
             this.FENText.ReadOnly = true;
             this.FENText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.FENText.Size = new System.Drawing.Size(680, 20);
+            this.FENText.Size = new System.Drawing.Size(454, 20);
             this.FENText.TabIndex = 7;
             // 
             // EngineList
@@ -402,6 +406,7 @@
             this.corrGridView.Location = new System.Drawing.Point(611, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
+            this.corrGridView.RowHeadersVisible = false;
             this.corrGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.corrGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.corrGridView.ShowEditingIcon = false;
@@ -658,11 +663,48 @@
             this.resultCombo.TabIndex = 31;
             this.resultCombo.SelectedIndexChanged += new System.EventHandler(this.resultCombo_SelectedIndexChanged);
             // 
+            // tagEditorGrid
+            // 
+            this.tagEditorGrid.AllowUserToResizeColumns = false;
+            this.tagEditorGrid.AllowUserToResizeRows = false;
+            this.tagEditorGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tagEditorGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tagEditorGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2});
+            this.tagEditorGrid.Location = new System.Drawing.Point(352, 285);
+            this.tagEditorGrid.Name = "tagEditorGrid";
+            this.tagEditorGrid.RowHeadersVisible = false;
+            this.tagEditorGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.tagEditorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.tagEditorGrid.ShowEditingIcon = false;
+            this.tagEditorGrid.Size = new System.Drawing.Size(220, 187);
+            this.tagEditorGrid.TabIndex = 32;
+            this.tagEditorGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.tagEditorGrid_CellValueChanged);
+            this.tagEditorGrid.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tagEditorGrid_RowsAdded);
+            this.tagEditorGrid.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.tagEditorGrid_RowsRemoved);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Tag";
+            this.Column1.MaxInputLength = 20;
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 70;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Value";
+            this.Column2.MaxInputLength = 100;
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 145;
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 484);
+            this.Controls.Add(this.tagEditorGrid);
             this.Controls.Add(this.resultCombo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PopMoveButton);
@@ -703,6 +745,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tagEditorGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -768,6 +811,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox resultCombo;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.DataGridView tagEditorGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+
     }
 }
 

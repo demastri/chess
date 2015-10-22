@@ -124,6 +124,7 @@ namespace PGNViewer
                 TreeNode n = FindGameNode(GameList.Nodes, selectedText);
                 GameList.SelectedNode = n;
                 UpdatePGNText();
+                UpdatePGNTags();
                 SetInitialPosition();
             }
             GameList.ExpandAll();
@@ -1066,6 +1067,7 @@ namespace PGNViewer
         private void GameList_SelectedIndexChanged(object sender, TreeViewEventArgs e)
         {
             UpdatePGNText();
+            UpdatePGNTags();
             SetInitialPosition();
             Redraw(false, true, false, false);
         }
@@ -1078,6 +1080,23 @@ namespace PGNViewer
                 curGame = (Game)GameList.SelectedNode.Tag;
                 PGNText.Text = curGame.PGNSource;
             }
+        }
+        bool initTags = false;
+        private void UpdatePGNTags()
+        {
+            initTags = true;
+            tagEditorGrid.Rows.Clear();
+            if( curGame != null )
+            {
+                tagEditorGrid.Rows.Insert(0, curGame.Tags.Count );
+                for( int i=0; i<curGame.Tags.Count; i++ )
+                {
+                    string key = curGame.Tags.Keys.ElementAt(i);
+                    tagEditorGrid.Rows[i].Cells[0].Value = key;
+                    tagEditorGrid.Rows[i].Cells[1].Value = curGame.Tags[key];
+                }
+            }
+            initTags = false;
         }
         private void SetInitialPosition()
         {
@@ -1425,6 +1444,65 @@ namespace PGNViewer
             UpdateFormTitle();
             if (newMove || newMetaData)
                 FileHasChanged = true;
+        }
+
+        private void tagEditorGrid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            if (curGame == null || initTags)
+                return;
+            return;
+
+            initTags = true;
+            string newROwName = "NewTag";
+            for (int i = 1; i < 1000 && curGame.Tags.Keys.Contains(newROwName); i++)
+                newROwName = "NewTag" + i.ToString();
+            tagEditorGrid.Rows[e.RowIndex].Cells[0].Value = newROwName;
+            tagEditorGrid.Rows[e.RowIndex].Cells[1].Value = "NewValue";
+            curGame.Tags.Add(newROwName, "NewValue");
+            initTags = false;
+        }
+
+        private void tagEditorGrid_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            if (curGame == null || initTags)
+                return;
+
+        }
+
+        private string[] PGNSTR = { "Event", "Site", "Date", "Round", "White", "Black", "Result" };
+
+        private void tagEditorGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (curGame == null || initTags)
+                return;
+            string oldkey = "";
+            if( e.RowIndex < curGame.Tags.Count )
+                oldkey = curGame.Tags.Keys.ElementAt(e.RowIndex);
+            string newVal = tagEditorGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            string oldVal = oldkey == ""? "" : curGame.Tags[oldkey];
+            if (e.ColumnIndex == 0)    // tag name
+            {
+                // can't change SevenTagRoster keys
+                if (PGNSTR.Contains(oldkey))
+                    MessageBox.Show("Can't modify a Seven Tag Roster entry");
+                else
+                    if (newVal == "")
+                        MessageBox.Show("Tag name cannot be empty");
+                    else
+                        if (newVal != oldkey && curGame.Tags.Keys.Contains(newVal))
+                            MessageBox.Show("Tag name must be unique");
+                        else
+                        {
+                            // ok = go ahead and update the Tags dictionary
+                            if( oldkey != "" )
+                                curGame.Tags.Remove(oldkey);
+                            curGame.Tags.Add(newVal, oldVal);
+                        }
+            }
+            else   // value
+            {
+                curGame.Tags[oldkey] = newVal;
+            }
         }
     }
 }
