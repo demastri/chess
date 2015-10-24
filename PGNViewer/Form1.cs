@@ -738,34 +738,22 @@ namespace PGNViewer
                 curGame.PGNtokens.Remove(termToken);
 
             bool isAWhiteMove = (curGame.Plies.Count % 2 == 1);
-            PGNText.Text = PGNText.Text.Substring(0, PGNText.Text.Length - Environment.NewLine.Length);
-            int curLineLength = PGNText.Text.Length - PGNText.Text.LastIndexOf(Environment.NewLine);
-            int newMovePairLength = 4 + 2 * (5 + 15 + 3); // move nbr + 2*(move, time, pad)
-            int maxLineLength = 100;
-            if (isAWhiteMove && curLineLength + newMovePairLength > maxLineLength)    // put it a new line...
-                PGNText.Text += Environment.NewLine;
-
             if (isAWhiteMove)
             {
                 string nbrText = (curGame.Plies.Count / 2 + 1).ToString() + ".";
                 PGNMoveNumber moveNbr = new PGNMoveNumber(nbrText, 0);
                 curGame.PGNtokens.Add(moveNbr);
-                PGNText.Text += nbrText;
             }
-
             curGame.PGNtokens.Add(moveStr);
+
             newMove.refToken.startLocation = PGNText.Text.Length;
-            
+
             PGNComment timeComment = new PGNComment(possTime.ToString("{MM/dd/yyyy HHmm}"));
             curGame.PGNtokens.Add(timeComment);
-            
-            PGNText.Text += possMove;
-            PGNText.Text += timeComment.tokenString + " ";
+
             newMove.comments.Add(timeComment);
 
-            PGNText.Text += Environment.NewLine;
-
-            PGNText.Text = (curGame.PGNSource = curGame.GeneratePGNSource()) + Environment.NewLine;
+            PGNText.Text = (curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly)) + Environment.NewLine;
 
             if (termToken != null)
                 curGame.PGNtokens.Add(termToken);
@@ -1307,7 +1295,7 @@ namespace PGNViewer
             curGame.PGNtokens.Add(curGame.GameTerm);
             Game oldGame = curGame;
 
-            curGame.PGNSource = curGame.GeneratePGNSource();
+            curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly);
             if (!updatingDisplay && saveFileOnUpdate)
             {
                 Game.SavePGNFile(curPGNFileLoc, GameRef);

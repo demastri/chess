@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -270,6 +271,7 @@
             this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PGNText.Enabled = false;
+            this.PGNText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PGNText.HideSelection = false;
             this.PGNText.Location = new System.Drawing.Point(578, 311);
             this.PGNText.Multiline = true;
@@ -403,6 +405,14 @@
             this.Black,
             this.BMoveTime,
             this.BMoveReflection});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle1;
             this.corrGridView.Location = new System.Drawing.Point(611, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
@@ -420,7 +430,7 @@
             this.MoveNbr.Name = "MoveNbr";
             this.MoveNbr.ReadOnly = true;
             this.MoveNbr.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MoveNbr.Width = 25;
+            this.MoveNbr.Width = 40;
             // 
             // White
             // 
@@ -428,7 +438,7 @@
             this.White.Name = "White";
             this.White.ReadOnly = true;
             this.White.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.White.Width = 40;
+            this.White.Width = 50;
             // 
             // WMoveTime
             // 
@@ -436,6 +446,7 @@
             this.WMoveTime.Name = "WMoveTime";
             this.WMoveTime.ReadOnly = true;
             this.WMoveTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.WMoveTime.Width = 110;
             // 
             // WMoveReflection
             // 
@@ -451,7 +462,7 @@
             this.Black.Name = "Black";
             this.Black.ReadOnly = true;
             this.Black.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Black.Width = 40;
+            this.Black.Width = 50;
             // 
             // BMoveTime
             // 
@@ -459,6 +470,7 @@
             this.BMoveTime.Name = "BMoveTime";
             this.BMoveTime.ReadOnly = true;
             this.BMoveTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BMoveTime.Width = 110;
             // 
             // BMoveReflection
             // 
@@ -564,6 +576,7 @@
             // 
             this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.GameList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GameList.HideSelection = false;
             this.GameList.Location = new System.Drawing.Point(28, 27);
             this.GameList.Name = "GameList";
@@ -667,8 +680,7 @@
             // 
             this.tagEditorGrid.AllowUserToResizeColumns = false;
             this.tagEditorGrid.AllowUserToResizeRows = false;
-            this.tagEditorGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tagEditorGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tagEditorGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tagEditorGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -780,13 +792,6 @@
         private System.Windows.Forms.Button CorrTimeNow;
         private System.Windows.Forms.TextBox CorrMoveNbr;
         private System.Windows.Forms.Button CorrUpdate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MoveNbr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn White;
-        private System.Windows.Forms.DataGridViewTextBoxColumn WMoveTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn WMoveReflection;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Black;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BMoveTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BMoveReflection;
         private System.Windows.Forms.Button CorrPublish;
         private System.Windows.Forms.Label ReflTimeLabel;
         private System.Windows.Forms.CheckBox ckInvertBoard;
@@ -814,6 +819,13 @@
         private System.Windows.Forms.DataGridView tagEditorGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MoveNbr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn White;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WMoveTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WMoveReflection;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Black;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BMoveTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BMoveReflection;
 
     }
 }
