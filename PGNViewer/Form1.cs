@@ -1066,7 +1066,7 @@ namespace PGNViewer
             if (GameList.SelectedNode != null && GameList.SelectedNode.Tag != null)
             {
                 curGame = (Game)GameList.SelectedNode.Tag;
-                PGNText.Text = curGame.PGNSource;
+                PGNText.Text = curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly);
             }
         }
         bool initTags = false;
