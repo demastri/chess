@@ -69,7 +69,7 @@ namespace PGNViewer
 
             string selectedText = "";
             if( curGame != null )
-                selectedText = curGame.Tags["Date"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
+                selectedText = curGame.Tags["Event"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
 
             GameList.Nodes.Clear();
             if (curDisplayMode == 3)    // corr
@@ -83,7 +83,7 @@ namespace PGNViewer
 
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
-                    string s = g.Tags["Date"] + " (" + ((int)((g.Plies.Count - 1) / 2) + 1) + " m - " + waitDays.ToString() + " d) " + g.Tags["White"] + "-" + g.Tags["Black"];
+                    string s = g.Tags["Event"] + " (" + ((int)((g.Plies.Count - 1) / 2) + 1) + " m - " + waitDays.ToString() + " d) " + g.Tags["White"] + "-" + g.Tags["Black"];
 
                     TreeNode thisGame = new TreeNode(s);
                     thisGame.Tag = g;
@@ -92,20 +92,32 @@ namespace PGNViewer
                     {
                         if ((ImWhite && WOnMove) || (!ImWhite && !WOnMove))
                         {
-                            int i = FindInsertIndex(inProgOnMoveNode.Nodes, waitDays, true);
-                            inProgOnMoveNode.Nodes.Insert(i, thisGame);
+                            TreeNode eventNode = FindGameNode(inProgOnMoveNode.Nodes, g.Tags["Event"]);
+                            if (eventNode == null)
+                                eventNode = inProgOnMoveNode.Nodes.Add(g.Tags["Event"]);
+
+                            int i = FindInsertIndex(eventNode.Nodes, waitDays, true);
+                            eventNode.Nodes.Insert(i, thisGame);
                         }
                         else
                         {
-                            int i = FindInsertIndex(inProgWaitingNode.Nodes, waitDays, true);
-                            inProgWaitingNode.Nodes.Insert(i, thisGame);
+                            TreeNode eventNode = FindGameNode(inProgWaitingNode.Nodes, g.Tags["Event"]);
+                            if (eventNode == null)
+                                eventNode = inProgWaitingNode.Nodes.Add(g.Tags["Event"]);
+
+                            int i = FindInsertIndex(eventNode.Nodes, waitDays, true);
+                            eventNode.Nodes.Insert(i, thisGame);
                         }
                     }
                     else
                     {
-                        s = g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] + " : " + g.Tags["Result"];
+                        TreeNode eventNode = FindGameNode(complNode.Nodes, g.Tags["Event"]);
+                        if (eventNode == null)
+                            eventNode = complNode.Nodes.Add(g.Tags["Event"]);
+
+                        s = g.Tags["Event"] + " " + g.Tags["White"] + "-" + g.Tags["Black"] + " : " + g.Tags["Result"];
                         thisGame.Text = s;
-                        complNode.Nodes.Add(thisGame);
+                        eventNode.Nodes.Add(thisGame);
                     }
                 }
             }
@@ -113,7 +125,7 @@ namespace PGNViewer
             {
                 foreach (Game g in GameRef)
                 {
-                    TreeNode thisGame = new TreeNode(g.Tags["Date"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
+                    TreeNode thisGame = new TreeNode(g.Tags["Event"] + " " + g.Tags["White"] + "-" + g.Tags["Black"]);
                     thisGame.Tag = g;
                     GameList.Nodes.Add(thisGame);
                 }
