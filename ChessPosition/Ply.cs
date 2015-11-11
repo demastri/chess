@@ -85,17 +85,24 @@ namespace ChessPosition
 
             outString += refToken.value + " ";
 
-            if (((int)options & (int)Game.GameSaveOptions.IncludeComments) != 0)
+            bool shouldIncludeComments = (((int)options & (int)Game.GameSaveOptions.IncludeComments) != 0);
+
+            foreach (PGNComment comment in comments)
             {
-                foreach (PGNComment comment in comments)
-                    if (comment.isBraceComment)
+                if (comment.isBraceComment)
+                {
+                    if (shouldIncludeComments || comment.value.IndexOf("PenaltyDays:") == 0)
                     {
                         outString += "{" + comment.value + "} ";
                     }
-                    else
+                }
+                else
+                {
+                    if (shouldIncludeComments)
                     {
                         outString += "; " + comment.value + Environment.NewLine;
                     }
+                }
             }
 
             if (((int)options & (int)Game.GameSaveOptions.IncludeVariations) != 0)

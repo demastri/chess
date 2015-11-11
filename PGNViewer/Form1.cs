@@ -68,7 +68,7 @@ namespace PGNViewer
             GameList.AfterSelect -= new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
 
             string selectedText = "";
-            if( curGame != null )
+            if (curGame != null)
                 selectedText = curGame.Tags["Event"] + " " + curGame.Tags["White"] + "-" + curGame.Tags["Black"];
 
             GameList.Nodes.Clear();
@@ -274,7 +274,7 @@ namespace PGNViewer
                         else
                             BPawns = refStr;
                     }
-                    else if( thisPc.piece != Piece.PieceType.King )
+                    else if (thisPc.piece != Piece.PieceType.King)
                     {
                         string refStr = (thisPc.color == PlayerEnum.White ? WPieces : BPieces);
 
@@ -653,6 +653,8 @@ namespace PGNViewer
                     // should be a time value
                     corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "WMoveTime" : "BMoveTime"].Value = CommentTimeString(p.comments);
                     lastMoveTime = thisMoveTime;
+
+                    thisReflTime += PenaltyTime(p.comments);
                 }
                 else
                 {
@@ -847,6 +849,21 @@ namespace PGNViewer
             }
             return -1;
         }
+        private int PenaltyTime(List<PGNComment> cmts)
+        {
+            int penaltyTime = 0;
+            string pDayTag = "PenaltyDays:";
+            foreach (PGNComment cmt in cmts)
+            {
+                if (cmt.value.IndexOf(pDayTag) == 0)
+                {
+                    int thisTime = 0;
+                    if( Int32.TryParse(cmt.value.Substring(pDayTag.Length), out thisTime ) )
+                        penaltyTime += thisTime;
+                }
+            }
+            return penaltyTime;
+        }
         private DateTime CommentTime(List<PGNComment> cmts)
         {
             int index = FindTimeComment(cmts);
@@ -1007,7 +1024,7 @@ namespace PGNViewer
 
                             int thisIndex = 0;
                             for (int i = 0; i < 10; i++)
-                                thisIndex = boardText.IndexOf(Environment.NewLine, thisIndex+1);
+                                thisIndex = boardText.IndexOf(Environment.NewLine, thisIndex + 1);
                             boardText = boardText.Substring(0, thisIndex);
 
                             // draw it into a picture box (font/size)
@@ -1086,10 +1103,10 @@ namespace PGNViewer
         {
             initTags = true;
             tagEditorGrid.Rows.Clear();
-            if( curGame != null )
+            if (curGame != null)
             {
-                tagEditorGrid.Rows.Insert(0, curGame.Tags.Count );
-                for( int i=0; i<curGame.Tags.Count; i++ )
+                tagEditorGrid.Rows.Insert(0, curGame.Tags.Count);
+                for (int i = 0; i < curGame.Tags.Count; i++)
                 {
                     string key = curGame.Tags.Keys.ElementAt(i);
                     tagEditorGrid.Rows[i].Cells[0].Value = key;
@@ -1432,9 +1449,9 @@ namespace PGNViewer
                         break;
                 }
         }
-        private void Redraw( bool newFile, bool newGame, bool newMove, bool newMetaData )   // if curGame is in a consistent state here, we should be able to update it based on actions, then call this method - done.
+        private void Redraw(bool newFile, bool newGame, bool newMove, bool newMetaData)   // if curGame is in a consistent state here, we should be able to update it based on actions, then call this method - done.
         {
-            if( newFile || newMove || newMetaData )
+            if (newFile || newMove || newMetaData)
                 UpdateGameListDisplay();    // refreshes the game list on the left side of the display - doesn't select a game...
             DrawBoard();                // updates the board for the curGame.curPosition
             UpdateCorrespondence();     // this loads all moves into the corr grid, updates refl time text and per move, and resultsCombo based on curGame.GameTerm.value
@@ -1476,10 +1493,10 @@ namespace PGNViewer
             if (curGame == null || initTags)
                 return;
             string oldkey = "";
-            if( e.RowIndex < curGame.Tags.Count )
+            if (e.RowIndex < curGame.Tags.Count)
                 oldkey = curGame.Tags.Keys.ElementAt(e.RowIndex);
             string newVal = tagEditorGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            string oldVal = oldkey == ""? "" : curGame.Tags[oldkey];
+            string oldVal = oldkey == "" ? "" : curGame.Tags[oldkey];
             if (e.ColumnIndex == 0)    // tag name
             {
                 // can't change SevenTagRoster keys
@@ -1494,7 +1511,7 @@ namespace PGNViewer
                         else
                         {
                             // ok = go ahead and update the Tags dictionary
-                            if( oldkey != "" )
+                            if (oldkey != "")
                                 curGame.Tags.Remove(oldkey);
                             curGame.Tags.Add(newVal, oldVal);
                         }
