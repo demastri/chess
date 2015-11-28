@@ -426,7 +426,7 @@
             // 
             // MoveNbr
             // 
-            this.MoveNbr.HeaderText = "#";
+            this.MoveNbr.HeaderText = "Move #";
             this.MoveNbr.Name = "MoveNbr";
             this.MoveNbr.ReadOnly = true;
             this.MoveNbr.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -450,7 +450,7 @@
             // 
             // WMoveReflection
             // 
-            this.WMoveReflection.HeaderText = "Rfl";
+            this.WMoveReflection.HeaderText = "Refl Tm";
             this.WMoveReflection.Name = "WMoveReflection";
             this.WMoveReflection.ReadOnly = true;
             this.WMoveReflection.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -474,7 +474,7 @@
             // 
             // BMoveReflection
             // 
-            this.BMoveReflection.HeaderText = "Rfl";
+            this.BMoveReflection.HeaderText = "Refl Tm";
             this.BMoveReflection.Name = "BMoveReflection";
             this.BMoveReflection.ReadOnly = true;
             this.BMoveReflection.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;

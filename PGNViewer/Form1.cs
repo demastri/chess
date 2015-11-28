@@ -858,7 +858,7 @@ namespace PGNViewer
                 if (cmt.value.IndexOf(pDayTag) == 0)
                 {
                     int thisTime = 0;
-                    if( Int32.TryParse(cmt.value.Substring(pDayTag.Length), out thisTime ) )
+                    if (Int32.TryParse(cmt.value.Substring(pDayTag.Length), out thisTime))
                         penaltyTime += thisTime;
                 }
             }
@@ -1040,6 +1040,26 @@ namespace PGNViewer
 
                             // write the image tag to the template
                             refStr = refStr.Replace(token, "" + imgStr + "");
+                            break;
+                        case "MoveAndTimeGrid":
+                            string tableString = "<Table border=\"1\" cellpadding=\"5\">";
+                            tableString += "<tr>";
+                            foreach (DataGridViewColumn c in corrGridView.Columns)
+                                tableString += "<td>" + c.HeaderText + "</td>";
+                            tableString += "</tr>";
+                            foreach (DataGridViewRow r in corrGridView.Rows)
+                            {
+                                tableString += "<tr>";
+                                foreach (DataGridViewCell c in r.Cells)
+                                    tableString += "<td>" + c.Value.ToString() + "</td>";
+                                tableString += "</tr>";
+                            }
+                            tableString += "<tr>";
+                            tableString += "<td colspan=3>Totals</td><td>" + (usedCorrTimeW).ToString() + "</td>";
+                            tableString += "<td colspan=2></td><td>" + (usedCorrTimeB).ToString() + "</td>";
+                            tableString += "</tr>";
+                            tableString += "</Table>";
+                            refStr = refStr.Replace(token, "" + tableString + "");
                             break;
                     }
                 }
