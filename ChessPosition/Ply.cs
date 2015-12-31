@@ -9,7 +9,7 @@ namespace ChessPosition
     public class Ply
     {
         public int Number;
-        public int MoveNumber { get { return Number / 2 + 1; } }
+        public int MoveNumber { get { return (Number-1) / 2 + 1; } }
 
         public Square src;
         public Square dest;

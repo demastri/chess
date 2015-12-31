@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +89,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.resultCombo = new System.Windows.Forms.ComboBox();
             this.tagEditorGrid = new System.Windows.Forms.DataGridView();
+            this.capturedPieceDisplay = new System.Windows.Forms.TextBox();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
@@ -101,11 +102,11 @@
             this.boardDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boardDisplay.Location = new System.Drawing.Point(352, 27);
+            this.boardDisplay.Location = new System.Drawing.Point(352, 101);
             this.boardDisplay.Multiline = true;
             this.boardDisplay.Name = "boardDisplay";
             this.boardDisplay.ReadOnly = true;
-            this.boardDisplay.Size = new System.Drawing.Size(253, 223);
+            this.boardDisplay.Size = new System.Drawing.Size(235, 342);
             this.boardDisplay.TabIndex = 1;
             this.boardDisplay.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boardDisplay_MouseDown);
             this.boardDisplay.MouseMove += new System.Windows.Forms.MouseEventHandler(this.boardDisplay_MouseMove);
@@ -268,24 +269,24 @@
             // 
             // PGNText
             // 
-            this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PGNText.Enabled = false;
             this.PGNText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PGNText.HideSelection = false;
-            this.PGNText.Location = new System.Drawing.Point(578, 311);
+            this.PGNText.Location = new System.Drawing.Point(593, 311);
             this.PGNText.Multiline = true;
             this.PGNText.Name = "PGNText";
             this.PGNText.ReadOnly = true;
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.PGNText.Size = new System.Drawing.Size(455, 161);
+            this.PGNText.Size = new System.Drawing.Size(439, 161);
             this.PGNText.TabIndex = 3;
             this.PGNText.Click += new System.EventHandler(this.PGNText_Click);
+            this.PGNText.DoubleClick += new System.EventHandler(this.PGNText_DoubleClick);
             // 
             // ResetGameButton
             // 
             this.ResetGameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ResetGameButton.Location = new System.Drawing.Point(364, 255);
+            this.ResetGameButton.Location = new System.Drawing.Point(365, 449);
             this.ResetGameButton.Name = "ResetGameButton";
             this.ResetGameButton.Size = new System.Drawing.Size(30, 23);
             this.ResetGameButton.TabIndex = 4;
@@ -296,7 +297,7 @@
             // BackButton
             // 
             this.BackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BackButton.Location = new System.Drawing.Point(436, 255);
+            this.BackButton.Location = new System.Drawing.Point(437, 449);
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(30, 23);
             this.BackButton.TabIndex = 5;
@@ -307,7 +308,7 @@
             // FwdButton
             // 
             this.FwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FwdButton.Location = new System.Drawing.Point(472, 255);
+            this.FwdButton.Location = new System.Drawing.Point(473, 449);
             this.FwdButton.Name = "FwdButton";
             this.FwdButton.Size = new System.Drawing.Size(30, 23);
             this.FwdButton.TabIndex = 6;
@@ -317,13 +318,12 @@
             // 
             // FENText
             // 
-            this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.FENText.Location = new System.Drawing.Point(578, 285);
+            this.FENText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.FENText.Location = new System.Drawing.Point(593, 285);
             this.FENText.Name = "FENText";
             this.FENText.ReadOnly = true;
             this.FENText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.FENText.Size = new System.Drawing.Size(454, 20);
+            this.FENText.Size = new System.Drawing.Size(439, 20);
             this.FENText.TabIndex = 7;
             // 
             // EngineList
@@ -343,11 +343,11 @@
             // 
             // AnalysisText
             // 
-            this.AnalysisText.Location = new System.Drawing.Point(578, 54);
+            this.AnalysisText.Location = new System.Drawing.Point(593, 54);
             this.AnalysisText.Multiline = true;
             this.AnalysisText.Name = "AnalysisText";
             this.AnalysisText.ReadOnly = true;
-            this.AnalysisText.Size = new System.Drawing.Size(421, 225);
+            this.AnalysisText.Size = new System.Drawing.Size(406, 225);
             this.AnalysisText.TabIndex = 9;
             // 
             // timer1
@@ -358,7 +358,7 @@
             // JumpBackButton
             // 
             this.JumpBackButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpBackButton.Location = new System.Drawing.Point(400, 255);
+            this.JumpBackButton.Location = new System.Drawing.Point(401, 449);
             this.JumpBackButton.Name = "JumpBackButton";
             this.JumpBackButton.Size = new System.Drawing.Size(30, 23);
             this.JumpBackButton.TabIndex = 10;
@@ -369,7 +369,7 @@
             // JumpFwdButton
             // 
             this.JumpFwdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpFwdButton.Location = new System.Drawing.Point(508, 255);
+            this.JumpFwdButton.Location = new System.Drawing.Point(509, 449);
             this.JumpFwdButton.Name = "JumpFwdButton";
             this.JumpFwdButton.Size = new System.Drawing.Size(30, 23);
             this.JumpFwdButton.TabIndex = 11;
@@ -380,7 +380,7 @@
             // JumpToEndButton
             // 
             this.JumpToEndButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.JumpToEndButton.Location = new System.Drawing.Point(544, 255);
+            this.JumpToEndButton.Location = new System.Drawing.Point(545, 449);
             this.JumpToEndButton.Name = "JumpToEndButton";
             this.JumpToEndButton.Size = new System.Drawing.Size(30, 23);
             this.JumpToEndButton.TabIndex = 12;
@@ -405,24 +405,25 @@
             this.Black,
             this.BMoveTime,
             this.BMoveReflection});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle1;
-            this.corrGridView.Location = new System.Drawing.Point(611, 54);
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle6;
+            this.corrGridView.Location = new System.Drawing.Point(593, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
             this.corrGridView.RowHeadersVisible = false;
             this.corrGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.corrGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.corrGridView.ShowEditingIcon = false;
-            this.corrGridView.Size = new System.Drawing.Size(421, 147);
+            this.corrGridView.Size = new System.Drawing.Size(439, 147);
             this.corrGridView.TabIndex = 13;
             this.corrGridView.Click += new System.EventHandler(this.corrGridView_Click);
+            this.corrGridView.DoubleClick += new System.EventHandler(this.corrGridView_DoubleClick);
             // 
             // MoveNbr
             // 
@@ -576,11 +577,11 @@
             // 
             this.GameList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.GameList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GameList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GameList.HideSelection = false;
-            this.GameList.Location = new System.Drawing.Point(28, 27);
+            this.GameList.Location = new System.Drawing.Point(12, 27);
             this.GameList.Name = "GameList";
-            this.GameList.Size = new System.Drawing.Size(318, 445);
+            this.GameList.Size = new System.Drawing.Size(334, 174);
             this.GameList.TabIndex = 23;
             this.GameList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.GameList_SelectedIndexChanged);
             // 
@@ -685,17 +686,28 @@
             this.tagEditorGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2});
-            this.tagEditorGrid.Location = new System.Drawing.Point(352, 285);
+            this.tagEditorGrid.Location = new System.Drawing.Point(12, 206);
             this.tagEditorGrid.Name = "tagEditorGrid";
             this.tagEditorGrid.RowHeadersVisible = false;
             this.tagEditorGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.tagEditorGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.tagEditorGrid.ShowEditingIcon = false;
-            this.tagEditorGrid.Size = new System.Drawing.Size(220, 187);
+            this.tagEditorGrid.Size = new System.Drawing.Size(334, 266);
             this.tagEditorGrid.TabIndex = 32;
             this.tagEditorGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.tagEditorGrid_CellValueChanged);
             this.tagEditorGrid.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tagEditorGrid_RowsAdded);
             this.tagEditorGrid.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.tagEditorGrid_RowsRemoved);
+            // 
+            // capturedPieceDisplay
+            // 
+            this.capturedPieceDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.capturedPieceDisplay.Location = new System.Drawing.Point(352, 33);
+            this.capturedPieceDisplay.Multiline = true;
+            this.capturedPieceDisplay.Name = "capturedPieceDisplay";
+            this.capturedPieceDisplay.ReadOnly = true;
+            this.capturedPieceDisplay.Size = new System.Drawing.Size(235, 62);
+            this.capturedPieceDisplay.TabIndex = 33;
             // 
             // Column1
             // 
@@ -709,13 +721,14 @@
             this.Column2.HeaderText = "Value";
             this.Column2.MaxInputLength = 100;
             this.Column2.Name = "Column2";
-            this.Column2.Width = 145;
+            this.Column2.Width = 225;
             // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 484);
+            this.Controls.Add(this.capturedPieceDisplay);
             this.Controls.Add(this.tagEditorGrid);
             this.Controls.Add(this.resultCombo);
             this.Controls.Add(this.label1);
@@ -817,8 +830,6 @@
         private System.Windows.Forms.ComboBox resultCombo;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.DataGridView tagEditorGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn MoveNbr;
         private System.Windows.Forms.DataGridViewTextBoxColumn White;
         private System.Windows.Forms.DataGridViewTextBoxColumn WMoveTime;
@@ -826,6 +837,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Black;
         private System.Windows.Forms.DataGridViewTextBoxColumn BMoveTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn BMoveReflection;
+        private System.Windows.Forms.TextBox capturedPieceDisplay;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
 
     }
 }

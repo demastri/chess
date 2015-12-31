@@ -212,8 +212,8 @@ namespace PGNViewer
             string BPawns = "oooooooo" + Environment.NewLine;
             string BPieces = "ttmmvvw" + Environment.NewLine;
 
-            float maxFontWide = boardDisplay.Width / (10f * 1.82f);
-            float maxFontHigh = boardDisplay.Height / (14f * 1.5f);
+            float maxFontWide = boardDisplay.Width / (10f * 1.4f);
+            float maxFontHigh = boardDisplay.Height / (10f * 1.4f);
             float maxFont = maxFontWide < maxFontHigh ? maxFontWide : maxFontHigh;
 
             if (maxFont < 0.005)
@@ -292,7 +292,16 @@ namespace PGNViewer
             }
             else
                 FENText.Text = "";
-            boardDisplay.Text = thisBoard + WPieces + WPawns + BPawns + BPieces;
+
+            capturedPieceDisplay.Font = new Font(pfc.Families[0], 9);
+            bool showDeltaPieces = false;
+            if (showDeltaPieces)
+            {
+                capturedPieceDisplay.Font = new Font(pfc.Families[0], 18);
+
+            }
+            boardDisplay.Text = thisBoard;
+            capturedPieceDisplay.Text = WPieces + WPawns + BPawns + BPieces;
             boardDisplay.Select(0, 0);
         }
 
@@ -838,7 +847,7 @@ namespace PGNViewer
             respDialog.ShowDialog();
 
         }
-        private int FindTimeComment(List<PGNComment> cmts)
+        public static int FindTimeComment(List<PGNComment> cmts)
         {
             foreach (PGNComment comment in cmts)
             {
@@ -849,22 +858,50 @@ namespace PGNViewer
             }
             return -1;
         }
-        private int PenaltyTime(List<PGNComment> cmts)
+        public static int FindPenaltyComment(List<PGNComment> cmts)
         {
-            int penaltyTime = 0;
-            string pDayTag = "PenaltyDays:";
-            foreach (PGNComment cmt in cmts)
-            {
-                if (cmt.value.IndexOf(pDayTag) == 0)
+            string[] timetags = { "PenaltyDays:", "TimeAtStart:" };
+            foreach (string pDayTag in timetags)
+                foreach (PGNComment comment in cmts)
                 {
-                    int thisTime = 0;
-                    if (Int32.TryParse(cmt.value.Substring(pDayTag.Length), out thisTime))
-                        penaltyTime += thisTime;
+                    if (comment.value.IndexOf(pDayTag) == 0)
+                        return cmts.IndexOf(comment);
+                }
+            return -1;
+        }
+        public static int PenaltyTime(List<PGNComment> cmts)
+        {
+            int index = FindPenaltyComment(cmts);
+            if (index >= 0)
+            {
+                int penaltyTime = 0;
+                if (Int32.TryParse(cmts[index].value.Substring(cmts[index].value.IndexOf(':') + 1), out penaltyTime))
+                    return penaltyTime;
+            }
+            return 0;
+        }
+        public static void UpdatePenaltyTime(List<PGNComment> cmts, int newTime, int plyNbr)
+        {
+            int index = FindPenaltyComment(cmts);
+            if (index >= 0)
+            {
+                if (newTime > 0)
+                    cmts[index].value = (plyNbr == 0 ? "TimeAtStart:" : "PenaltyDays:") + newTime.ToString(); // update the existing value if it exists
+                else
+                    cmts.RemoveAt(index);   // remove it if it exists...
+            }
+            else
+            {
+                if (newTime > 0)    // have new time and didn't before (if don't have new time, do nothing...
+                {
+                    if (plyNbr == 0)
+                        cmts.Add(new PGNComment("{TimeAtStart:" + newTime.ToString() + "}"));
+                    else
+                        cmts.Add(new PGNComment("{PenaltyDays:" + newTime.ToString() + "}"));
                 }
             }
-            return penaltyTime;
         }
-        private DateTime CommentTime(List<PGNComment> cmts)
+        public static DateTime CommentTime(List<PGNComment> cmts)
         {
             int index = FindTimeComment(cmts);
             if (index >= 0)
@@ -875,7 +912,16 @@ namespace PGNViewer
             }
             return DateTime.MinValue;
         }
-        private string CommentTimeString(List<PGNComment> cmts)
+        public static void UpdateCommentTime(List<PGNComment> cmts, DateTime newVal)
+        {
+            string outStr = newVal.ToString("MM/dd/yyyy HHmm");
+            int index = FindTimeComment(cmts);
+            if (index >= 0)
+                cmts[index].value = outStr;
+            else
+                cmts.Add(new PGNComment("{" + outStr + "}"));
+        }
+        public static string CommentTimeString(List<PGNComment> cmts)
         {
             int index = FindTimeComment(cmts);
             if (index >= 0)
@@ -1473,6 +1519,7 @@ namespace PGNViewer
         {
             if (newFile || newMove || newMetaData)
                 UpdateGameListDisplay();    // refreshes the game list on the left side of the display - doesn't select a game...
+            UpdatePGNText();
             DrawBoard();                // updates the board for the curGame.curPosition
             UpdateCorrespondence();     // this loads all moves into the corr grid, updates refl time text and per move, and resultsCombo based on curGame.GameTerm.value
             HighlightPGNMove();         // updates the board for the curGame.curPly
@@ -1539,6 +1586,25 @@ namespace PGNViewer
             else   // value
             {
                 curGame.Tags[oldkey] = newVal;
+            }
+        }
+
+        private void PGNText_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void corrGridView_DoubleClick(object sender, EventArgs e)
+        {
+            MoveEditor editorDialog = new MoveEditor();
+            editorDialog.Init(curGame.Plies[curGame.curPly - 1]);
+            if (editorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // update the move time and penalty time
+                Ply outPly = editorDialog.Extract();
+                UpdateCommentTime(curGame.Plies[curGame.curPly - 1].comments, CommentTime(outPly.comments));
+                UpdatePenaltyTime(curGame.Plies[curGame.curPly - 1].comments, PenaltyTime(outPly.comments), curGame.curPly - 1);
+                Redraw(false, false, false, true);
             }
         }
     }
