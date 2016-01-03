@@ -35,7 +35,7 @@
             this.CorrMoveText = new System.Windows.Forms.TextBox();
             this.MoveNbrLabel = new System.Windows.Forms.Label();
             this.penaltyTime = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.OKButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.EditorNowButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -100,15 +100,15 @@
             this.penaltyTime.Size = new System.Drawing.Size(47, 20);
             this.penaltyTime.TabIndex = 19;
             // 
-            // button1
+            // OKButton
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(27, 87);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(57, 23);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
+            this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.OKButton.Location = new System.Drawing.Point(27, 87);
+            this.OKButton.Name = "OKButton";
+            this.OKButton.Size = new System.Drawing.Size(57, 23);
+            this.OKButton.TabIndex = 20;
+            this.OKButton.Text = "OK";
+            this.OKButton.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -132,12 +132,14 @@
             // 
             // MoveEditor
             // 
+            this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(210, 120);
             this.Controls.Add(this.EditorNowButton);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.OKButton);
             this.Controls.Add(this.penaltyTime);
             this.Controls.Add(this.MoveNbrLabel);
             this.Controls.Add(this.CorrMoveText);
@@ -162,7 +164,7 @@
         private System.Windows.Forms.TextBox CorrMoveText;
         private System.Windows.Forms.Label MoveNbrLabel;
         private System.Windows.Forms.TextBox penaltyTime;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button EditorNowButton;
     }

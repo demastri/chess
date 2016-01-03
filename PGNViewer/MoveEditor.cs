@@ -45,6 +45,7 @@ namespace PGNViewer
         private void EditorNowButton_Click(object sender, EventArgs e)
         {
             CorrMoveTime.Value = DateTime.Now;
+            OKButton.Select();
         }
 
     }
