@@ -20,7 +20,7 @@ namespace PGNViewer
 
         public void SendToClipboard_Click(object sender, EventArgs e)
         {
-            ClipboardHelper.CopyToClipboard(htmlView.DocumentText, "SomeText");
+            ClipboardHelper.CopyToClipboard(htmlView.DocumentText, htmlView.DocumentText);
         }
 
         private void CorrResponseDialog_Shown(object sender, EventArgs e)

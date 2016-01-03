@@ -1060,6 +1060,11 @@ namespace PGNViewer
                             tempStr = (remainCorrTimeB + lastCorrTimeB).ToString() + " / " + lastCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
+                        case "PGNWithTags":
+                            // actually just move numbers and moves here...
+                            string thisScore = curGame.GeneratePGNSource(10000, Game.GameSaveOptions.SimpleGameScore);
+                            refStr = thisScore.Replace(Environment.NewLine, "<br>");
+                            break;
                         case "PGNSource":
                             // actually just move numbers and moves here...
                             refStr = refStr.Replace(token, "<br>" + curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly) + "<br><br>");

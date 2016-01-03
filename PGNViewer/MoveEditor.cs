@@ -42,5 +42,10 @@ namespace PGNViewer
             return outPly;
         }
 
+        private void EditorNowButton_Click(object sender, EventArgs e)
+        {
+            CorrMoveTime.Value = DateTime.Now;
+        }
+
     }
 }
