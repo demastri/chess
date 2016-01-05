@@ -107,6 +107,14 @@ namespace JPD.Utilities
                 return 1;
             return 0;
         }
+        public bool Contains(string k, string v)
+        {
+            if (multiValueSettings.ContainsKey(k))
+                return multiValueSettings[k].Contains(v);
+            if (singleValueSettings.ContainsKey(k))
+                return singleValueSettings[k] == v;
+            return false;
+        }
         List<string> SingleValueKeys { get { return singleValueSettings.Keys.ToList(); } }
         List<string> MultiValueKeys { get { return multiValueSettings.Keys.ToList(); } }
 
