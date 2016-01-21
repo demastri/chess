@@ -29,7 +29,7 @@
             }
         };
 
-    datacontext.getTodoLists(todoLists, error); // load todoLists
+    //datacontext.getTodoLists(todoLists, error); // load todoLists
 
     return {
         todoLists: todoLists,

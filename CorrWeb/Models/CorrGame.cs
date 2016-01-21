@@ -9,15 +9,8 @@ namespace CorrWeb.Models
 {
     public class CorrGame
     {
-        public int CorrGameId { get; set; }
+        public ChessPosition.Game thisGame { get; set; }
 
-        [Required]
-        public string Opponent { get; set; }
-        public string Event { get; set; }
-        public string Result { get; set; }
-
-        [ForeignKey("GameList")]
-        public int GameListId { get; set; }
-        public virtual GameList GameList { get; set; }
+        public virtual GameList thisGameList { get; set; }
     }
 }

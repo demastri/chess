@@ -15,9 +15,8 @@ namespace ChessPosition
         public List<PGNToken> tokens;
         List<Sentence> games;
 
-        public void Tokenize(StreamReader sr)
+        public void Tokenize(StreamReader sr, string grammarFile)
         {
-            string grammarFile = "Parser/Grammars/PGNSchema.xml";
             string corpusFile = "Parser/Corpora/Sample.pgn";
             try
             {
@@ -55,14 +54,14 @@ namespace ChessPosition
             tokens.AddRange(termTokens);
         }
 
-        public PGNTokenizer(StreamReader sr)
+        public PGNTokenizer(StreamReader sr, string GrammarFile)
         {
-            Tokenize(sr);
+            Tokenize(sr, GrammarFile);
         }
         public PGNTokenizer(string s)
         {
             pgn = s;
-            Tokenize(null);
+            Tokenize(null, null);
         }
             /// full definition of actual PGN token set:
             /// http://www6.chessclub.com/help/PGN-spec

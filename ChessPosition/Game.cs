@@ -80,11 +80,16 @@ namespace ChessPosition
         }
         public static List<Game> ReadPGNFile(string PGNFileLoc)
         {
+            string grammarFile = "Parser/Grammars/PGNSchema.xml";
+            return ReadPGNFile(PGNFileLoc, grammarFile);
+        }
+        public static List<Game> ReadPGNFile(string PGNFileLoc, string GrammarFile)
+        {
             List<Game> GameRef = new List<Game>();
             if (PGNFileLoc != "" && File.Exists(PGNFileLoc))
             {
                 StreamReader tr = new StreamReader(PGNFileLoc);
-                PGNTokenizer nextTokenSet = new PGNTokenizer(tr);
+                PGNTokenizer nextTokenSet = new PGNTokenizer(tr, GrammarFile);
                 tr.Close();
                 for (int i = 0; i < nextTokenSet.GameCount; i++)
                 {

@@ -1,13 +1,13 @@
 ﻿@model CorrWeb.Models.LoginModel
 @{
-    ViewBag.Title = "My Todo List";
+    ViewBag.Title = "My Correspondence Game List";
 }
 @functions{
     public string GetAntiForgeryToken()
     {
         string cookieToken, formToken;
         AntiForgery.GetTokens(null, out cookieToken, out formToken);
-        return cookieToken + ":" + formToken;                
+        return cookieToken + ":" + formToken;
     }
 }
 
@@ -15,59 +15,58 @@
     <h1>@ViewBag.Title</h1>
 </header>
 
+<head>
+    <meta charset="utf-8">
+    <title>jQuery UI Accordion - Default functionality</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script>
+        $(function () {
+            $("#accordion").accordion();
+        });
+    </script>
+</head>
+
 <div id="main-content">
-@if (@User.Identity.IsAuthenticated)
-{
-    <p class="error" data-bind="text: error"></p>
-    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
-    <button data-bind="click: addTodoList">Add Todo list</button>
-
-    <section id="lists" data-bind="foreach: todoLists, visible: todoLists().length > 0">
-        <article class="todoList">
-            <header>
-                <form data-bind="validate: true">
-                    <input class="required" data-bind="value: title, selected: isEditingListTitle, blurOnEnter: true" />
-                </form>
-            </header>
-
-            <a href="#" class="deletelist" data-bind="click: $parent.deleteTodoList">X</a>
-
-            <ul data-bind="foreach: todos">
-                <li>
-                    <input type="checkbox" data-bind="checked: isDone" />
-                    <input class="todoItemInput" type="text" data-bind="value: title, disable: isDone, blurOnEnter: true" />
-                    <a href="#" data-bind="click: $parent.deleteTodo">X</a>
-                    <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
-                </li>
-            </ul>
-
-            <form data-bind="submit: addTodo">
-                <input class="addTodo" type="text" data-bind="value: newTodoTitle, placeholder: 'Type here to add', blurOnEnter: true, event: { blur: addTodo }" />
-            </form>
-
-            <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
-        </article>
-    </section>
-}
-else
-{
-    <div class="todoList" id="loginPanel">
-        <section id="localLoginPanel">
-            <h2>Log in</h2>
-            @Html.Partial("_Login")
-        </section>
-        <section id="socialLoginPanel">
-            <h2>Log in using another service</h2>
-            @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-        <p>First time here? <a id="showRegister">Sign up</a></p>
-    </div>
-    <div class="todoList" id="registerPanel">
-        <h2>Sign up</h2>
-        @Html.Partial("_Register")
-        <p>Already signed up? <a id="showLogin">Log in</a></p>
-    </div>
-}
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <p class="error" data-bind="text: error"></p>
+        <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+     
+        <div id="accordion">
+            <h3>Game Selection</h3>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameListTree.cshtml", new CorrWeb.Models.GameList(User.Identity.Name))</div>
+            <h3>Game Tags</h3>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameTags.cshtml", null)</div>
+            <h3>Board Display</h3>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameBoard.cshtml", null)</div>
+            <h3>Detailed Move List</h3>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/MoveListGrid.cshtml", null)</div>
+        </div>
+           
+        
+    }
+    else
+    {
+        <div class="todoList" id="loginPanel">
+            <section id="localLoginPanel">
+                <h2>Log in</h2>
+                @Html.Partial("_Login")
+            </section>
+            <section id="socialLoginPanel">
+                <h2>Log in using another service</h2>
+                @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+            </section>
+            <p>First time here? <a id="showRegister">Sign up</a></p>
+        </div>
+        <div class="todoList" id="registerPanel">
+            <h2>Sign up</h2>
+            @Html.Partial("_Register")
+            <p>Already signed up? <a id="showLogin">Log in</a></p>
+        </div>
+    }
 </div>
 
 @if (@User.Identity.IsAuthenticated)

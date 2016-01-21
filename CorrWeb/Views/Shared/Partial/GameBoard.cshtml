@@ -1,0 +1,34 @@
+﻿@model CorrWeb.Models.CorrGame
+
+@section HeadCustomStyleBlock {  
+    <style type="text/css">  
+        @@font-face {  
+            font-family: Chess-7;
+            src: url(~/Fonts.Chess-7.ttf);            
+        }  
+    </style>  
+}  
+
+<div style="width: 100%; background: gray; float:left">
+<p style="text-align: left; background: gray; color: #202020; font-family:Chess-7" >
+                !""""""""# <br />
+                ç + + + +% <br />
+                æ+ + + + % <br />
+                å + + + +% <br />
+                ä+ + + + % <br />
+                ã + + + +% <br />
+                â+ + + + % <br />
+                á + + + +% <br />
+                à+ + + + % <br />
+                /èéêëìíîï) <br />
+</p>
+<p style="text-align: left; background: gray; color: #202020; clear:left; " >
+        @Html.ActionLink("|<", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink("<<", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink("<", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink(">", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink(">>", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink(">|", "New", new { /* id=Model.PrimaryKey */ }) |
+        @Html.ActionLink("Delete", "Delete", new { /* id=Model.PrimaryKey */ })
+</p>
+</div>

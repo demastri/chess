@@ -1,0 +1,51 @@
+﻿@model CorrWeb.Models.GameList
+
+<div style="width: 100%; background: black;">
+    <p style=" text-align: left; background: black; color: #80c0c0; float: left">
+        @Model.Count() games in the current file
+    </p>
+    <ul style="text-align: left; background: black; color: #80c0c0; clear: left">
+        <li>Games on Move</li>
+        <ul>
+            @foreach (string e in Model.onMoveGameList.Keys)
+            {
+                <li>@e</li>
+                <ul>
+                    @foreach (ChessPosition.Game g in Model.onMoveGameList[e])
+                    {
+                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                    }
+                </ul>
+            }
+        </ul>
+        <li>Games Waiting</li>
+        <ul>
+            @foreach (string e in Model.waitingGameList.Keys)
+            {
+                <li>@e</li>
+                <ul>
+                    @foreach (ChessPosition.Game g in Model.waitingGameList[e])
+                    {
+                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                    }
+                </ul>
+            }
+        </ul>
+        <li>Games Completed</li>
+        <ul>
+            @foreach (string e in Model.completeGameList.Keys)
+            {
+                <li>@e</li>
+                <ul>
+                    @foreach (ChessPosition.Game g in Model.completeGameList[e])
+                    {
+                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                    }
+                </ul>
+            }
+        </ul>
+    </ul>
+
+        @Html.ActionLink("New Game", "New", new { /* id=Model.PrimaryKey */ })
+    </p>
+</div>

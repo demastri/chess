@@ -14,97 +14,32 @@ namespace CorrWeb.Controllers
 {
     public class GameListController : ApiController
     {
-        private TodoItemContext db = new TodoItemContext();
-
+        public Dictionary<string, GameList> ListSet;
+        GameList currentGameList;
+        
         // GET api/GameList
         public IEnumerable<GameList> GetGameLists()
         {
-            return db.GameLists.AsEnumerable();
+            ListSet = InitListSet();
+            return ListSet.Values;
+        }
+        private Dictionary<string, GameList> InitListSet()
+        {
+            Dictionary<string, GameList> outSet = new Dictionary<string, GameList>();
+            // this is meaningless - no need for the crossuser set
+            // this is a placeholder in case we want multiple sets per user
+            return outSet;
         }
 
         // GET api/GameList/5
-        public GameList GetGameList(int id)
+        public GameList GetGameList(string id)
         {
-            GameList gamelist = db.GameLists.Find(id);
-            if (gamelist == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            return gamelist;
+            return currentGameList = new GameList(id);  // ListSet[id];
         }
 
-        // PUT api/GameList/5
-        public HttpResponseMessage PutGameList(int id, GameList gamelist)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-
-            if (id != gamelist.GameListId)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-
-            db.Entry(gamelist).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
-        // POST api/GameList
-        public HttpResponseMessage PostGameList(GameList gamelist)
-        {
-            if (ModelState.IsValid)
-            {
-                db.GameLists.Add(gamelist);
-                db.SaveChanges();
-
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, gamelist);
-                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = gamelist.GameListId }));
-                return response;
-            }
-            else
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-        }
-
-        // DELETE api/GameList/5
-        public HttpResponseMessage DeleteGameList(int id)
-        {
-            GameList gamelist = db.GameLists.Find(id);
-            if (gamelist == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            db.GameLists.Remove(gamelist);
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, gamelist);
-        }
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
             base.Dispose(disposing);
         }
     }
