@@ -1,19 +1,25 @@
 ﻿@model CorrWeb.Models.GameList
 
-<div style="width: 100%; background: black;">
-    <p style=" text-align: left; background: black; color: #80c0c0; float: left">
-        @Model.Count() games in the current file
+<div style="width: 100%; ">
+    <p style="text-align: left; float: left">
+        @Model.Count() games currently on file
     </p>
-    <ul style="text-align: left; background: black; color: #80c0c0; clear: left">
+    <ul style="text-align: left; clear: left">
         <li>Games on Move</li>
         <ul>
             @foreach (string e in Model.onMoveGameList.Keys)
             {
                 <li>@e</li>
                 <ul>
-                    @foreach (ChessPosition.Game g in Model.onMoveGameList[e])
+                    @for(int i=0; i<Model.onMoveGameList[e].Count; i++)
                     {
-                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                        ChessPosition.Game g  = Model.onMoveGameList[e][i];
+                        <li>
+                            @Html.ActionLink(
+                                g.Tags["White"] + "-" + g.Tags["Black"],
+                                "GameChange", "GameList", 
+                                new { listIndex=0, eventIndex=e, gameIndex=i }, null)
+                        </li>
                     }
                 </ul>
             }
@@ -24,9 +30,15 @@
             {
                 <li>@e</li>
                 <ul>
-                    @foreach (ChessPosition.Game g in Model.waitingGameList[e])
+                    @for (int i = 0; i < Model.waitingGameList[e].Count; i++)
                     {
-                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                        ChessPosition.Game g = Model.waitingGameList[e][i];
+                        <li>
+                            @Html.ActionLink(
+                                g.Tags["White"] + "-" + g.Tags["Black"],
+                                "GameChange", "GameList", 
+                                new { listIndex=1, eventIndex=e, gameIndex=i }, null)
+                        </li>
                     }
                 </ul>
             }
@@ -37,15 +49,21 @@
             {
                 <li>@e</li>
                 <ul>
-                    @foreach (ChessPosition.Game g in Model.completeGameList[e])
+                    @for (int i = 0; i < Model.completeGameList[e].Count; i++)
                     {
-                        <li>@g.Tags["White"] - @g.Tags["Black"]</li>
+                        ChessPosition.Game g = Model.completeGameList[e][i];
+                        <li>
+                            @Html.ActionLink(
+                                g.Tags["White"] + "-" + g.Tags["Black"],
+                                "GameChange", "Home", 
+                                new { listIndex=2, eventIndex=e, gameIndex=i }, null)
+                        </li>
                     }
                 </ul>
             }
         </ul>
     </ul>
 
-        @Html.ActionLink("New Game", "New", new { /* id=Model.PrimaryKey */ })
+    @Html.ActionLink("New Game", "New", new { /* id=Model.PrimaryKey */ })
     </p>
 </div>

@@ -1,34 +1,57 @@
-﻿@model CorrWeb.Models.CorrGame
+﻿@model CorrWeb.Models.GameList
 
-@section HeadCustomStyleBlock {  
-    <style type="text/css">  
-        @@font-face {  
+@section HeadCustomStyleBlock {
+    <style type="text/css">
+        @@font-face {
             font-family: Chess-7;
-            src: url(~/Fonts.Chess-7.ttf);            
-        }  
-    </style>  
-}  
+            src: url(~/Fonts.Chess-7.ttf);
+        }
+    </style>
+}
 
-<div style="width: 100%; background: gray; float:left">
-<p style="text-align: left; background: gray; color: #202020; font-family:Chess-7" >
-                !""""""""# <br />
-                ç + + + +% <br />
-                æ+ + + + % <br />
-                å + + + +% <br />
-                ä+ + + + % <br />
-                ã + + + +% <br />
-                â+ + + + % <br />
-                á + + + +% <br />
-                à+ + + + % <br />
-                /èéêëìíîï) <br />
-</p>
-<p style="text-align: left; background: gray; color: #202020; clear:left; " >
-        @Html.ActionLink("|<", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink("<<", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink("<", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink(">", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink(">>", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink(">|", "New", new { /* id=Model.PrimaryKey */ }) |
-        @Html.ActionLink("Delete", "Delete", new { /* id=Model.PrimaryKey */ })
-</p>
+<div style="width: 100%; float: left;">
+    @if (ViewBag != null && ViewBag.listIndex != null && ViewBag.eventIndex != null && ViewBag.gameIndex != null)
+    {
+        ViewBag.thisGame = Model.FindGame(ViewBag.listIndex, ViewBag.eventIndex, ViewBag.gameIndex);
+    }
+    @if (ViewBag.thisGame != null)
+    {
+        int prevPos = ViewBag.positionIndex - 1;
+        int rewPos = ViewBag.positionIndex - 5;
+        int ffPos = ViewBag.positionIndex + 5;
+        int nextPos = ViewBag.positionIndex + 1;
+        if (prevPos < 0)
+        {
+            prevPos = 0;
+        }
+        if (rewPos < 0)
+        {
+            rewPos = 0;
+        }
+        if (ffPos >= ViewBag.thisGame.Plies.Count)
+        {
+            ffPos = ViewBag.thisGame.Plies.Count - 1;
+        }
+        if (nextPos >= ViewBag.thisGame.Plies.Count)
+        {
+            nextPos = ViewBag.thisGame.Plies.Count - 1;
+        }
+        <p style="font-size: 65px; text-align: center; font-family: Chess-7; line-height: 100%; margin: -50px 0 0px 30px">
+            @Model.GetPositionString(ViewBag.listIndex, ViewBag.eventIndex, ViewBag.gameIndex, ViewBag.positionIndex)
+        </p>
+        <p style="text-align: left; background: gray; color: #202020; clear: left;">
+            @Html.ActionLink("|<", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = 0 }, null) |
+            @Html.ActionLink("<<", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = rewPos, posDelta = -5 }, null) |
+            @Html.ActionLink("<", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = prevPos, posDelta = -1 }, null) |
+            @Html.ActionLink(">", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = nextPos, posDelta = 1 }, null) |
+            @Html.ActionLink(">>", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = ffPos, posDelta = 5 }, null) |
+            @Html.ActionLink(">|", "PositionChange", "GameList", new { listIndex = ViewBag.listIndex, eventIndex = ViewBag.eventIndex, gameIndex = ViewBag.gameIndex, posIndex = ViewBag.thisGame.Plies.Count - 1, posDelta = 1000 }, null) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=Model.PrimaryKey */ })
+            }
+        </p>
+    }
+    @if (ViewBag.thisGame == null)
+    { 
+        <p>No game is currently selected...</p>
+    }
 </div>

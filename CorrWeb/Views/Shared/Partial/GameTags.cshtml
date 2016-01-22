@@ -1,5 +1,27 @@
-﻿@model CorrWeb.Models.CorrGame
-<p style="width: 150px; text-align: left; background: aqua; color: #202020; float:left; " >
-    Will be the tagsfor the currently selected game
-    or No Game Currently Selected note
+﻿@model CorrWeb.Models.GameList
+
+<p style="width: 100%; text-align: left;">
+
+    @if (ViewBag != null && ViewBag.listIndex != null && ViewBag.eventIndex != null && ViewBag.gameIndex != null)
+    {
+        ViewBag.thisGame = Model.FindGame(ViewBag.listIndex, ViewBag.eventIndex, ViewBag.gameIndex);
+    }
+    @if (ViewBag.thisGame != null)
+    {
+        <table style="width: 100%; text-align: left; float: left;">
+            @foreach (string tag in ViewBag.thisGame.Tags.Keys)
+            {
+                <tr>
+                    <td>@tag</td>
+                    <td>@ViewBag.thisGame.Tags[tag]</td>
+                </tr>
+            }
+        </table>
+    }
+    @if (ViewBag.thisGame == null)
+    { 
+        <p>No game is currently selected...</p>
+    }
+    <br />
+    <br />
 </p>

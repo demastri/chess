@@ -1,4 +1,5 @@
 ﻿@model CorrWeb.Models.LoginModel
+
 @{
     ViewBag.Title = "My Correspondence Game List";
 }
@@ -24,7 +25,7 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script>
         $(function () {
-            $("#accordion").accordion();
+            $("#functionAcc").accordion({ collapsible: true, active: @ViewBag.selectedPanel });
         });
     </script>
 </head>
@@ -32,18 +33,33 @@
 <div id="main-content">
     @if (@User.Identity.IsAuthenticated)
     {
+        CorrWeb.Models.GameList.GameListContext = new CorrWeb.Models.GameList(User.Identity.Name);
         <p class="error" data-bind="text: error"></p>
         <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
      
-        <div id="accordion">
-            <h3>Game Selection</h3>
-            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameListTree.cshtml", new CorrWeb.Models.GameList(User.Identity.Name))</div>
+        if (ViewBag != null && ViewBag.listIndex != null && ViewBag.eventIndex != null && ViewBag.gameIndex != null)
+        {
+            ViewBag.gName = CorrWeb.Models.GameList.GameListContext.FindGameName(ViewBag.listIndex, ViewBag.eventIndex, ViewBag.gameIndex);
+        }
+
+        
+        
+        <div id="functionAcc">
+            @if (ViewBag.gName == null)
+            {
+                <h3>Game Selection</h3>
+            }
+            @if (ViewBag.gName != null)
+            {
+                <h3>Game Selection: @ViewBag.gName</h3>
+            }
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameListTree.cshtml", CorrWeb.Models.GameList.GameListContext)</div>
             <h3>Game Tags</h3>
-            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameTags.cshtml", null)</div>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameTags.cshtml", CorrWeb.Models.GameList.GameListContext)</div>
             <h3>Board Display</h3>
-            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameBoard.cshtml", null)</div>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/GameBoard.cshtml", CorrWeb.Models.GameList.GameListContext)</div>
             <h3>Detailed Move List</h3>
-            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/MoveListGrid.cshtml", null)</div>
+            <div style="max-height: 700px">@Html.Partial("~/Views/Shared/Partial/MoveListGrid.cshtml", CorrWeb.Models.GameList.GameListContext)</div>
         </div>
            
         

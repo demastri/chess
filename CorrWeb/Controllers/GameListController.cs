@@ -9,14 +9,15 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using CorrWeb.Models;
+using System.Web.Mvc;
 
 namespace CorrWeb.Controllers
 {
-    public class GameListController : ApiController
+    public class GameListController : Controller
     {
         public Dictionary<string, GameList> ListSet;
         GameList currentGameList;
-        
+
         // GET api/GameList
         public IEnumerable<GameList> GetGameLists()
         {
@@ -37,10 +38,34 @@ namespace CorrWeb.Controllers
             return currentGameList = new GameList(id);  // ListSet[id];
         }
 
+        public ActionResult GameChange(int listIndex, string eventIndex, int gameIndex)
+        {
+            ChessPosition.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
+
+            ViewBag.listIndex = listIndex;
+            ViewBag.eventIndex = eventIndex;
+            ViewBag.gameIndex = gameIndex;
+            ViewBag.positionIndex = (thisGame == null ? -1 : (thisGame.Tags["Result"] == "*" ? thisGame.Plies.Count-1 : 0));
+            ViewBag.selectedPanel = 2;
+            return View("~/Views/Home/Index.cshtml");
+        }
+        public ActionResult PositionChange(int listIndex, string eventIndex, int gameIndex, int posIndex)
+        {
+            ChessPosition.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
+
+            ViewBag.listIndex = listIndex;
+            ViewBag.eventIndex = eventIndex;
+            ViewBag.gameIndex = gameIndex;
+            ViewBag.positionIndex = posIndex;
+            ViewBag.selectedPanel = 2;
+            return View("~/Views/Home/Index.cshtml");
+        }
+
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
         }
+
     }
 }

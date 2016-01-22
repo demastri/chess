@@ -1,7 +1,20 @@
-﻿@model CorrWeb.Models.CorrGame
+﻿@model CorrWeb.Models.GameList
 
-<p style="width: 200px; text-align: left; background: yellow; color: #202020; float:left" >
-    Will be the move list for the currently selected game
-    or No Game Currently Selected note
+@ViewBag.thisGame
 
-</p>
+<div style="width: 100%; float: left">
+    @if (ViewBag != null && ViewBag.listIndex != null && ViewBag.eventIndex != null && ViewBag.gameIndex != null)
+    {
+        ViewBag.thisGame = Model.FindGame(ViewBag.listIndex, ViewBag.eventIndex, ViewBag.gameIndex);
+    }
+    @if (ViewBag.thisGame != null)
+    {
+        <p style="width: 100%; text-align: left; float: left">
+            Will be the move list for the currently selected game
+        </p>
+    }
+    @if (ViewBag.thisGame == null)
+    { 
+        <p>No game is currently selected...</p>
+    }
+</div>
