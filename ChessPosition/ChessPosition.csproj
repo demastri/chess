@@ -31,10 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Parser">
       <HintPath>..\..\Compiler\Parser\bin\Debug\Parser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Analysis.cs" />
     <Compile Include="AnalysisRequest.cs" />
+    <Compile Include="ChessPositionDbContext.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="EngineParameters.cs" />
     <Compile Include="Engines\AnalysisFarm.cs" />
@@ -52,6 +60,12 @@
     <Compile Include="Engines\Crafty.cs" />
     <Compile Include="Engines\Stockfish.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameList.cs" />
+    <Compile Include="Migrations\201601252202391_addplies.cs" />
+    <Compile Include="Migrations\201601252202391_addplies.Designer.cs">
+      <DependentUpon>201601252202391_addplies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PGNToken.cs" />
     <Compile Include="PGNTokenizer.cs" />
     <Compile Include="Piece.cs" />
@@ -61,6 +75,29 @@
     <Compile Include="PositionHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Square.cs" />
+    <Compile Include="V2\Comment.cs" />
+    <Compile Include="V2\EFModel\DbGameList.cs" />
+    <Compile Include="V2\EFModel\DbGame.cs" />
+    <Compile Include="V2\PlayerEnum.cs" />
+    <Compile Include="V2\Transforms\FileGameList.cs" />
+    <Compile Include="V2\Game.cs" />
+    <Compile Include="V2\GameList.cs" />
+    <Compile Include="V2\Transforms\PGNGame.cs" />
+    <Compile Include="V2\Piece.cs" />
+    <Compile Include="V2\Pieces\Bishop.cs" />
+    <Compile Include="V2\Pieces\Invalid.cs" />
+    <Compile Include="V2\Pieces\King.cs" />
+    <Compile Include="V2\Pieces\Knight.cs" />
+    <Compile Include="V2\Pieces\Pawn.cs" />
+    <Compile Include="V2\Pieces\Queen.cs" />
+    <Compile Include="V2\Pieces\Rook.cs" />
+    <Compile Include="V2\Ply.cs" />
+    <Compile Include="V2\Position.cs" />
+    <Compile Include="V2\PositionHash.cs" />
+    <Compile Include="V2\Square.cs" />
+    <Compile Include="V2\Transforms\PGNPly.cs" />
+    <Compile Include="V2\Transforms\PGNToken.cs" />
+    <Compile Include="V2\Transforms\PGNTokenizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PipesCommsExamples\ProcessWrappers\ProcessWrappers.csproj">
@@ -77,6 +114,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Sample.pgn" />
   </ItemGroup>
@@ -88,6 +128,12 @@
     <Content Include="Parser\Grammars\PGNSchema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="V2\V2 TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201601252202391_addplies.resx">
+      <DependentUpon>201601252202391_addplies.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

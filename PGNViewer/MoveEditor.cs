@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define useV2
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,7 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+#if useV2
+using ChessPosition.V2;
+#else
 using ChessPosition;
+#endif
 
 namespace PGNViewer
 {
@@ -24,7 +30,9 @@ namespace PGNViewer
             plyNumber = thisPly.Number;
 
             MoveNbrLabel.Text = thisPly.MoveNumber.ToString() + "." + (thisPly.Number % 2 == 0 ? " ..." : "");
+#if !useV2
             CorrMoveText.Text = thisPly.refToken.value;
+#endif
             CorrMoveTime.Value = PGNViewer.CommentTime(thisPly.comments);
             penaltyTime.Text = PGNViewer.PenaltyTime(thisPly.comments).ToString();
             if (penaltyTime.Text == "")
@@ -33,12 +41,21 @@ namespace PGNViewer
         public Ply Extract()
         {
             Ply outPly = new Ply();
+#if useV2
+            outPly.comments.Add(new Comment(false, CorrMoveTime.Value.ToString("MM/dd/yyyy HHmm")));
+            if (penaltyTime.Text != "0")
+                if (plyNumber == 0)
+                    outPly.comments.Add(new Comment(false, "TimeAtStart:" + Convert.ToInt32(penaltyTime.Text)));
+                else
+                    outPly.comments.Add(new Comment(false, "PenaltyDays:" + Convert.ToInt32(penaltyTime.Text)));
+#else
             outPly.comments.Add(new PGNComment(CorrMoveTime.Value.ToString("{MM/dd/yyyy HHmm}")));
             if (penaltyTime.Text != "0")
                 if (plyNumber == 0)
                     outPly.comments.Add(new PGNComment("{TimeAtStart:" + Convert.ToInt32(penaltyTime.Text)+"}"));
                 else
                     outPly.comments.Add(new PGNComment("{PenaltyDays:" + Convert.ToInt32(penaltyTime.Text) + "}"));
+#endif
             return outPly;
         }
 

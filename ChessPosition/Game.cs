@@ -4,31 +4,78 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Data;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChessPosition
 {
     public class Game
     {
-        public Dictionary<string, string> Tags;
-        public List<Ply> Plies;
-        public PGNTerminator GameTerm;
-        public Position CurrentPosition;
-        public PlayerEnum OnMove { get { return CurrentPosition.onMove; } set { CurrentPosition.onMove = value; } }
-        public int RatingWhite;
-        public int RatingBlack;
+        public class Tag
+        {
+            public Guid TagID { get; set; }
+            public string key { get; set; }
+            public string value { get; set; }
+
+            public Tag(string k, string v)
+            {
+                TagID = Guid.NewGuid();
+                key = k;
+                value = v;
+            }
+            public static Dictionary<string, string> DictionaryFromTags(ICollection<Tag> tags)
+            {
+                Dictionary<string, string> outDict = new Dictionary<string, string>();
+                foreach (Tag t in tags)
+                    outDict.Add(t.key, t.value);
+                return outDict;
+            }
+            public static ICollection<Tag> TagsFromDictionary(Dictionary<string, string> dict)
+            {
+                List<Tag> outList = new List<Tag>();
+                foreach (string k in dict.Keys)
+                    outList.Add( new Tag(k, dict[k]) );
+                return outList;
+            }
+        }
 
 
-        public string PGNSource;
+        [Key]
+        public Guid GameID { get; set; }
 
+        // actual internal structures needed by the game definition
+        // these and the walking pieces should be the only ones needed by a client application, no?  
+        // Functions to read/write from a particular location (pgn etc) that read/save a game list should be public too
         public static int Unrated = -1;
         public static int NoRating = -2;
-
+        public int RatingWhite { get { return Convert.ToInt32((Tags.ContainsKey("WhiteElo") ? Tags["WhiteElo"] : (Tags.ContainsKey("WhiteUSCF") ? Tags["WhiteUSCF"] : NoRating.ToString()))); } }
+        public int RatingBlack { get { return Convert.ToInt32((Tags.ContainsKey("BlackElo") ? Tags["BlackElo"] : (Tags.ContainsKey("BlackUSCF") ? Tags["BlackUSCF"] : NoRating.ToString()))); } }
+        public string PlayerWhite { get { return Tags.ContainsKey("White") ? Tags["White"] : ""; } }
+        public string PlayerBlack { get { return Tags.ContainsKey("Black") ? Tags["Black"] : ""; } }
+        public Dictionary<string, string> Tags { get; set; }
+        public ICollection<Ply> Plies { get; set; }
+        public PGNTerminator GameTerm { get; set; }
+        
+        // actual internal structures needed by the game "walking" - current position, etc
+        public Position CurrentPosition;
+        public PlayerEnum OnMove { get { return CurrentPosition.onMove; } set { CurrentPosition.onMove = value; } }
+        public int curPly;
+        public bool EndOfGame { get { return curPly >= Plies.Count; } }
+        
+        // structures needed for PGN translation
+        public enum GameSaveOptions { IncludeTags = 1, IncludeMoves = 2, IncludeComments = 4, IncludeVariations = 8, IncludeAll = 15, SimpleGameScore = 3, MoveListOnly = 2 };
+        private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
+        private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
+        public string PGNSource;
         public List<PGNToken> PGNtokens;
 
-        public int curPly;
-        // these values are NOT included in the hash, since they're defined here...
-        Dictionary<PositionHash, int> repetitions;
+        // structures needed for FEN translation
+        private Dictionary<PositionHash, int> repetitions;
         private int progressCounter;
+        
+        // structures needed for db translation
+        public ICollection<Tag> TagColl { get; set; }
 
         public static List<Game> FindGame(List<PGNTag> tags, List<Game> games)
         {
@@ -47,134 +94,6 @@ namespace ChessPosition
             }
             return outList;
         }
-
-        public static void SaveGameFile(string GameFileLoc, List<Game> games)
-        {
-            StreamWriter tr = new StreamWriter(GameFileLoc);
-            foreach (Game g in games)
-                g.SaveCompact(tr);
-            tr.Flush();
-            tr.Close();
-        }
-        public static void SavePGNFile(string PGNFileLoc, List<Game> games)
-        {
-            StreamWriter tr = new StreamWriter(PGNFileLoc);
-            foreach (Game g in games)
-                g.SavePGN(tr);
-            tr.Flush();
-            tr.Close();
-            // test
-            SaveGameFile(PGNFileLoc + ".gam", games);
-        }
-        public static List<Game> ReadGameFile(string GameFileLoc)
-        {
-            List<Game> GameRef = new List<Game>();
-            if (GameFileLoc != "" && File.Exists(GameFileLoc))
-            {
-                StreamReader tr = new StreamReader(GameFileLoc);
-                while (!tr.EndOfStream)
-                    GameRef.Add(new Game(tr));
-                tr.Close();
-            }
-            return GameRef;
-        }
-        public static List<Game> ReadPGNFile(string PGNFileLoc)
-        {
-            string grammarFile = "Parser/Grammars/PGNSchema.xml";
-            return ReadPGNFile(PGNFileLoc, grammarFile);
-        }
-        public static List<Game> ReadPGNFile(string PGNFileLoc, string GrammarFile)
-        {
-            List<Game> GameRef = new List<Game>();
-            if (PGNFileLoc != "" && File.Exists(PGNFileLoc))
-            {
-                StreamReader tr = new StreamReader(PGNFileLoc);
-                PGNTokenizer nextTokenSet = new PGNTokenizer(tr, GrammarFile);
-                tr.Close();
-                for (int i = 0; i < nextTokenSet.GameCount; i++)
-                {
-                    nextTokenSet.LoadGame(i);
-                    GameRef.Add(new Game(nextTokenSet));
-                }
-            }
-            return GameRef;
-        }
-
-        public Game(StreamReader tr)
-        {
-            // ### read it here...
-            InitGame();
-            bool done = false;
-            while (!done && !tr.EndOfStream)
-            {
-                string compactToken;
-                string lastTokenName;
-                compactToken = ReadNextCompactTokenString(tr);
-                lastTokenName = ParseCompactTokenString(compactToken);
-
-                if (lastTokenName == "Term")
-                    done = true;
-            }
-        }
-        public static string ReadNextCompactTokenString(StreamReader tr)
-        {
-            string outToken = "";
-            // every time this runs, the next usable character should be a '['
-            bool inToken = false;
-            while (!inToken && !tr.EndOfStream)
-                inToken = (tr.Read() == (int)'[');
-            if (inToken)
-            {
-                int lBraceCount = 1;
-                int nextChar = 0;
-                while (!tr.EndOfStream && nextChar != ']' && lBraceCount == 0)
-                {
-                    nextChar = tr.Read();
-                    if (nextChar == '[')
-                        lBraceCount++;
-                    if (nextChar == ']')
-                        lBraceCount--;
-                    outToken += ((char)nextChar).ToString();
-                }
-                if (tr.EndOfStream)
-                    return "";
-                outToken = outToken.Substring(0, outToken.Length - 1);  // strip off the last brace
-            }
-            return outToken;
-        }
-        public static string ReadNextCompactTokenString(string s)
-        {
-            return ReadNextCompactTokenString(new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(s))));
-        }
-        private string ParseCompactTokenString(string compactToken)
-        {
-            string name = "None";
-            if (compactToken.IndexOf("Tag") == 0)
-            {
-                int lbr = compactToken.IndexOf('<');
-                int rbr = compactToken.IndexOf('>');
-                string key = compactToken.Substring(lbr + 1, rbr - lbr - 1);
-                lbr = compactToken.IndexOf('<', lbr + 1);
-                rbr = compactToken.IndexOf('>', rbr + 1);
-                string val = compactToken.Substring(lbr + 1, rbr - lbr - 1);
-                Tags.Add(key, val);
-                name = "Tag";
-            }
-            if (compactToken.IndexOf("Ply") == 0)
-            {
-                Plies.Add(new Ply(compactToken));
-                name = "Ply";
-            }
-            if (compactToken.IndexOf("Term") == 0)
-            {
-                int lbr = compactToken.IndexOf('<');
-                int rbr = compactToken.IndexOf('>');
-                GameTerm = new PGNTerminator(compactToken.Substring(lbr + 1, rbr - lbr - 1));
-                name = "Term";
-            }
-            return name;
-        }
-
 
         public Game(PGNTokenizer pgt)
         {
@@ -197,7 +116,7 @@ namespace ChessPosition
                 return;
             }
         }
-        private void BuildPlyFromToken(PGNToken token, List<Ply> curPlyCollection, ref Ply lastPly, int curPlyNumber)
+        private void BuildPlyFromToken(PGNToken token, ICollection<Ply> curPlyCollection, ref Ply lastPly, int curPlyNumber)
         {
             switch (token.tokenType)
             {
@@ -224,9 +143,9 @@ namespace ChessPosition
                         foreach (List<PGNToken> var in ((PGNMoveString)token).variations)
                         {
                             CurrentPosition = new Position(varStartPosition);
-                            List<Ply> varPlies = HandleVariation(var, curPlyCollection, curPlyNumber);
+                            ICollection<Ply> varPlies = HandleVariation(var, curPlyCollection, curPlyNumber);
                             if (lastPly.variation == null)
-                                lastPly.variation = new List<List<Ply>>();
+                                lastPly.variation = new List<ICollection<Ply>>();
                             lastPly.variation.Add(varPlies);
                         }
                         CurrentPosition = new Position(varStartPosition);
@@ -235,26 +154,6 @@ namespace ChessPosition
             }
         }
 
-        public string GenerateCompactSource()
-        {
-            string outString = "";
-            // tags
-            foreach (string tagKey in Tags.Keys)
-                outString += "[Tag Name<" + tagKey + "> Val<" + Tags[tagKey] + ">]";
-
-            // moves
-            foreach (Ply p in Plies)
-                outString += p.GenerateCompactSource();
-
-            // term
-            outString += "[Term Val<" + GameTerm.value + ">]";
-
-            return outString;
-        }
-
-        public enum GameSaveOptions { IncludeTags = 1, IncludeMoves = 2, IncludeComments = 4, IncludeVariations = 8, IncludeAll = 15, SimpleGameScore = 3, MoveListOnly = 2 };
-
-        private GameSaveOptions SelectedOptions = GameSaveOptions.IncludeAll;
         public string GeneratePGNSource()
         {
             return GeneratePGNSource(-1, GameSaveOptions.IncludeAll);
@@ -285,7 +184,7 @@ namespace ChessPosition
 
             return outString;
         }
-        public string GeneratePGNSource(List<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, GameSaveOptions options)
+        public string GeneratePGNSource(ICollection<Ply> variation, int curPly, int baseStrLen, int newLineTrigger, GameSaveOptions options)
         {
             string outString = "";
             int curLineLength = 0;
@@ -318,6 +217,7 @@ namespace ChessPosition
         }
         private void InitGame()
         {
+            GameID = Guid.NewGuid();
             Plies = new List<Ply>();
             repetitions = new Dictionary<PositionHash, int>();
             PGNtokens = new List<PGNToken>();
@@ -334,8 +234,6 @@ namespace ChessPosition
             ResetPosition();
             PGNSource = "";
             GameTerm = new PGNTerminator(PGNTerminator.terminators[(int)PGNTerminator.TerminatorTypes.InProgress]);
-
-            RatingWhite = RatingBlack = NoRating;
         }
 
         public void ResetPosition()
@@ -365,8 +263,8 @@ namespace ChessPosition
                 if (curPly >= Plies.Count)
                     return false;
                 int prePcCount = CurrentPosition.board.Count;
-                bool wasApawn = CurrentPosition.board[Plies[curPly].src].piece == Piece.PieceType.Pawn;
-                CurrentPosition.MakeMove(Plies[curPly++]);
+                bool wasApawn = CurrentPosition.board[Plies.ElementAt(curPly).src].piece == Piece.PieceType.Pawn;
+                CurrentPosition.MakeMove(Plies.ElementAt(curPly++));
                 bool wasAcapture = prePcCount != CurrentPosition.board.Count; // it was a capture
                 if (wasApawn || wasAcapture)
                     progressCounter = 0;
@@ -380,7 +278,6 @@ namespace ChessPosition
             }
             return true;
         }
-        public bool EndOfGame { get { return curPly >= Plies.Count; } }
         public void BackPosition()
         {
             BackPosition(1);
@@ -409,11 +306,6 @@ namespace ChessPosition
                 Tags[t.key] = valString;
             else
                 Tags.Add(t.key, valString);
-
-            if ((t.key == "WhiteElo" || t.key == "WhiteUSCF") && valString.Length > 0)
-                RatingWhite = Convert.ToInt32(valString);
-            if ((t.key == "BlackElo" || t.key == "BlackUSCF") && valString.Length > 0)
-                RatingBlack = Convert.ToInt32(valString);
         }
 
         public string ToFEN()
@@ -491,10 +383,7 @@ namespace ChessPosition
             return outPly;
         }
 
-        private static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
-        private static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
-
-        public Ply HandleMove(PGNMoveString token, List<Ply> curPlyCollection, int curPlyNumber)
+        public Ply HandleMove(PGNMoveString token, ICollection<Ply> curPlyCollection, int curPlyNumber)
         {
             curPlyNumber++;
             int curMoveNumber = (curPlyNumber - 1) / 2;
@@ -689,15 +578,11 @@ namespace ChessPosition
             int defaultLineTrigger = 90;
             sw.Write(GeneratePGNSource(defaultLineTrigger, GameSaveOptions.IncludeAll));
         }
-        public void SaveCompact(StreamWriter sw)
-        {
-            sw.Write(GenerateCompactSource());
-        }
-        private List<Ply> HandleVariation(List<PGNToken> var, List<Ply> curPlyCollection, int curPlyNumber)
+        private ICollection<Ply> HandleVariation(List<PGNToken> var, ICollection<Ply> curPlyCollection, int curPlyNumber)
         {
             /// the token contains any embedded MoveText
             /// simply turn them into Plies or add to existing plies as necessary, and return the set
-            List<Ply> outPly = new List<Ply>();
+            ICollection<Ply> outPly = new List<Ply>();
             Ply curPly = null;
             foreach (PGNToken token in var)
             {

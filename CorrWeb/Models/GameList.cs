@@ -11,6 +11,7 @@ namespace CorrWeb.Models
 {
     public class GameList
     {
+        ChessPosition.GameList refGameList;
         static public GameList GameListContext = null;
 
         private static Dictionary<string, List<ChessPosition.Game>> gameCache = null;
@@ -30,6 +31,7 @@ namespace CorrWeb.Models
 
         public GameList()
         {
+            refGameList = null;
             panelSelect = ((panelSelect) + 1 % 4);
             selGameIndex = -1;
             if (gameCache == null)
@@ -39,6 +41,7 @@ namespace CorrWeb.Models
         }
         public GameList(string uid)
         {
+            refGameList = new ChessPosition.GameList( uid );
             panelSelect = ((panelSelect) + 1 % 4);
             selGameIndex = -1;
             if (gameCache == null)
@@ -52,7 +55,7 @@ namespace CorrWeb.Models
                 string refDataLocation = "C:\\Projects\\JPD\\BBRepos\\Chess\\CorrWeb\\App_Data\\";
                 string parserLocation = "C:\\Projects\\JPD\\BBRepos\\Chess\\ChessPosition\\Parser\\Grammars\\PGNSchema.xml";
                 string fileLocation = refDataLocation + uid + ".pgn";
-                _games = ChessPosition.Game.ReadPGNFile(fileLocation, parserLocation);
+                _games = refGameList.Games;
                 gameCache.Add(_uid, _games);
             }
             ParseGameLists();

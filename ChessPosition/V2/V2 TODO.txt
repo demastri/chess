@@ -1,0 +1,13 @@
+﻿o Comment
+x Game
+o GameList
+x Piece
+x Ply
+x Position
+x PositionHash
+x Square
+
+Pgn -> v2 class
+v2 class -> pgn
+db -> v2 class
+v2 class -> db

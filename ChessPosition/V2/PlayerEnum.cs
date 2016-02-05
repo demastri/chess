@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessPosition
+namespace ChessPosition.V2
 {
     public enum PlayerEnum
     {

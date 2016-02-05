@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define useV2
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,7 +13,12 @@ using System.Windows.Forms;
 
 using System.IO;
 using System.Xml;
+#if useV2
+using ChessPosition.V2;
+using ChessPosition.V2.PGN;
+#else
 using ChessPosition;
+#endif
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using JPD.Utilities;
@@ -29,8 +36,10 @@ namespace PGNViewer
         // terminators & results updating & displaying properly
         // grouping games in files (in corr mode) by complete / in progress
 
-        List<Game> GameRef;
-        Engine AnalysisEngine;
+        GameList refGameList;
+
+        List<Game> GameRef { get { return refGameList.Games; } }
+        ChessPosition.Engine AnalysisEngine;
         Game curGame;
         string curPGNFileLoc = "";
         TreeNode inProgOnMoveNode = null;
@@ -57,7 +66,11 @@ namespace PGNViewer
         {
             updatingDisplay = true;
             curPGNFileLoc = fn;
-            GameRef = Game.ReadPGNFile(curPGNFileLoc);
+#if useV2
+            refGameList = FileGameList.Load(fn, Settings.AppSettings["MyName"]);
+#else
+            refGameList = new GameList(fn, Settings.AppSettings["MyName"]);
+#endif
             curGame = null;
             saveToolStripMenuItem.Enabled = true;
 
@@ -79,7 +92,7 @@ namespace PGNViewer
                 complNode = GameList.Nodes.Add("Complete");
                 foreach (Game g in GameRef)
                 {
-                    int waitDays = g.Plies.Count <= 0 ? 0 : (DateTime.Now - CommentTime(g.Plies[g.Plies.Count - 1].comments)).Days;
+                    int waitDays = g.Plies.Count <= 0 ? 0 : (DateTime.Now - CommentTime(g.Plies.ElementAt(g.Plies.Count - 1).comments)).Days;
 
                     bool ImWhite = g.Tags["White"] == corrName.Text;
                     bool WOnMove = g.Plies.Count % 2 == 0;
@@ -178,7 +191,7 @@ namespace PGNViewer
             AnalysisEngine = null;
             timer1.Start();
 
-            GameRef = new List<Game>();
+            refGameList = new GameList();
             SetMode(Settings.AppSettings["StartMode"]);
             OpenLastFile();
         }
@@ -286,7 +299,11 @@ namespace PGNViewer
                             BPieces = refStr;
                     }
 
+#if useV2
+                    thisBoard = PokePiece(thisBoard, sq.rank + 1, sq.file + 1, thisPc);
+#else
                     thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, thisPc);
+#endif
                 }
                 FENText.Text = curGame.ToFEN();
             }
@@ -322,6 +339,8 @@ namespace PGNViewer
         }
         private void HighlightPGNMove()
         {
+#if useV2
+#else
             if (curGame == null)
             {
                 PGNText.Text = "";
@@ -364,6 +383,7 @@ namespace PGNViewer
                 if (lastToken != null && lastToken.tokenType == PGNTokenType.MoveNumber)
                     curMoveTextStart -= lastToken.tokenString.Length;
             }
+#endif
         }
         private void HighlightCorrMoveInGrid()
         {
@@ -380,15 +400,19 @@ namespace PGNViewer
             }
         }
 
+#if useV2
+        private string PokePiece(string refStr, Square.Rank rank, Square.File file, Piece pc) // rank/file ranged 1-8
+#else
         private string PokePiece(string refStr, int rank, int file, Piece pc) // rank/file ranged 1-8
+#endif
         {
             if (ckInvertBoard.Checked)
             {
                 rank = 9 - rank;
                 file = 9 - file;
             }
-            int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - rank)) + (file);
-            bool isWhite = (((((rank - 1) % 2) == ((file - 1) % 2)) ? 1 : 0) == 0);   // 1 => b
+            int locToPoke = ((10 + Environment.NewLine.Length) * (1 + 8 - (int)rank)) + (int)(file);
+            bool isWhite = ((((((int)rank - 1) % 2) == (((int)file - 1) % 2)) ? 1 : 0) == 0);   // 1 => b
             char pcChar = isWhite ? Char.ToLower(pc.ToChess7Char) : Char.ToUpper(pc.ToChess7Char);  // upper case is on a dark square...
 
             return JPD.Utilities.Utils.SwapChar(refStr, locToPoke, pcChar);
@@ -421,7 +445,7 @@ namespace PGNViewer
             {
                 AnalysisEngine.Quit();
             }
-            AnalysisEngine = Engine.InitEngine(EngineList.Text);
+            AnalysisEngine = ChessPosition.Engine.InitEngine(EngineList.Text);
             UpdateAnalysis();
             AnalysisEngine.AnalysisUpdateEvent += AnalysisEngine_AnalysisUpdate;
         }
@@ -438,7 +462,7 @@ namespace PGNViewer
                 AnalysisEngine.Stop();
                 if (curGame != null)
                 {
-                    AnalysisEngine.SetPostion(new EngineParameters("stockfish", 50, -1), curGame.ToFEN());
+                    AnalysisEngine.SetPostion(new ChessPosition.EngineParameters("stockfish", 50, -1), curGame.ToFEN());
                 }
             }
         }
@@ -645,12 +669,19 @@ namespace PGNViewer
 
             for (int i = 0; i < curGame.Plies.Count; i++)
             {
-                Ply p = curGame.Plies[i];
+                Ply p = curGame.Plies.ElementAt(i);
+#if !useV2
                 PGNToken s = curGame.PGNtokens[i];
+#endif
                 int thisReflTime = 0;
 
                 corrGridView.Rows[i / 2].Cells["MoveNbr"].Value = 1 + i / 2;
-                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value = p.refToken.value;
+                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value =
+#if useV2
+                    "";
+#else
+                    p.refToken.value;
+#endif
                 if (p.comments != null)
                 {
                     DateTime thisMoveTime = CommentTime(p.comments);
@@ -689,7 +720,11 @@ namespace PGNViewer
                 totalCorrTimeW.ToString() + " / " + usedCorrTimeW.ToString() + " / " + remainCorrTimeW.ToString() + "     " +
                 totalCorrTimeB.ToString() + " / " + usedCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
 
+#if useV2
+            resultCombo.Text = curGame.TerminatorString;
+#else
             resultCombo.Text = curGame.GameTerm.value;
+#endif
         }
 
         private void CorrTimeNow_Click(object sender, EventArgs e)
@@ -703,6 +738,8 @@ namespace PGNViewer
 
         private void CorrUpdate_Click(object sender, EventArgs e)
         {
+#if useV2
+#else
             string possMove = CorrMoveText.Text + " ";
             DateTime possTime = CorrMoveTime.Value;
 
@@ -780,6 +817,7 @@ namespace PGNViewer
 
             if (termToken != null)
                 curGame.PGNtokens.Add(termToken);
+#endif
 
             // move to the end...
             curGame.ResetPosition();
@@ -788,7 +826,11 @@ namespace PGNViewer
             // save the updated game / file
             if (saveFileOnUpdate)
             {
-                Game.SavePGNFile(curPGNFileLoc, GameRef);
+#if useV2
+                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
+#else
+                refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
+#endif
                 ReloadGamesFromFile();
                 Redraw(true, false, true, false);
             }
@@ -847,9 +889,15 @@ namespace PGNViewer
             respDialog.ShowDialog();
 
         }
+#if useV2
+        public static int FindTimeComment(List<Comment> cmts)
+        {
+            foreach (Comment comment in cmts)
+#else
         public static int FindTimeComment(List<PGNComment> cmts)
         {
             foreach (PGNComment comment in cmts)
+#endif
             {
                 // (05/10/2015 1224)
                 DateTime thisTime;
@@ -858,18 +906,30 @@ namespace PGNViewer
             }
             return -1;
         }
+#if useV2
+        public static int FindPenaltyComment(List<Comment> cmts)
+#else
         public static int FindPenaltyComment(List<PGNComment> cmts)
+#endif
         {
             string[] timetags = { "PenaltyDays:", "TimeAtStart:" };
             foreach (string pDayTag in timetags)
+#if useV2
+                foreach (Comment comment in cmts)
+#else
                 foreach (PGNComment comment in cmts)
+#endif
                 {
                     if (comment.value.IndexOf(pDayTag) == 0)
                         return cmts.IndexOf(comment);
                 }
             return -1;
         }
+#if useV2
+        public static int PenaltyTime(List<Comment> cmts)
+#else
         public static int PenaltyTime(List<PGNComment> cmts)
+#endif
         {
             int index = FindPenaltyComment(cmts);
             if (index >= 0)
@@ -880,7 +940,11 @@ namespace PGNViewer
             }
             return 0;
         }
+#if useV2
+        public static void UpdatePenaltyTime(List<Comment> cmts, int newTime, int plyNbr)
+#else
         public static void UpdatePenaltyTime(List<PGNComment> cmts, int newTime, int plyNbr)
+#endif
         {
             int index = FindPenaltyComment(cmts);
             if (index >= 0)
@@ -894,34 +958,57 @@ namespace PGNViewer
             {
                 if (newTime > 0)    // have new time and didn't before (if don't have new time, do nothing...
                 {
+#if useV2
+                    if (plyNbr == 0)
+                        cmts.Add(new Comment(false, "TimeAtStart:" + newTime.ToString()));
+                    else
+                        cmts.Add(new Comment(false, "PenaltyDays:" + newTime.ToString() + ""));
+#else
                     if (plyNbr == 0)
                         cmts.Add(new PGNComment("{TimeAtStart:" + newTime.ToString() + "}"));
                     else
                         cmts.Add(new PGNComment("{PenaltyDays:" + newTime.ToString() + "}"));
+#endif
                 }
             }
         }
+#if useV2
+        public static DateTime CommentTime(List<Comment> cmts)
+#else
         public static DateTime CommentTime(List<PGNComment> cmts)
+#endif
         {
             int index = FindTimeComment(cmts);
             if (index >= 0)
             {
-                DateTime thisTime;
+                DateTime thisTime = DateTime.MinValue;
                 DateTime.TryParseExact(cmts[index].value, "MM/dd/yyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out thisTime);
                 return thisTime;
             }
             return DateTime.MinValue;
         }
+#if useV2
+        public static void UpdateCommentTime(List<Comment> cmts, DateTime newVal)
+#else
         public static void UpdateCommentTime(List<PGNComment> cmts, DateTime newVal)
+#endif
         {
             string outStr = newVal.ToString("MM/dd/yyyy HHmm");
             int index = FindTimeComment(cmts);
             if (index >= 0)
                 cmts[index].value = outStr;
             else
+#if useV2
+                cmts.Add(new Comment(false, outStr));
+#else
                 cmts.Add(new PGNComment("{" + outStr + "}"));
+#endif
         }
+#if useV2
+        public static string CommentTimeString(List<Comment> cmts)
+#else
         public static string CommentTimeString(List<PGNComment> cmts)
+#endif
         {
             int index = FindTimeComment(cmts);
             if (index >= 0)
@@ -965,14 +1052,16 @@ namespace PGNViewer
                             break;
                         case "WhiteMove":
                             lastWPly -= 2 * offset;
+#if !useV2
                             if (lastWPly >= 0)
-                                tempStr = curGame.Plies[lastWPly].refToken.tokenString;
+                                tempStr = curGame.Plies.ElementAt(lastWPly).refToken.tokenString;
+#endif
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteMoveTime":
                             lastWPly -= 2 * offset;
-                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comments != null)
-                                tempStr = CommentTimeString(curGame.Plies[lastWPly].comments) + " " + corrTZ.Text;
+                            if (lastWPly >= 0 && curGame.Plies.ElementAt(lastWPly).comments != null)
+                                tempStr = CommentTimeString(curGame.Plies.ElementAt(lastWPly).comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "WhiteReflTime":
@@ -983,8 +1072,8 @@ namespace PGNViewer
                             break;
                         case "WhiteClockStart":
                             lastWPly -= 1 + (2 * offset);
-                            if (lastWPly >= 0 && curGame.Plies[lastWPly].comments != null)
-                                tempStr = CommentTimeString(curGame.Plies[lastWPly].comments) + " " + corrTZ.Text;
+                            if (lastWPly >= 0 && curGame.Plies.ElementAt(lastWPly).comments != null)
+                                tempStr = CommentTimeString(curGame.Plies.ElementAt(lastWPly).comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
@@ -1004,8 +1093,10 @@ namespace PGNViewer
                             goto case "BlackMove";
                         case "BlackMove":
                             lastBPly -= 2 * offset;
+#if !useV2
                             if (lastBPly >= 0 && curGame.Plies.Count > lastBPly)
-                                tempStr = curGame.Plies[lastBPly].refToken.tokenString;
+                                tempStr = curGame.Plies.ElementAt(lastBPly).refToken.tokenString;
+#endif
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackGridMoveTime":
@@ -1014,8 +1105,8 @@ namespace PGNViewer
                             goto case "BlackMoveTime";
                         case "BlackMoveTime":
                             lastBPly -= 2 * offset;
-                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comments != null)
-                                tempStr = CommentTimeString(curGame.Plies[lastBPly].comments) + " " + corrTZ.Text;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies.ElementAt(lastBPly).comments != null)
+                                tempStr = CommentTimeString(curGame.Plies.ElementAt(lastBPly).comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
                         case "BlackGridReflTime":
@@ -1034,8 +1125,8 @@ namespace PGNViewer
                             goto case "BlackClockStart";
                         case "BlackClockStart":
                             lastBPly -= 1 + (2 * offset);
-                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies[lastBPly].comments != null)
-                                tempStr = CommentTimeString(curGame.Plies[lastBPly].comments) + " " + corrTZ.Text;
+                            if (lastBPly >= 0 && curGame.Plies.Count > lastBPly && curGame.Plies.ElementAt(lastBPly).comments != null)
+                                tempStr = CommentTimeString(curGame.Plies.ElementAt(lastBPly).comments) + " " + corrTZ.Text;
                             refStr = refStr.Replace(token, tempStr);
                             break;
 
@@ -1060,6 +1151,8 @@ namespace PGNViewer
                             tempStr = (remainCorrTimeB + lastCorrTimeB).ToString() + " / " + lastCorrTimeB.ToString() + " / " + remainCorrTimeB.ToString();
                             refStr = refStr.Replace(token, tempStr);
                             break;
+#if useV2
+#else
                         case "PGNWithTags":
                             // actually just move numbers and moves here...
                             string thisScore = curGame.GeneratePGNSource(10000, Game.GameSaveOptions.SimpleGameScore);
@@ -1069,6 +1162,7 @@ namespace PGNViewer
                             // actually just move numbers and moves here...
                             refStr = refStr.Replace(token, "<br>" + curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly) + "<br><br>");
                             break;
+#endif
                         case "Diagram":
                             // pull the current text from the board display
                             string boardText = boardDisplay.Text;
@@ -1166,7 +1260,9 @@ namespace PGNViewer
             if (GameList.SelectedNode != null && GameList.SelectedNode.Tag != null)
             {
                 curGame = (Game)GameList.SelectedNode.Tag;
+#if !useV2
                 PGNText.Text = curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly);
+#endif
             }
         }
         bool initTags = false;
@@ -1272,10 +1368,17 @@ namespace PGNViewer
             int rowLength = 12;
             int rowBoardOffset = 1;
             int startIndex = boardDisplay.SelectionStart;
+#if useV2
+            dragStartSquare = new Square(
+                (Square.Rank)(8 - startIndex / rowLength),
+                (Square.File)((startIndex % rowLength) - rowBoardOffset)
+                );
+#else
             dragStartSquare = new Square(
                 (byte)(8 - startIndex / rowLength),
                 (byte)((startIndex % rowLength) - rowBoardOffset)
                 );
+#endif
         }
 
         private void boardDisplay_DoubleClick(object sender, EventArgs e)
@@ -1291,6 +1394,16 @@ namespace PGNViewer
             dragStartPosition = boardDisplay.SelectionStart = startIndex;
             boardDisplay.SelectionLength = 1;
 
+#if useV2
+            Square.Rank thisRow = (Square.Rank)(8 - startIndex / rowLength);
+            Square.File thisCol = (Square.File)((startIndex % rowLength) - rowBoardOffset);
+
+            if (ckInvertBoard.Checked)
+            {
+                thisRow = (7 - thisRow);
+                thisCol = (7 - thisCol);
+            }
+#else
             byte thisRow = (byte)(8 - startIndex / rowLength);
             byte thisCol = (byte)((startIndex % rowLength) - rowBoardOffset);
 
@@ -1299,6 +1412,7 @@ namespace PGNViewer
                 thisRow = (byte)(7 - thisRow);
                 thisCol = (byte)(7 - thisCol);
             }
+#endif
 
             if (!inDrag)   // start one...
             {
@@ -1314,9 +1428,10 @@ namespace PGNViewer
 
                 // at this point, generate the appropriate move text and populate the proposed move text box
                 // Piece-target square, augmented for source square, capture - including ep, castle
-
+#if !useV2
                 Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
                 CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
+#endif
 
                 CleanupDrag();
             }
@@ -1367,10 +1482,14 @@ namespace PGNViewer
 
         private void PopMoveButton_Click(object sender, EventArgs e)
         {
-            curGame.Plies.RemoveAt(curGame.Plies.Count - 1);
+            curGame.Plies.Remove(curGame.Plies.ElementAt(curGame.Plies.Count - 1));
             if (saveFileOnUpdate)
             {
-                Game.SavePGNFile(curPGNFileLoc, GameRef);
+#if useV2
+                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
+#else
+                refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
+#endif
                 ReloadGamesFromFile();
             }
             else
@@ -1384,7 +1503,9 @@ namespace PGNViewer
 
         private void resultCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+#if useV2
             curGame.Tags["Result"] = (string)resultCombo.SelectedItem;
+#else
             curGame.GameTerm = new PGNTerminator((string)resultCombo.SelectedItem);
             foreach (PGNToken t in curGame.PGNtokens)
                 if (t.tokenType == PGNTokenType.Terminator)
@@ -1396,9 +1517,14 @@ namespace PGNViewer
             Game oldGame = curGame;
 
             curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly);
+#endif
             if (!updatingDisplay && saveFileOnUpdate)
             {
-                Game.SavePGNFile(curPGNFileLoc, GameRef);
+#if useV2
+                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
+#else
+                refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
+#endif
                 ReloadGamesFromFile();
             }
             else
@@ -1418,6 +1544,16 @@ namespace PGNViewer
             dragStartPosition = boardDisplay.SelectionStart = startIndex;
             boardDisplay.SelectionLength = 1;
 
+#if useV2
+            Square.Rank thisRow = (Square.Rank)(8 - startIndex / rowLength);
+            Square.File thisCol = (Square.File)((startIndex % rowLength) - rowBoardOffset);
+
+            if (ckInvertBoard.Checked)
+            {
+                thisRow = (7 - thisRow);
+                thisCol = (7 - thisCol);
+            }
+#else
             byte thisRow = (byte)(8 - startIndex / rowLength);
             byte thisCol = (byte)((startIndex % rowLength) - rowBoardOffset);
 
@@ -1426,6 +1562,7 @@ namespace PGNViewer
                 thisRow = (byte)(7 - thisRow);
                 thisCol = (byte)(7 - thisCol);
             }
+#endif
 
             return new Square(thisRow, thisCol);
         }
@@ -1477,9 +1614,10 @@ namespace PGNViewer
 
                 // at this point, generate the appropriate move text and populate the proposed move text box
                 // Piece-target square, augmented for source square, capture - including ep, castle
-
+#if !useV2
                 Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
                 CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
+#endif
                 dragEndPosition = GetCharIndexFromMouseLocation(e);
                 boardDisplay.SelectionStart = dragEndPosition;
                 boardDisplay.SelectionLength = 1;
@@ -1501,7 +1639,11 @@ namespace PGNViewer
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FileHasChanged)
-                Game.SavePGNFile(curPGNFileLoc, GameRef);
+#if useV2
+                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
+#else
+                refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
+#endif
             FileHasChanged = false;
         }
 
@@ -1602,13 +1744,13 @@ namespace PGNViewer
         private void corrGridView_DoubleClick(object sender, EventArgs e)
         {
             MoveEditor editorDialog = new MoveEditor();
-            editorDialog.Init(curGame.Plies[curGame.curPly - 1]);
+            editorDialog.Init(curGame.Plies.ElementAt(curGame.curPly - 1));
             if (editorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 // update the move time and penalty time
                 Ply outPly = editorDialog.Extract();
-                UpdateCommentTime(curGame.Plies[curGame.curPly - 1].comments, CommentTime(outPly.comments));
-                UpdatePenaltyTime(curGame.Plies[curGame.curPly - 1].comments, PenaltyTime(outPly.comments), curGame.curPly - 1);
+                UpdateCommentTime(curGame.Plies.ElementAt(curGame.curPly - 1).comments, CommentTime(outPly.comments));
+                UpdatePenaltyTime(curGame.Plies.ElementAt(curGame.curPly - 1).comments, PenaltyTime(outPly.comments), curGame.curPly - 1);
                 Redraw(false, false, false, true);
             }
         }

@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
   <Setting name="MRUList">
-    <SettingValue id="1" value="c:\projects\jpd\bbrepos\chess\data\corr.pgn" />
   </Setting>
-  <Setting name="OpenLast" value="y" />
+  <Setting name="OpenLast" value="n" />
   <Setting name="StartMode" value="correspondence" />
   <Setting name="CorrTemplate" value="CCTemplate" />
   <Setting name="MyName" value="SomeName" />
