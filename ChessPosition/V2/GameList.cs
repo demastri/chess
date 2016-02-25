@@ -10,19 +10,36 @@ namespace ChessPosition.V2
     {
         public List<Game> Games { get; set; }
         public string User { get; set; }
+        public string connDetail{ get; set; }
 
-        protected virtual void Load() {}
-        public virtual void Save() {}
+        public virtual void Load() { }
+        public virtual void Save() { }
+
+        public void Save(string conn, string userInfo) 
+        {
+            connDetail = conn;
+            User = userInfo;
+
+            Save();
+        }
+        public void Load(string conn, string userInfo)
+        {
+            connDetail = conn;
+            User = userInfo;
+
+            Load();
+        }
 
         public GameList()
         {
             Games = new List<Game>();
             User = "";
         }
-        public GameList(string user)
+        public GameList(string conn, string user)
         {
-            Games = new List<Game>();
+            connDetail = conn;
             User = user;
+            Games = new List<Game>();
         }
         
         public Game this[int i]

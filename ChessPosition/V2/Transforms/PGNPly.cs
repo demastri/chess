@@ -9,13 +9,13 @@ namespace ChessPosition.V2.PGN
 {
     public class PGNPly
     {
-        public static string GeneratePGNSource(Position curPos, Ply thisPly, int curPlyNbr, PGNGame.GameSaveOptions options)
+        public static string GeneratePGNSource(Position curPos, Ply thisPly, int curPlyNbr, PGNGame.GameSaveOptions options, bool includeMoveNumber)
         {
             string outString = "";
 
             bool WOnMove = (curPlyNbr % 2 == 0);
             int curMove = (curPlyNbr / 2 + 1);
-            if (WOnMove)
+            if (WOnMove && includeMoveNumber)
             {
                 outString += curMove.ToString() + ".";
             }
@@ -54,7 +54,7 @@ namespace ChessPosition.V2.PGN
                         int varPlyNbr = curPlyNbr;
                         foreach (Ply nextPly in subVar)
                         {
-                            string varString = PGNPly.GeneratePGNSource(varPos, nextPly, varPlyNbr++, options).Trim();
+                            string varString = PGNPly.GeneratePGNSource(varPos, nextPly, varPlyNbr++, options, includeMoveNumber).Trim();
                             outString += "(" + varString + ") ";
                             varPos.MakeMove(nextPly);
                         }
@@ -83,7 +83,8 @@ namespace ChessPosition.V2.PGN
             //  ### promotion and check/mate would be nice, too...
 
             // castle
-            if (thisPc.piece == Piece.PieceType.King && src.file == Square.File.FE)
+            if (thisPc.piece == Piece.PieceType.King && src.file == Square.File.FE && 
+                (dest.file == Square.File.FC ||dest.file == Square.File.FG))
             {
                 if (dest.file == Square.File.FG &&
                     (refPos.castleRights & (byte)

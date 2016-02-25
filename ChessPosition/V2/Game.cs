@@ -16,16 +16,31 @@ namespace ChessPosition.V2
 
         public enum Terminators { WWin = 0, BWin = 1, Draw = 2, InProgress = 3 };
         public static List<string> terminators = new List<string>() { "1-0", "0-1", "1/2-1/2", "*" };
+        protected static List<string> moveDecorators = new List<string>() { "#", "+", "++", "ep", "e.p.", "x", "=", "(", ")" };
+        protected static List<string> castleMarkers = new List<string>() { "O-O", "O-O-O" };
 
         public static int Unrated = -1;
         public static int NoRating = -2;
-        
+
         #endregion
 
         #region constructors (empty)
         public Game()
         {
             InitGame();
+        }
+        public Game(Game refGame)
+        {
+            CopyGame(refGame);
+        }
+
+        protected virtual void CopyGame(Game refGame)
+        {
+            InitGame();
+
+            Plies = refGame.Plies;
+            Terminator = refGame.Terminator;
+            Tags = refGame.Tags;
         }
 
         protected virtual void InitGame()
@@ -88,11 +103,16 @@ namespace ChessPosition.V2
         {
             return CurrentPosition.ToFEN(progressCounter, curPly / 2 + 1);
         }
-        
+
         #endregion
 
         #region domain logic
-    
+
+        public bool AdvanceTo(int plyNbr)
+        {
+            ResetPosition();
+            return AdvancePosition(plyNbr);
+        }
         public bool AdvancePosition()
         {
             return AdvancePosition(1);
@@ -142,6 +162,176 @@ namespace ChessPosition.V2
                 targetPly = 0;
             ResetPosition();
             return AdvancePosition(targetPly);
+        }
+        public Ply CreateMove(Square src, Square dest)
+        {
+            Ply outPly = new Ply(src, dest);
+
+            Piece thisPc = CurrentPosition.PieceAt(src);
+            Piece capPc = CurrentPosition.PieceAt(dest);
+
+            if (thisPc == null || thisPc.color != OnMove || (capPc != null && capPc.color == OnMove))
+                return null;
+            List<Square> options = CurrentPosition.FindPieceWithTarget(thisPc, dest, src);
+            if (options.Count != 1)
+                return null;
+            // at this point, thisPc is the right color, and could move from src->dest
+            // Fully defined piece text = (Piece desig)(constrain row)(constrain col)(capture flag)(dest sq)
+
+            return outPly;
+        }
+        public void AddMoveToPly(string sanMove, Ply outPly)
+        {
+            int curPlyNumber = curPly + 1;
+            int curMoveNumber = (curPlyNumber - 1) / 2;
+            PlayerEnum curPlayer = (curPlyNumber % 2 == 1 ? PlayerEnum.White : PlayerEnum.Black);
+            Square.Rank Krank = (curPlayer == PlayerEnum.White ? Square.Rank.R1 : Square.Rank.R8);
+
+            string locString = sanMove.Trim();
+
+            for (int i = 0; i < moveDecorators.Count; i++)
+                locString = locString.Replace(moveDecorators[i], "");
+
+            if (castleMarkers.Contains(locString))
+            {
+                // src / dest squares should be easy here
+                if (locString == castleMarkers[0]) // K-Side
+                {
+                    outPly.src = new Square(Krank, Square.File.FE);
+                    outPly.dest = new Square(Krank, Square.File.FG);
+                }
+                if (locString == castleMarkers[1]) // Q-Side
+                {
+                    outPly.src = new Square(Krank, Square.File.FE);
+                    outPly.dest = new Square(Krank, Square.File.FC);
+                }
+                return; // move is complete - return
+            }
+            else
+            {
+                Piece.PieceType movePcType = Piece.PieceType.Pawn;
+                Piece.PieceType promoPcType = Piece.PieceType.Invalid;
+
+                // it's a piece designator, other than a P
+                if (char.IsUpper(locString[0]))
+                {
+                    movePcType = Piece.FromChar(locString[0]);
+                    if (movePcType == Piece.PieceType.Invalid)
+                    {
+                        // should handle the error more gracefully than this ...
+                        System.Console.WriteLine("Couldn't properly process this move string: " + sanMove);
+                        return;
+                    }
+                    locString = locString.Substring(1); // trim off the piece identifier
+                }
+
+                // set up the piece we're working with
+                Piece curPiece = Piece.PieceFactory(curPlayer, movePcType);
+                Piece promoPiece = null;
+
+                if (curPiece.piece == Piece.PieceType.Pawn && char.IsUpper(locString[locString.Length - 1]))   // it's a promotion designator...
+                {
+                    promoPcType = Piece.FromChar(locString[locString.Length - 1]);
+                    promoPiece = Piece.PieceFactory(curPlayer, promoPcType);
+                    locString = locString.Substring(0, locString.Length - 1); // trim off the promotionidentifier
+                    outPly.promo = promoPiece;
+                }
+
+                // the rest of the move string designates the targetsquare, and potentially a source hint
+                // N2d4, Ree6, Re2e6, cd6, cd, cde.p., cd6e.p., d5, e8Q e8=Q e8(Q) potentially with a + or # afterwards
+                // move decorators removed above since O-O could be O-O+....
+                // so the resulting string can only be [optional src file][optional src rank][dest file][optional (for pawn caps) dest rank]
+
+
+                // find src and dest squares...
+                Square TargetSquare = new Square();
+                Square SourceSquare = new Square();
+                List<Square> options;
+                Square constraint = new Square(Square.Rank.NONE, Square.File.NONE);
+                switch (locString.Length)
+                {
+                    case 2: // either we have an explicit target square (e6), or an unambiguous P capture (dc)
+                        if (Char.IsDigit(locString[1])) // ok - target is specified
+                        {
+                            TargetSquare.file = (Square.File)(locString[0] - 'a');
+                            TargetSquare.rank = (Square.Rank)(locString[1] - '1');
+                            options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, constraint);
+                            if (options.Count != 1)
+                            {
+                                System.Console.WriteLine("couldn't unambiguously process move <no pc for target> " + sanMove);
+                                return;
+                            }
+                            outPly.src = new Square(options[0]);
+                            outPly.dest = new Square(TargetSquare);
+                            return;
+                        }
+                        else
+                        {
+                            // this has to be a file/file pawn capture
+                            if (curPiece.piece != Piece.PieceType.Pawn)
+                            {
+                                System.Console.WriteLine("couldn't unambiguously process move <not P for col capture> " + sanMove);
+                                return;
+                            }
+
+                            // cd -> how to id the source and target squares??  certainly both squares are col constrained
+                            // the source square is constrained but how to constrain the targets?
+                            // it's a capture on that file - we can start by listing all occupied squares on that file
+                            // any source constrained returns should be unambiguously correct...
+                            // if we could take more than one piece with a pawn on that file from this one it would need another qualifier
+
+                            // ### want to write:
+                            SourceSquare = new Square(Square.Rank.NONE, (Square.File)(locString[0] - 'a'));
+                            constraint = new Square(Square.Rank.NONE, (Square.File)(locString[1] - 'a'));
+                            options = CurrentPosition.FindPieceWithTarget(curPiece, constraint, SourceSquare);
+                            // and this should be constrained in an appropriate way
+                            if (options.Count != 1)
+                            {
+                                System.Console.WriteLine("couldn't unambiguously process move <col capture>  " + sanMove);
+                                return;
+                            }
+                            constraint.rank = options[0].rank + (curPlayer == PlayerEnum.White ? 1 : -1);
+                            outPly.src = new Square(options[0]);
+                            outPly.dest = new Square(constraint);
+                            // ###
+                        }
+
+                        break;
+                    case 3:
+                        constraint.file = (Char.IsLetter(locString[0]) ? (Square.File)(locString[0] - 'a') : Square.File.NONE);
+                        constraint.rank = (Char.IsDigit(locString[0]) ? (Square.Rank)(locString[0] - '1') : Square.Rank.NONE);
+                        TargetSquare = new Square(
+                            (Square.Rank)(locString[2] - '1'),
+                            (Square.File)(locString[1] - 'a'));
+                        options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, constraint);
+                        // at this point, there is a restriction on either row or col to validate
+                        if (options.Count != 1)
+                        {
+                            System.Console.WriteLine("couldn't unambiguously process partially constrained move  " + sanMove);
+                            return;
+                        }
+                        outPly.src = new Square(options[0]);
+                        outPly.dest = new Square(TargetSquare);
+                        break;
+                    case 4:
+                        SourceSquare = new Square(
+                            (Square.Rank)(locString[1] - '1'),
+                            (Square.File)(locString[0] - 'a'));
+                        TargetSquare = new Square(
+                            (Square.Rank)(locString[3] - '1'),
+                            (Square.File)(locString[2] - 'a'));
+                        options = CurrentPosition.FindPieceWithTarget(curPiece, TargetSquare, SourceSquare);
+                        if (!options.Contains(SourceSquare) || options.Count != 1)
+                        {
+                            System.Console.WriteLine("couldn't find specified piece for move  " + sanMove);
+                            return;
+                        }
+                        outPly.src = new Square(SourceSquare);
+                        outPly.dest = new Square(TargetSquare);
+                        break;
+                }
+            }
+            return;
         }
 
         #endregion

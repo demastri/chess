@@ -181,10 +181,14 @@ namespace ChessPosition.V2.PGN
                 key = value = "";
             }
         }
+        public override string ToString()
+        {
+            return "[" + key + ", " + value + "]";
+        }
     }
     public class PGNMoveNumber : PGNToken
     {
-        public int value;
+        new public int value;
 
         public PGNMoveNumber(string s)
         {
@@ -204,6 +208,10 @@ namespace ChessPosition.V2.PGN
                 value = Convert.ToInt32(s.Substring(offset, nbrEnd - offset));
                 tokenString = s.Substring(offset, nbrEnd - offset + 1);
             }
+        }
+        public override string ToString()
+        {
+            return "[" + value+ ".]";
         }
     }
     public class PGNMoveString : PGNToken
@@ -226,6 +234,10 @@ namespace ChessPosition.V2.PGN
             value = s;
             annotation = "";
             NAG = -1;
+        }
+        public override string ToString()
+        {
+            return "[" + value + "]";
         }
     }
 
@@ -250,6 +262,10 @@ namespace ChessPosition.V2.PGN
             }
 
         }
+        public override string ToString()
+        {
+            return "{" + value + "}";
+        }
     }
 
     public class PGNTerminator : PGNToken
@@ -260,6 +276,11 @@ namespace ChessPosition.V2.PGN
             tokenType = PGNTokenType.Terminator;
             tokenString = value = s;
         }
+        public override string ToString()
+        {
+            return "<" + value + ">";
+        }
+
     }
 
     public class PGNEscape : PGNToken

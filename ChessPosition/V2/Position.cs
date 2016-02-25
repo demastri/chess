@@ -17,7 +17,8 @@ namespace ChessPosition.V2
         #region enums and static definitions
 
         public enum CastleRights { KS_White = 0x01, QS_White = 0x02, KS_Black = 0x04, QS_Black = 0x08 };
-        public static Position StartPosition = new Position();
+        public static string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        public static Position StartPosition { get {return new Position(startFen); } }
         public PositionHash Hash { get { return new PositionHash(this); } }
 
         #endregion
@@ -30,7 +31,10 @@ namespace ChessPosition.V2
         }
         public Position(Position p) // copy-con
         {
-            Clone(p);
+            if (p == null)
+                Clone(StartPosition);
+            else 
+                Clone(p);
         }
         public Position(PositionHash ph)
         {
@@ -210,7 +214,6 @@ namespace ChessPosition.V2
 
         private void ResetStartPosition()
         {
-            string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             Clone(startFen);
         }
 
@@ -222,18 +225,39 @@ namespace ChessPosition.V2
         public List<Square> FindPieceWithTarget(Piece p, Square target, Square sourceConstraint)
         {
             List<Square> options = new List<Square>();
-            foreach (Square source in board.Keys)
-            {
-                if (board[source] == p && p.CouldMoveTo(source, target, board, epLoc, castleRights))
+            if (target.rank == Square.Rank.NONE)
+                for (Square.Rank r = Square.Rank.R1; r <= Square.Rank.R8; r++)
                 {
-                    if ((sourceConstraint.rank == Square.Rank.NONE || source.rank == sourceConstraint.rank) &&
-                        (sourceConstraint.file == Square.File.NONE || source.file == sourceConstraint.file))
+                    Square thisTarget = new Square(r, target.file);
+                    List<Square> localOptions = FindPieceWithTarget(p, thisTarget, sourceConstraint);
+                    options.AddRange(localOptions);
+                }
+            else
+            {
+                if (target.file == Square.File.NONE)
+                    for (Square.File f = Square.File.FA; f <= Square.File.FH; f++)
                     {
-                        Position possPos = new Position(this);
-                        Ply testPly = new Ply(source, target, p);    // i think promo piece is irrelevant here, if the piece is pinned, it doesn't matter what it promotes to...
-                        possPos.MakeMove(testPly);
-                        if (!possPos.IsStillCheck())
-                            options.Add(source);
+                        Square thisTarget = new Square(target.rank, f);
+                        List<Square> localOptions = FindPieceWithTarget(p, thisTarget, sourceConstraint);
+                        options.AddRange(localOptions);
+                    }
+                else
+                {
+
+                    foreach (Square source in board.Keys)
+                    {
+                        if (board[source] == p && p.CouldMoveTo(source, target, board, epLoc, castleRights))
+                        {
+                            if ((sourceConstraint.rank == Square.Rank.NONE || source.rank == sourceConstraint.rank) &&
+                                (sourceConstraint.file == Square.File.NONE || source.file == sourceConstraint.file))
+                            {
+                                Position possPos = new Position(this);
+                                Ply testPly = new Ply(source, target, p);    // i think promo piece is irrelevant here, if the piece is pinned, it doesn't matter what it promotes to...
+                                possPos.MakeMove(testPly);
+                                if (!possPos.IsStillCheck())
+                                    options.Add(source);
+                            }
+                        }
                     }
                 }
             }
@@ -360,12 +384,12 @@ namespace ChessPosition.V2
                 }
                 else
                 {
-                    epLoc = Square.None;
+                    epLoc = Square.None();
                 }
             }
             else
             {
-                epLoc = Square.None;
+                epLoc = Square.None();
             }
 
             onMove = (onMove == PlayerEnum.White ? PlayerEnum.Black : PlayerEnum.White);

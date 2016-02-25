@@ -66,6 +66,10 @@ namespace ChessPosition.V2
                     return new Pieces.Knight(p);
                 case PieceType.Bishop:
                     return new Pieces.Bishop(p);
+                case PieceType.King:
+                    return new Pieces.King(p);
+                case PieceType.Queen:
+                    return new Pieces.Queen(p);
             }
             return new Pieces.Invalid();
         }
@@ -79,7 +83,7 @@ namespace ChessPosition.V2
         }
         protected virtual void Init(PlayerEnum p, PieceType t)
         {
-            pcValue = (byte)(((byte)t & PcColorMask) + (((byte)p << 4) & PcTypeMask));
+            pcValue = (byte)(((byte)p & PcColorMask) + (((byte)t << 4) & PcTypeMask));
         }
         #endregion
 
@@ -102,7 +106,11 @@ namespace ChessPosition.V2
 
         override public string ToString()
         {
-            return PieceFactory(PlayerEnum.White, piece).ToAscii.ToString();
+            return ToFENString().ToUpper();
+        }
+        public string ToFENString()
+        {
+            return ToAscii.ToString();
         }
         public static Piece.PieceType FromChar(char c)
         {

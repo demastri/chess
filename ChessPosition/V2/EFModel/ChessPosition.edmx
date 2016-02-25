@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CorrMgrModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="CorrMgrModelStoreContainer">
+          <EntitySet Name="Comments" EntityType="CorrMgrModel.Store.Comments" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Games" EntityType="CorrMgrModel.Store.Games" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Plies" EntityType="CorrMgrModel.Store.Plies" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="CorrMgrModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tags" EntityType="CorrMgrModel.Store.Tags" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="CorrMgrModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Variations" EntityType="CorrMgrModel.Store.Variations" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Comments_Plies" Association="CorrMgrModel.Store.FK_Comments_Plies">
+            <End Role="Plies" EntitySet="Plies" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_Users" Association="CorrMgrModel.Store.FK_Games_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plies_Games" Association="CorrMgrModel.Store.FK_Plies_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Plies" EntitySet="Plies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plies_Variations" Association="CorrMgrModel.Store.FK_Plies_Variations">
+            <End Role="Variations" EntitySet="Variations" />
+            <End Role="Plies" EntitySet="Plies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tags_Games" Association="CorrMgrModel.Store.FK_Tags_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Variations_Plies" Association="CorrMgrModel.Store.FK_Variations_Plies">
+            <End Role="Plies" EntitySet="Plies" />
+            <End Role="Variations" EntitySet="Variations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PlyID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CommentValue" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="commentEndsLine" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Games">
+          <Key>
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="GameID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Terminator" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Plies">
+          <Key>
+            <PropertyRef Name="PlyID" />
+          </Key>
+          <Property Name="PlyID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GameID" Type="uniqueidentifier" />
+          <Property Name="VariationID" Type="uniqueidentifier" />
+          <Property Name="PlyNumber" Type="int" Nullable="false" />
+          <Property Name="SourceSquare" Type="int" Nullable="false" />
+          <Property Name="DestSquare" Type="int" Nullable="false" />
+          <Property Name="PromoPiece" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GameID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TagName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="TagValue" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DisplayName" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Variations">
+          <Key>
+            <PropertyRef Name="VariationID" />
+          </Key>
+          <Property Name="VariationID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="BasePlyID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="VariationOrderID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Comments_Plies">
+          <End Role="Plies" Type="CorrMgrModel.Store.Plies" Multiplicity="1" />
+          <End Role="Comments" Type="CorrMgrModel.Store.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plies">
+              <PropertyRef Name="PlyID" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="PlyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_Users">
+          <End Role="Users" Type="CorrMgrModel.Store.Users" Multiplicity="1" />
+          <End Role="Games" Type="CorrMgrModel.Store.Games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plies_Games">
+          <End Role="Games" Type="CorrMgrModel.Store.Games" Multiplicity="0..1" />
+          <End Role="Plies" Type="CorrMgrModel.Store.Plies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Plies">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plies_Variations">
+          <End Role="Variations" Type="CorrMgrModel.Store.Variations" Multiplicity="0..1" />
+          <End Role="Plies" Type="CorrMgrModel.Store.Plies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Variations">
+              <PropertyRef Name="VariationID" />
+            </Principal>
+            <Dependent Role="Plies">
+              <PropertyRef Name="VariationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tags_Games">
+          <End Role="Games" Type="CorrMgrModel.Store.Games" Multiplicity="1" />
+          <End Role="Tags" Type="CorrMgrModel.Store.Tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Tags">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Variations_Plies">
+          <End Role="Plies" Type="CorrMgrModel.Store.Plies" Multiplicity="1" />
+          <End Role="Variations" Type="CorrMgrModel.Store.Variations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plies">
+              <PropertyRef Name="PlyID" />
+            </Principal>
+            <Dependent Role="Variations">
+              <PropertyRef Name="BasePlyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CorrMgrModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CorrMgrEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Comments" EntityType="CorrMgrModel.Comment" />
+          <EntitySet Name="Games" EntityType="CorrMgrModel.Game" />
+          <EntitySet Name="Plies" EntityType="CorrMgrModel.Ply" />
+          <EntitySet Name="Tags" EntityType="CorrMgrModel.Tag" />
+          <EntitySet Name="Users" EntityType="CorrMgrModel.User" />
+          <EntitySet Name="Variations" EntityType="CorrMgrModel.Variation" />
+          <AssociationSet Name="FK_Comments_Plies" Association="CorrMgrModel.FK_Comments_Plies">
+            <End Role="Plies" EntitySet="Plies" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Games_Users" Association="CorrMgrModel.FK_Games_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Games" EntitySet="Games" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plies_Games" Association="CorrMgrModel.FK_Plies_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Plies" EntitySet="Plies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tags_Games" Association="CorrMgrModel.FK_Tags_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Plies_Variations" Association="CorrMgrModel.FK_Plies_Variations">
+            <End Role="Variations" EntitySet="Variations" />
+            <End Role="Plies" EntitySet="Plies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Variations_Plies" Association="CorrMgrModel.FK_Variations_Plies">
+            <End Role="Plies" EntitySet="Plies" />
+            <End Role="Variations" EntitySet="Variations" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="CorrMgrModel.sysdiagram" />
+        </EntityContainer>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Guid" Nullable="false" />
+          <Property Name="PlyID" Type="Guid" Nullable="false" />
+          <Property Name="CommentValue" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="commentEndsLine" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Ply" Relationship="CorrMgrModel.FK_Comments_Plies" FromRole="Comments" ToRole="Plies" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="GameID" Type="Guid" Nullable="false" />
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="Terminator" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="User" Relationship="CorrMgrModel.FK_Games_Users" FromRole="Games" ToRole="Users" />
+          <NavigationProperty Name="Plies" Relationship="CorrMgrModel.FK_Plies_Games" FromRole="Games" ToRole="Plies" />
+          <NavigationProperty Name="Tags" Relationship="CorrMgrModel.FK_Tags_Games" FromRole="Games" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="Ply">
+          <Key>
+            <PropertyRef Name="PlyID" />
+          </Key>
+          <Property Name="PlyID" Type="Guid" Nullable="false" />
+          <Property Name="GameID" Type="Guid" />
+          <Property Name="VariationID" Type="Guid" />
+          <Property Name="PlyNumber" Type="Int32" Nullable="false" />
+          <Property Name="SourceSquare" Type="Int32" Nullable="false" />
+          <Property Name="DestSquare" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Comments" Relationship="CorrMgrModel.FK_Comments_Plies" FromRole="Plies" ToRole="Comments" />
+          <NavigationProperty Name="Game" Relationship="CorrMgrModel.FK_Plies_Games" FromRole="Plies" ToRole="Games" />
+          <NavigationProperty Name="Variation" Relationship="CorrMgrModel.FK_Plies_Variations" FromRole="Plies" ToRole="Variations" />
+          <NavigationProperty Name="Variations" Relationship="CorrMgrModel.FK_Variations_Plies" FromRole="Plies" ToRole="Variations" />
+          <Property Type="Int32" Name="PromoPiece" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="Guid" Nullable="false" />
+          <Property Name="GameID" Type="Guid" Nullable="false" />
+          <Property Name="TagName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="TagValue" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Game" Relationship="CorrMgrModel.FK_Tags_Games" FromRole="Tags" ToRole="Games" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Games" Relationship="CorrMgrModel.FK_Games_Users" FromRole="Users" ToRole="Games" />
+        </EntityType>
+        <EntityType Name="Variation">
+          <Key>
+            <PropertyRef Name="VariationID" />
+          </Key>
+          <Property Name="VariationID" Type="Guid" Nullable="false" />
+          <Property Name="BasePlyID" Type="Guid" Nullable="false" />
+          <Property Name="VariationOrderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Plies" Relationship="CorrMgrModel.FK_Plies_Variations" FromRole="Variations" ToRole="Plies" />
+          <NavigationProperty Name="Ply" Relationship="CorrMgrModel.FK_Variations_Plies" FromRole="Variations" ToRole="Plies" />
+        </EntityType>
+        <Association Name="FK_Comments_Plies">
+          <End Role="Plies" Type="CorrMgrModel.Ply" Multiplicity="1" />
+          <End Role="Comments" Type="CorrMgrModel.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plies">
+              <PropertyRef Name="PlyID" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="PlyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Games_Users">
+          <End Role="Users" Type="CorrMgrModel.User" Multiplicity="1" />
+          <End Role="Games" Type="CorrMgrModel.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Games">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plies_Games">
+          <End Role="Games" Type="CorrMgrModel.Game" Multiplicity="0..1" />
+          <End Role="Plies" Type="CorrMgrModel.Ply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Plies">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tags_Games">
+          <End Role="Games" Type="CorrMgrModel.Game" Multiplicity="1" />
+          <End Role="Tags" Type="CorrMgrModel.Tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Tags">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Plies_Variations">
+          <End Role="Variations" Type="CorrMgrModel.Variation" Multiplicity="0..1" />
+          <End Role="Plies" Type="CorrMgrModel.Ply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Variations">
+              <PropertyRef Name="VariationID" />
+            </Principal>
+            <Dependent Role="Plies">
+              <PropertyRef Name="VariationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Variations_Plies">
+          <End Role="Plies" Type="CorrMgrModel.Ply" Multiplicity="1" />
+          <End Role="Variations" Type="CorrMgrModel.Variation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plies">
+              <PropertyRef Name="PlyID" />
+            </Principal>
+            <Dependent Role="Variations">
+              <PropertyRef Name="BasePlyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="principal_id" Nullable="false" />
+          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="version" />
+          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CorrMgrModelStoreContainer" CdmEntityContainer="CorrMgrEntities">
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="CorrMgrModel.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="PlyID" ColumnName="PlyID" />
+                <ScalarProperty Name="CommentValue" ColumnName="CommentValue" />
+                <ScalarProperty Name="commentEndsLine" ColumnName="commentEndsLine" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="CorrMgrModel.Game">
+              <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Terminator" ColumnName="Terminator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plies">
+            <EntityTypeMapping TypeName="CorrMgrModel.Ply">
+              <MappingFragment StoreEntitySet="Plies">
+                <ScalarProperty Name="PromoPiece" ColumnName="PromoPiece" />
+                <ScalarProperty Name="PlyID" ColumnName="PlyID" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="VariationID" ColumnName="VariationID" />
+                <ScalarProperty Name="PlyNumber" ColumnName="PlyNumber" />
+                <ScalarProperty Name="SourceSquare" ColumnName="SourceSquare" />
+                <ScalarProperty Name="DestSquare" ColumnName="DestSquare" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="CorrMgrModel.Tag">
+              <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+                <ScalarProperty Name="TagValue" ColumnName="TagValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CorrMgrModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Variations">
+            <EntityTypeMapping TypeName="CorrMgrModel.Variation">
+              <MappingFragment StoreEntitySet="Variations">
+                <ScalarProperty Name="VariationID" ColumnName="VariationID" />
+                <ScalarProperty Name="BasePlyID" ColumnName="BasePlyID" />
+                <ScalarProperty Name="VariationOrderID" ColumnName="VariationOrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CorrMgrModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

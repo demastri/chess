@@ -572,7 +572,6 @@ namespace ChessPosition
             outStr += " ...";
             return outStr;
         }
-
         public void SavePGN(StreamWriter sw)
         {
             int defaultLineTrigger = 90;

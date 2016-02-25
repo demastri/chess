@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessPosition.V2
+namespace ChessPosition.V2.Transforms
 {
-    public enum PlayerEnum
+    class ReferenceTransform
     {
-        White=0,
-        Black=1,
-        Unknown=2
     }
 }

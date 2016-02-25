@@ -62,12 +62,21 @@ namespace PGNViewer
         {
             LoadGamesFromFile(curPGNFileLoc);
         }
+        private void LoadGamesFromDB(string connDetail)
+        {
+            updatingDisplay = true;
+            refGameList = new DbGameList(connDetail, Settings.AppSettings["MyName"]);
+            curGame = null;
+            saveToolStripMenuItem.Enabled = true;
+
+            Redraw(true, false, false, false);
+        }
         private void LoadGamesFromFile(string fn)
         {
             updatingDisplay = true;
             curPGNFileLoc = fn;
 #if useV2
-            refGameList = FileGameList.Load(fn, Settings.AppSettings["MyName"]);
+            refGameList = new FileGameList(fn, Settings.AppSettings["MyName"]);
 #else
             refGameList = new GameList(fn, Settings.AppSettings["MyName"]);
 #endif
@@ -322,25 +331,19 @@ namespace PGNViewer
             boardDisplay.Select(0, 0);
         }
 
-        int curMoveTextStart = 0;
-        int curMoveTextEnd = 0;
         private int findPlyAtLocation(int loc)
         {
             for (int i = 0; i <= curGame.Plies.Count; i++)
             {
-                ChangePosition(0);
-                ChangePosition(i);
-                if (curMoveTextStart <= loc && loc <= curMoveTextEnd)
+                if (drawGame.plyStart[i] <= loc && drawGame.plyEnd[i] >= loc)
                     return i;
-                if (curMoveTextStart > loc)
+                if (drawGame.plyStart[i] > loc)
                     return i - 1;
             }
             return curGame.Plies.Count;
         }
         private void HighlightPGNMove()
         {
-#if useV2
-#else
             if (curGame == null)
             {
                 PGNText.Text = "";
@@ -351,13 +354,18 @@ namespace PGNViewer
             if (thisPly < 0 && PGNText.Text != null)
             {
                 PGNText.Select(0, 0);
-                curMoveTextStart = curMoveTextEnd = 0;
             }
             else
             {
                 int moveNbr = (thisPly / 2) + 1;
                 bool haveMove = false;
                 bool nextPly = !isBlack;
+#if useV2
+                int startLoc, moveLength;
+                drawGame.GetMoveLocations(thisPly, out startLoc, out moveLength);
+                PGNText.Select(startLoc, moveLength);
+                PGNText.ScrollToCaret();
+#else
                 PGNMoveString thisMove = null;
                 PGNToken lastToken = null;
                 foreach (PGNToken t in curGame.PGNtokens)
@@ -382,8 +390,8 @@ namespace PGNViewer
                 curMoveTextEnd = thisMove.startLocation + thisMove.value.Length;
                 if (lastToken != null && lastToken.tokenType == PGNTokenType.MoveNumber)
                     curMoveTextStart -= lastToken.tokenString.Length;
-            }
 #endif
+            }
         }
         private void HighlightCorrMoveInGrid()
         {
@@ -506,6 +514,11 @@ namespace PGNViewer
                 curGame.ResetPosition();
             else
                 curGame.AdvancePosition(rel);
+            Redraw(false, false, false, false);
+        }
+        private void ChangeTo(int abs)
+        {
+            curGame.AdvanceTo(abs);
             Redraw(false, false, false, false);
         }
 
@@ -669,19 +682,22 @@ namespace PGNViewer
 
             for (int i = 0; i < curGame.Plies.Count; i++)
             {
-                Ply p = curGame.Plies.ElementAt(i);
+                Ply p = curGame.Plies[i];
 #if !useV2
                 PGNToken s = curGame.PGNtokens[i];
 #endif
                 int thisReflTime = 0;
 
                 corrGridView.Rows[i / 2].Cells["MoveNbr"].Value = 1 + i / 2;
-                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value =
 #if useV2
-                    "";
+                string baseStr = drawGame.PGNPlySource[i];
+                if (baseStr.IndexOf('.') >= 0)
+                    baseStr = baseStr.Substring(baseStr.IndexOf('.') + 1);
 #else
-                    p.refToken.value;
+                string baseStr = p.refToken.value;
 #endif
+                corrGridView.Rows[i / 2].Cells[(i % 2 == 0) ? "White" : "Black"].Value = baseStr;
+
                 if (p.comments != null)
                 {
                     DateTime thisMoveTime = CommentTime(p.comments);
@@ -738,33 +754,49 @@ namespace PGNViewer
 
         private void CorrUpdate_Click(object sender, EventArgs e)
         {
-#if useV2
-#else
             string possMove = CorrMoveText.Text + " ";
             DateTime possTime = CorrMoveTime.Value;
-
             // this a valid time for the game?
-            foreach (Ply p in curGame.Plies)
+            DateTime commentTime = CommentTime(curGame.Plies[curGame.Plies.Count - 1].comments);
+            if (commentTime > possTime)
             {
-                if (p.comments != null)
-                {
-                    DateTime commentTime = CommentTime(p.comments);
-                    if (commentTime > possTime)
-                    {
-                        MessageBox.Show("There was a later time already posted to this game");
-                        return;
-                    }
-                }
+                MessageBox.Show("There was a later time already posted to this game");
+                return;
             }
             // is this a valid move in the position?
-            // append this to the game
-            // ###% actually refactor this so almost all of it lives in the game class...
             Ply newMove = null;
             if (possMove.Trim() == "")
             {
                 MessageBox.Show("There was a problem with the provided move");
                 return;
             }
+#if useV2
+            curGame.AdvanceTo(curGame.Plies.Count);
+
+            newMove = new Ply();
+            curGame.AddMoveToPly(possMove, newMove);
+
+            if (newMove == null || newMove.src == Square.None())
+            {
+                MessageBox.Show("There was a problem with the provided move");
+                return;
+            }
+            newMove.Number = curGame.Plies.Count;
+            curGame.Plies.Add(newMove);
+
+            // append this to the game
+            // append this to the game text(s)...
+            // add the time comment 
+            // regen the text++
+            newMove.comments.Add(new Comment(false, possTime.ToString("MM/dd/yyyy HHmm")));
+
+            drawGame = new PGNGame(curGame);
+            drawGame.GeneratePGNSource(PGNGame.GameSaveOptions.MoveListOnly);
+            PGNText.Text = drawGame.PGNSource;
+
+#else
+            // append this to the game
+            // ###% actually refactor this so almost all of it lives in the game class...
             PGNMoveString moveStr = new PGNMoveString(possMove);
             curGame.ResetPosition();
             curGame.AdvancePosition(curGame.Plies.Count);
@@ -820,17 +852,12 @@ namespace PGNViewer
 #endif
 
             // move to the end...
-            curGame.ResetPosition();
-            curGame.AdvancePosition(curGame.Plies.Count);
+            curGame.AdvanceTo(curGame.Plies.Count);
 
             // save the updated game / file
             if (saveFileOnUpdate)
             {
-#if useV2
-                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
-#else
                 refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
-#endif
                 ReloadGamesFromFile();
                 Redraw(true, false, true, false);
             }
@@ -1260,7 +1287,11 @@ namespace PGNViewer
             if (GameList.SelectedNode != null && GameList.SelectedNode.Tag != null)
             {
                 curGame = (Game)GameList.SelectedNode.Tag;
-#if !useV2
+#if useV2
+                drawGame = new PGNGame(curGame);
+                drawGame.GeneratePGNSource(PGNGame.GameSaveOptions.MoveListOnly);
+                PGNText.Text = drawGame.PGNSource;
+#else
                 PGNText.Text = curGame.PGNSource = curGame.GeneratePGNSource(Game.GameSaveOptions.MoveListOnly);
 #endif
             }
@@ -1334,7 +1365,8 @@ namespace PGNViewer
 
         private void closeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            LoadGamesFromFile("");
+            if (CheckFileChanges())
+                LoadGamesFromFile("");
         }
 
         private void corrGridView_Click(object sender, EventArgs e)
@@ -1351,11 +1383,9 @@ namespace PGNViewer
 
         private void PGNText_Click(object sender, EventArgs e)
         {
-
             int newPly = findPlyAtLocation(PGNText.SelectionStart);
 
-            ChangePosition(0);
-            ChangePosition(newPly);
+            ChangeTo(newPly + 1);
         }
         bool inDrag = false;
         int dragStartPosition = -1;
@@ -1485,11 +1515,7 @@ namespace PGNViewer
             curGame.Plies.Remove(curGame.Plies.ElementAt(curGame.Plies.Count - 1));
             if (saveFileOnUpdate)
             {
-#if useV2
-                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
-#else
                 refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
-#endif
                 ReloadGamesFromFile();
             }
             else
@@ -1520,11 +1546,7 @@ namespace PGNViewer
 #endif
             if (!updatingDisplay && saveFileOnUpdate)
             {
-#if useV2
-                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
-#else
                 refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
-#endif
                 ReloadGamesFromFile();
             }
             else
@@ -1614,7 +1636,11 @@ namespace PGNViewer
 
                 // at this point, generate the appropriate move text and populate the proposed move text box
                 // Piece-target square, augmented for source square, capture - including ep, castle
-#if !useV2
+#if useV2
+                Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
+                string thisText = PGNPly.GeneratePGNSource(curGame.CurrentPosition, p, curGame.Plies.Count, PGNGame.GameSaveOptions.MoveListOnly, false);
+                CorrMoveText.Text = thisText;
+#else
                 Ply p = curGame.CreateMove(dragStartSquare, dragEndSquare);
                 CorrMoveText.Text = (p != null ? p.refToken.tokenString : "");
 #endif
@@ -1639,29 +1665,26 @@ namespace PGNViewer
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (FileHasChanged)
-#if useV2
-                FileGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"], refGameList);
-#else
                 refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
-#endif
             FileHasChanged = false;
         }
 
+        private bool CheckFileChanges()
+        {
+            // Confirm user wants to close
+            if (FileHasChanged &&
+                        MessageBox.Show(this, "There are unsaved changes,\nare you sure you want to close?", "Closing", MessageBoxButtons.YesNo) == DialogResult.No)
+                return false;
+            return true;
+        }
         private void PGNViewer_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
-            if (FileHasChanged)
-                // Confirm user wants to close
-                switch (MessageBox.Show(this, "There are unsaved changes,\nare you sure you want to close?", "Closing", MessageBoxButtons.YesNo))
-                {
-                    case DialogResult.No:
-                        e.Cancel = true;
-                        break;
-                    default:
-                        break;
-                }
+            if (!CheckFileChanges())
+                e.Cancel = true;
         }
+        PGNGame drawGame = null;
         private void Redraw(bool newFile, bool newGame, bool newMove, bool newMetaData)   // if curGame is in a consistent state here, we should be able to update it based on actions, then call this method - done.
         {
             if (newFile || newMove || newMetaData)
@@ -1736,11 +1759,6 @@ namespace PGNViewer
             }
         }
 
-        private void PGNText_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
         private void corrGridView_DoubleClick(object sender, EventArgs e)
         {
             MoveEditor editorDialog = new MoveEditor();
@@ -1754,5 +1772,6 @@ namespace PGNViewer
                 Redraw(false, false, false, true);
             }
         }
+
     }
 }

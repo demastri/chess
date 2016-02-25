@@ -47,7 +47,7 @@ namespace ChessPosition.V2
         public static byte RankMask = 0xf0;
         public static byte FileMask = 0x0f;
         public static byte NoLocation = 0xff;
-        public static Square None = new Square();
+        public static Square None() { return new Square(NoLocation); }
 
         #endregion
 
@@ -60,6 +60,10 @@ namespace ChessPosition.V2
         public Square(Square s)
         {
             loc = s.loc;
+        }
+        private Square(byte thisLoc)
+        {
+            loc = thisLoc;
         }
         public Square(Rank r, File f)
         {
@@ -90,7 +94,7 @@ namespace ChessPosition.V2
         public override string ToString()
         {
             return (loc == NoLocation) ? "??" :
-                "rf".Replace('r', (char)(rank + '1')).Replace('f', (char)(file + 'a'));
+                "fr".Replace('r', (char)(rank + '1')).Replace('f', (char)(file + 'a'));
         }
 
         #endregion

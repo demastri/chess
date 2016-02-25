@@ -42,7 +42,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,29 +56,56 @@
   <ItemGroup>
     <Compile Include="Analysis.cs" />
     <Compile Include="AnalysisRequest.cs" />
-    <Compile Include="ChessPositionDbContext.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Ply.cs" />
+    <Compile Include="V2\EFModel\ChessPosition.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessPosition.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V2\EFModel\ChessPosition.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V2\EFModel\ChessPosition.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessPosition.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="V2\EFModel\Comment.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
     <Compile Include="Engine.cs" />
     <Compile Include="EngineParameters.cs" />
     <Compile Include="Engines\AnalysisFarm.cs" />
     <Compile Include="Engines\AnalysisFarmClient.cs" />
     <Compile Include="Engines\Crafty.cs" />
     <Compile Include="Engines\Stockfish.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameList.cs" />
-    <Compile Include="Migrations\201601252202391_addplies.cs" />
-    <Compile Include="Migrations\201601252202391_addplies.Designer.cs">
-      <DependentUpon>201601252202391_addplies.cs</DependentUpon>
+    <Compile Include="V2\EFModel\Game.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="GameList.cs" />
     <Compile Include="PGNToken.cs" />
     <Compile Include="PGNTokenizer.cs" />
     <Compile Include="Piece.cs" />
     <Compile Include="PlayerEnum.cs" />
-    <Compile Include="Ply.cs" />
+    <Compile Include="V2\EFModel\Ply.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
     <Compile Include="Position.cs" />
     <Compile Include="PositionHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Square.cs" />
+    <Compile Include="V2\EFModel\sysdiagram.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V2\EFModel\Tag.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V2\EFModel\User.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
     <Compile Include="V2\Comment.cs" />
     <Compile Include="V2\EFModel\DbGameList.cs" />
     <Compile Include="V2\EFModel\DbGame.cs" />
@@ -98,6 +129,10 @@
     <Compile Include="V2\Transforms\PGNPly.cs" />
     <Compile Include="V2\Transforms\PGNToken.cs" />
     <Compile Include="V2\Transforms\PGNTokenizer.cs" />
+    <Compile Include="V2\Transforms\ReferenceTransform.cs" />
+    <Compile Include="V2\EFModel\Variation.cs">
+      <DependentUpon>ChessPosition.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PipesCommsExamples\ProcessWrappers\ProcessWrappers.csproj">
@@ -117,6 +152,23 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <EntityDeploy Include="V2\EFModel\ChessPosition.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChessPosition.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="V2\EFModel\ChessPosition.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChessPosition.edmx</DependentUpon>
+      <LastGenOutput>ChessPosition.Context.cs</LastGenOutput>
+    </None>
+    <None Include="V2\EFModel\ChessPosition.edmx.diagram">
+      <DependentUpon>ChessPosition.edmx</DependentUpon>
+    </None>
+    <None Include="V2\EFModel\ChessPosition.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChessPosition.edmx</DependentUpon>
+      <LastGenOutput>ChessPosition.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
     <None Include="Sample.pgn" />
   </ItemGroup>
@@ -131,9 +183,10 @@
     <Content Include="V2\V2 TODO.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201601252202391_addplies.resx">
-      <DependentUpon>201601252202391_addplies.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

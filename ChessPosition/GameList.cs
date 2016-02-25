@@ -1,4 +1,6 @@
-﻿using System;
+﻿#undef useDBContext
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,6 @@ namespace ChessPosition
 {
     public class GameList
     {
-        public static ChessPositionDbContext dbContext = new ChessPositionDbContext();
         public List<Game> Games { get; set; }
         public string defaultGrammarFileLocation = "Parser/Grammars/PGNSchema.xml";
 
@@ -33,7 +34,9 @@ namespace ChessPosition
         public GameList(string user)
         {
             Games = new List<Game>();
+#if useDBContext
             List<Game> testGames = dbContext.Games.ToList<Game>();
+#endif
         }
         public GameList()
         {
@@ -42,6 +45,7 @@ namespace ChessPosition
 
         public bool Save(string user)   // db
         {
+#if useDBContext
             foreach (Game g in GameList.dbContext.Games)
                 GameList.dbContext.Games.Remove(g);
             foreach (Game g in Games)
@@ -50,6 +54,7 @@ namespace ChessPosition
                 GameList.dbContext.Games.Add(g);
             }
             GameList.dbContext.SaveChanges();
+#endif
             return false;
         }
         public bool Save(string filename, string user)  // file

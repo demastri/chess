@@ -10,52 +10,43 @@ namespace ChessPosition.V2.PGN
     public class FileGameList : GameList
     {
         private static string defaultGrammarFileLocation = "Parser/Grammars/PGNSchema.xml";
-        string fileName { get; set; }
 
-        public FileGameList(string fn, string user, GameList refGL) 
-            : base(user)
+        public FileGameList(string fn, string user)
+            : base(fn, user)
         {
-            fileName = fn;
             Load();
-            Games = refGL.Games;
         }
 
-        protected override void Load() 
-        { 
-            if (fileName!= "" && File.Exists(fileName))
+        public override void Load() 
+        {
+            if (connDetail != "" && File.Exists(connDetail))
             {
-                StreamReader tr = new StreamReader(fileName);
+                StreamReader tr = new StreamReader(connDetail);
                 PGNTokenizer nextTokenSet = new PGNTokenizer(tr, defaultGrammarFileLocation);
                 tr.Close();
                 for (int i = 0; i < nextTokenSet.GameCount; i++)
                 {
                     nextTokenSet.LoadGame(i);
+
+                    string tokenStr = "";
+                    foreach (PGNToken pgnt in nextTokenSet.tokens)
+                        tokenStr += pgnt.ToString();
+
                     Games.Add(new PGNGame(nextTokenSet));
                 }
             }
         }
 
-        public override void Save() 
-        { 
-        }
-        public static void Save(string fn, string user, GameList refGL)
+        public override void Save()
         {
-        }
-        public static GameList Load(string fn, string user)
-        {
-            GameList outGameList = new GameList();
-            if (fn != "" && File.Exists(fn))
+            StreamWriter tr = new StreamWriter(connDetail);
+            foreach (Game g in Games)
             {
-                StreamReader tr = new StreamReader(fn);
-                PGNTokenizer nextTokenSet = new PGNTokenizer(tr, defaultGrammarFileLocation);
-                tr.Close();
-                for (int i = 0; i < nextTokenSet.GameCount; i++)
-                {
-                    nextTokenSet.LoadGame(i);
-                    outGameList.Games.Add(new PGNGame(nextTokenSet));
-                }
+                PGNGame outGame = new PGNGame(g);
+                outGame.SavePGN(tr);
             }
-            return outGameList;
+            tr.Flush();
+            tr.Close();
         }
 
     }

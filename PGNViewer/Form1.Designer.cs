@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,9 +89,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.resultCombo = new System.Windows.Forms.ComboBox();
             this.tagEditorGrid = new System.Windows.Forms.DataGridView();
-            this.capturedPieceDisplay = new System.Windows.Forms.TextBox();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.capturedPieceDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tagEditorGrid)).BeginInit();
@@ -270,7 +270,6 @@
             // PGNText
             // 
             this.PGNText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PGNText.Enabled = false;
             this.PGNText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PGNText.HideSelection = false;
             this.PGNText.Location = new System.Drawing.Point(593, 311);
@@ -280,8 +279,7 @@
             this.PGNText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.PGNText.Size = new System.Drawing.Size(439, 161);
             this.PGNText.TabIndex = 3;
-            this.PGNText.Click += new System.EventHandler(this.PGNText_Click);
-            this.PGNText.DoubleClick += new System.EventHandler(this.PGNText_DoubleClick);
+            this.PGNText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PGNText_Click);
             // 
             // ResetGameButton
             // 
@@ -405,14 +403,14 @@
             this.Black,
             this.BMoveTime,
             this.BMoveReflection});
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle2;
             this.corrGridView.Location = new System.Drawing.Point(593, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
@@ -698,17 +696,6 @@
             this.tagEditorGrid.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.tagEditorGrid_RowsAdded);
             this.tagEditorGrid.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.tagEditorGrid_RowsRemoved);
             // 
-            // capturedPieceDisplay
-            // 
-            this.capturedPieceDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.capturedPieceDisplay.Location = new System.Drawing.Point(352, 33);
-            this.capturedPieceDisplay.Multiline = true;
-            this.capturedPieceDisplay.Name = "capturedPieceDisplay";
-            this.capturedPieceDisplay.ReadOnly = true;
-            this.capturedPieceDisplay.Size = new System.Drawing.Size(235, 62);
-            this.capturedPieceDisplay.TabIndex = 33;
-            // 
             // Column1
             // 
             this.Column1.HeaderText = "Tag";
@@ -722,6 +709,17 @@
             this.Column2.MaxInputLength = 100;
             this.Column2.Name = "Column2";
             this.Column2.Width = 225;
+            // 
+            // capturedPieceDisplay
+            // 
+            this.capturedPieceDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.capturedPieceDisplay.Location = new System.Drawing.Point(352, 33);
+            this.capturedPieceDisplay.Multiline = true;
+            this.capturedPieceDisplay.Name = "capturedPieceDisplay";
+            this.capturedPieceDisplay.ReadOnly = true;
+            this.capturedPieceDisplay.Size = new System.Drawing.Size(235, 62);
+            this.capturedPieceDisplay.TabIndex = 33;
             // 
             // PGNViewer
             // 
