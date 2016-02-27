@@ -7,14 +7,14 @@ using System.Configuration;
 
 using ChessPosition.V2.EFModel;
 
-namespace ChessPosition.V2.PGN
+namespace ChessPosition.V2.Db
 {
     public class DbGameList : GameList
     {
-        CorrMgrEntities dbContext = new CorrMgrEntities();
+        public static CorrMgrEntities dbContext = new CorrMgrEntities();
 
-        public DbGameList(string conn, string user)
-            : base(conn, user)
+        public DbGameList(string user)
+            : base("", user)
         {
             Load();
         }
@@ -32,19 +32,55 @@ namespace ChessPosition.V2.PGN
 
         public override void Save()
         {
-            // messy way -> (the app can literally do anything, how else can they stay in sync??)
             // delete _the user's_ games from the db via the context
+            dbContext.Games.RemoveRange(dbContext.Games.Where(g => g.User.DisplayName == User));
             // add them back from the games list
+            foreach (Game g in Games)
+                dbContext.Games.Add(DbGame.GenerateEFGame(g, User));
             // save the user's games back to the db via the context
-            // ###
+            dbContext.SaveChanges();
+        }
+        public static void Save(GameList games, string user)
+        {
+            // messy way -> (the app can literally do anything, how else can they stay in sync??)
+
+            // check if the user exists
+            bool exists = (dbContext.Users.Where(u => u.DisplayName == user).Count() > 0);
+
+            if (!exists)
+            {
+                EFModel.User nextUser = new User();
+                nextUser.UserID = Guid.NewGuid();
+                nextUser.DisplayName = user;
+
+                dbContext.Users.Add(nextUser);
+                dbContext.SaveChanges();
+            }
+
+            // delete _the user's_ games from the db via the context
+            dbContext.Comments.RemoveRange(dbContext.Comments.Where(c => c.Ply.Game.User.DisplayName == user));
+            dbContext.Plies.RemoveRange(dbContext.Plies.Where(p => p.Game.User.DisplayName == user));
+            dbContext.Tags.RemoveRange(dbContext.Tags.Where(t => t.Game.User.DisplayName == user));
+            dbContext.Games.RemoveRange(dbContext.Games.Where(g => g.User.DisplayName == user));
+            dbContext.SaveChanges();
+
+            // add them back from the games list
+            foreach (Game g in games.Games)
+                dbContext.Games.Add(DbGame.GenerateEFGame(g, user));
+            // save the user's games back to the db via the context
+            dbContext.SaveChanges();
 
             // testing steps
             // 0 - read/write from pgn, as a test
+            // complete - 24-Feb-16
             // 1 - read from pgn, write data back to the database as well
+            // complete - 26-Feb-16
             // 2 - read the data from the database, write to both
+            // complete - 26-Feb-16
             // 3 - read/write from the db
+            // complete - 26-Feb-16
             // 4 - read from db, merge with incoming pgn data, write all back to db
-            
+
         }
     }
 }

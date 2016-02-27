@@ -30,7 +30,7 @@ namespace ChessPosition.V2.EFModel
     
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual Game Game { get; set; }
-        public virtual Variation Variation { get; set; }
+        public virtual Variation BaseVariation { get; set; }
         public virtual ICollection<Variation> Variations { get; set; }
     }
 }

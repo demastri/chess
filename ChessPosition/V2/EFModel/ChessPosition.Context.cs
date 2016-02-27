@@ -31,6 +31,5 @@ namespace ChessPosition.V2.EFModel
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Variation> Variations { get; set; }
-        public DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

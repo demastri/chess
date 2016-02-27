@@ -361,7 +361,7 @@ namespace ChessPosition.V2
             }
             if (srcPiece.piece == Piece.PieceType.Pawn) // ep and promotion (everything else is just regular...)
             {
-                if (p.promo != null)
+                if (p.promo != null && p.promo.piece != Piece.PieceType.Invalid)
                 {
                     board.Remove(p.dest);
                     board[p.dest] = p.promo;

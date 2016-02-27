@@ -29,13 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.boardDisplay = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.LoadFromDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openLastFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -92,6 +96,7 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.capturedPieceDisplay = new System.Windows.Forms.TextBox();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tagEditorGrid)).BeginInit();
@@ -128,7 +133,11 @@
             this.FileMenuStrip.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
+            this.SaveAsToolStripMenuItem,
             this.closeToolStripMenuItem1,
+            this.toolStripSeparator4,
+            this.LoadFromDBToolStripMenuItem,
+            this.SaveToDBToolStripMenuItem,
             this.toolStripSeparator3,
             this.openLastFileMenu,
             this.toolStripSeparator1,
@@ -146,7 +155,7 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -154,78 +163,106 @@
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // SaveAsToolStripMenuItem
+            // 
+            this.SaveAsToolStripMenuItem.Enabled = false;
+            this.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem";
+            this.SaveAsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.SaveAsToolStripMenuItem.Text = "Sa&ve As";
+            this.SaveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem1
             // 
             this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
             this.closeToolStripMenuItem1.Text = "C&lose";
             this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(179, 6);
+            // 
+            // LoadFromDBToolStripMenuItem
+            // 
+            this.LoadFromDBToolStripMenuItem.Name = "LoadFromDBToolStripMenuItem";
+            this.LoadFromDBToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.LoadFromDBToolStripMenuItem.Text = "Load From &Database";
+            this.LoadFromDBToolStripMenuItem.Click += new System.EventHandler(this.LoadFromDBToolStripMenuItem_Click);
+            // 
+            // SaveToDBToolStripMenuItem
+            // 
+            this.SaveToDBToolStripMenuItem.Enabled = false;
+            this.SaveToDBToolStripMenuItem.Name = "SaveToDBToolStripMenuItem";
+            this.SaveToDBToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.SaveToDBToolStripMenuItem.Text = "Save  To Data&base";
+            this.SaveToDBToolStripMenuItem.Click += new System.EventHandler(this.SaveToDBToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(179, 6);
             // 
             // openLastFileMenu
             // 
             this.openLastFileMenu.Name = "openLastFileMenu";
-            this.openLastFileMenu.Size = new System.Drawing.Size(148, 22);
+            this.openLastFileMenu.Size = new System.Drawing.Size(182, 22);
             this.openLastFileMenu.Text = "Open L&ast File";
             this.openLastFileMenu.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
             // 
             // mruMenuItem1
             // 
             this.mruMenuItem1.Name = "mruMenuItem1";
-            this.mruMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.mruMenuItem1.Size = new System.Drawing.Size(182, 22);
             this.mruMenuItem1.Text = "&1 - MRU1";
             this.mruMenuItem1.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem2
             // 
             this.mruMenuItem2.Name = "mruMenuItem2";
-            this.mruMenuItem2.Size = new System.Drawing.Size(148, 22);
+            this.mruMenuItem2.Size = new System.Drawing.Size(182, 22);
             this.mruMenuItem2.Text = "&2 - MRU2";
             this.mruMenuItem2.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem3
             // 
             this.mruMenuItem3.Name = "mruMenuItem3";
-            this.mruMenuItem3.Size = new System.Drawing.Size(148, 22);
+            this.mruMenuItem3.Size = new System.Drawing.Size(182, 22);
             this.mruMenuItem3.Text = "&3 - MRU3";
             this.mruMenuItem3.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem4
             // 
             this.mruMenuItem4.Name = "mruMenuItem4";
-            this.mruMenuItem4.Size = new System.Drawing.Size(148, 22);
+            this.mruMenuItem4.Size = new System.Drawing.Size(182, 22);
             this.mruMenuItem4.Text = "&4 - MRU4";
             this.mruMenuItem4.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // mruMenuItem5
             // 
             this.mruMenuItem5.Name = "mruMenuItem5";
-            this.mruMenuItem5.Size = new System.Drawing.Size(148, 22);
+            this.mruMenuItem5.Size = new System.Drawing.Size(182, 22);
             this.mruMenuItem5.Text = "&5 - MRU5";
             this.mruMenuItem5.Click += new System.EventHandler(this.mruMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(179, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -403,14 +440,14 @@
             this.Black,
             this.BMoveTime,
             this.BMoveReflection});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.corrGridView.DefaultCellStyle = dataGridViewCellStyle1;
             this.corrGridView.Location = new System.Drawing.Point(593, 54);
             this.corrGridView.Name = "corrGridView";
             this.corrGridView.ReadOnly = true;
@@ -721,6 +758,11 @@
             this.capturedPieceDisplay.Size = new System.Drawing.Size(235, 62);
             this.capturedPieceDisplay.TabIndex = 33;
             // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.DefaultExt = "pgn";
+            this.saveFileDialog1.Filter = "PGN files (*.pgn)|*.pgn|All files (*.*)|*.*";
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -838,6 +880,11 @@
         private System.Windows.Forms.TextBox capturedPieceDisplay;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.ToolStripMenuItem SaveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem LoadFromDBToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveToDBToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 
     }
 }

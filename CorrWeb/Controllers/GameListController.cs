@@ -40,7 +40,7 @@ namespace CorrWeb.Controllers
 
         public ActionResult GameChange(int listIndex, string eventIndex, int gameIndex)
         {
-            ChessPosition.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
+            ChessPosition.V2.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
 
             ViewBag.listIndex = listIndex;
             ViewBag.eventIndex = eventIndex;
@@ -51,7 +51,7 @@ namespace CorrWeb.Controllers
         }
         public ActionResult PositionChange(int listIndex, string eventIndex, int gameIndex, int posIndex)
         {
-            ChessPosition.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
+            ChessPosition.V2.Game thisGame = Models.GameList.GameListContext.FindGame(listIndex, eventIndex, gameIndex);
 
             ViewBag.listIndex = listIndex;
             ViewBag.eventIndex = eventIndex;

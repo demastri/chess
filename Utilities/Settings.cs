@@ -74,11 +74,19 @@ namespace JPD.Utilities
                     Add( k, value );
             }
         }
-        public void Add(string k, string v)
+        public void Add(string k, string v) // add unique values only!
         {
-            if( !multiValueSettings.ContainsKey(k) )
+            if (!multiValueSettings.ContainsKey(k))
                 multiValueSettings[k] = new List<string>();
-            if( v != null )
+            if (v != null && !multiValueSettings[k].Contains(v))
+                multiValueSettings[k].Add(v);
+            Save();
+        }
+        public void AddWithDuplicates(string k, string v)
+        {
+            if (!multiValueSettings.ContainsKey(k))
+                multiValueSettings[k] = new List<string>();
+            if (v != null)
                 multiValueSettings[k].Add(v);
             Save();
         }

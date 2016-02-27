@@ -96,6 +96,14 @@ namespace ChessPosition.V2
             return (loc == NoLocation) ? "??" :
                 "fr".Replace('r', (char)(rank + '1')).Replace('f', (char)(file + 'a'));
         }
+        public int ToInt()
+        {
+            return (int)loc;
+        }
+        public static Square FromInt( int someLoc )
+        {
+            return new Square((byte)someLoc);
+        }
 
         #endregion
 

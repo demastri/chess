@@ -126,6 +126,10 @@ namespace ChessPosition.V2
             }
             return PieceFactory(PlayerEnum.Unknown, PieceType.Invalid);
         }
+        public char ToFENChar() // FENchar == asciiRef...
+        {
+            return ToAscii;
+        }
         #endregion
 
         #region domain logic

@@ -24,6 +24,6 @@ namespace ChessPosition.V2.EFModel
         public int VariationOrderID { get; set; }
     
         public virtual ICollection<Ply> Plies { get; set; }
-        public virtual Ply Ply { get; set; }
+        public virtual Ply BasePly { get; set; }
     }
 }

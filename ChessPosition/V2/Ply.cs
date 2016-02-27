@@ -36,7 +36,7 @@ namespace ChessPosition.V2
 
             src = new Square(srcSq);
             dest = new Square(destSq);
-            promo = promoPc;
+            promo = Piece.PieceFactory(promoPc.color, promoPc.piece);
         }
 
         private void BaseInit()

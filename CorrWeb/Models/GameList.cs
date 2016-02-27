@@ -5,29 +5,30 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System.Web.Mvc;
-using ChessPosition;
+using ChessPosition.V2;
+using ChessPosition.V2.Db;
 
 namespace CorrWeb.Models
 {
     public class GameList
     {
-        ChessPosition.GameList refGameList;
+        ChessPosition.V2.GameList refGameList;
         static public GameList GameListContext = null;
 
-        private static Dictionary<string, List<ChessPosition.Game>> gameCache = null;
+        private static Dictionary<string, List<Game>> gameCache = null;
         private string _uid;
-        private List<ChessPosition.Game> _games;
+        private List<Game> _games;
 
         public List<string> eventList;
-        public Dictionary<string, List<ChessPosition.Game>> onMoveGameList;
-        public Dictionary<string, List<ChessPosition.Game>> waitingGameList;
-        public Dictionary<string, List<ChessPosition.Game>> completeGameList;
+        public Dictionary<string, List<Game>> onMoveGameList;
+        public Dictionary<string, List<Game>> waitingGameList;
+        public Dictionary<string, List<Game>> completeGameList;
 
         [Required]
         public string UserId { get { return _uid; } }
         public int selGameIndex { get; set; }
         public static int panelSelect = 0;
-        public virtual List<ChessPosition.Game> Games { get { return _games; } }
+        public virtual List<Game> Games { get { return _games; } }
 
         public GameList()
         {
@@ -35,17 +36,18 @@ namespace CorrWeb.Models
             panelSelect = ((panelSelect) + 1 % 4);
             selGameIndex = -1;
             if (gameCache == null)
-                gameCache = new Dictionary<string, List<ChessPosition.Game>>();
+                gameCache = new Dictionary<string, List<Game>>();
             _uid = "";
-            _games = new List<ChessPosition.Game>();
+            _games = new List<Game>();
         }
         public GameList(string uid)
         {
-            refGameList = new ChessPosition.GameList( uid );
+            //refGameList = new GameList( uid );
+            refGameList = new DbGameList("DeMastri, John");
             panelSelect = ((panelSelect) + 1 % 4);
             selGameIndex = -1;
             if (gameCache == null)
-                gameCache = new Dictionary<string, List<ChessPosition.Game>>();
+                gameCache = new Dictionary<string, List<Game>>();
 
             _uid = uid;
             if (gameCache.ContainsKey(uid))
@@ -64,9 +66,9 @@ namespace CorrWeb.Models
         {
             return Games.Count;
         }
-        public ChessPosition.Game FindGame(int listIndex, string eventIndex, int gameIndex)
+        public Game FindGame(int listIndex, string eventIndex, int gameIndex)
         {
-            Dictionary<string, List<ChessPosition.Game>> outList =
+            Dictionary<string, List<Game>> outList =
                 (listIndex == 0 ? onMoveGameList :
                 (listIndex == 1 ? waitingGameList :
                 (listIndex == 2 ? completeGameList : null)));
@@ -76,7 +78,7 @@ namespace CorrWeb.Models
         }
         public string FindGameName(int listIndex, string eventIndex, int gameIndex)
         {
-            ChessPosition.Game thisGame = FindGame(listIndex, eventIndex, gameIndex);
+            Game thisGame = FindGame(listIndex, eventIndex, gameIndex);
             if (thisGame == null)
                 return "";
             return thisGame.Tags["White"] + " - " + thisGame.Tags["Black"] + ": " + thisGame.Tags["Result"];
@@ -88,18 +90,18 @@ namespace CorrWeb.Models
             string plrDispName = "DeMastri, John";  // ###
 
             eventList = new List<string>();
-            onMoveGameList = new Dictionary<string, List<ChessPosition.Game>>();
-            waitingGameList = new Dictionary<string, List<ChessPosition.Game>>();
-            completeGameList = new Dictionary<string, List<ChessPosition.Game>>();
+            onMoveGameList = new Dictionary<string, List<Game>>();
+            waitingGameList = new Dictionary<string, List<Game>>();
+            completeGameList = new Dictionary<string, List<Game>>();
 
-            foreach (ChessPosition.Game g in _games)
+            foreach (Game g in _games)
             {
                 string thisEvent = g.Tags["Event"];
 
                 if (g.Tags["Result"] != "*")
                 {
                     if (!completeGameList.ContainsKey(thisEvent))
-                        completeGameList.Add(thisEvent, new List<ChessPosition.Game>());
+                        completeGameList.Add(thisEvent, new List<Game>());
                     completeGameList[thisEvent].Add(g);
                 }
                 else
@@ -107,18 +109,18 @@ namespace CorrWeb.Models
                     string wPlr = g.Tags["White"];
                     string bPlr = g.Tags["Black"];
                     bool onMove =
-                      ((g.OnMove == ChessPosition.PlayerEnum.White && wPlr == plrDispName) ||
-                       (g.OnMove == ChessPosition.PlayerEnum.Black && bPlr == plrDispName));
+                      ((g.OnMove == PlayerEnum.White && wPlr == plrDispName) ||
+                       (g.OnMove == PlayerEnum.Black && bPlr == plrDispName));
                     if (onMove)
                     {
                         if (!onMoveGameList.ContainsKey(thisEvent))
-                            onMoveGameList.Add(thisEvent, new List<ChessPosition.Game>());
+                            onMoveGameList.Add(thisEvent, new List<Game>());
                         onMoveGameList[thisEvent].Add(g);
                     }
                     else
                     {
                         if (!waitingGameList.ContainsKey(thisEvent))
-                            waitingGameList.Add(thisEvent, new List<ChessPosition.Game>());
+                            waitingGameList.Add(thisEvent, new List<Game>());
                         waitingGameList[thisEvent].Add(g);
                     }
                 }
@@ -137,7 +139,7 @@ namespace CorrWeb.Models
                 "á + + + +%<br />" +
                 "à+ + + + %<br />" +
                 "/èéêëìíîï)<br />";
-            ChessPosition.Game curGame = FindGame(listIndex, eventIndex, gameIndex);
+            Game curGame = FindGame(listIndex, eventIndex, gameIndex);
             
             string thisBoard = emptyBoard;
             if (curGame != null)
@@ -150,7 +152,7 @@ namespace CorrWeb.Models
                     Piece thisPc = curGame.CurrentPosition.board[sq];
                     char thisPcChar = Char.ToLower(thisPc.ToChess7Char);
 
-                    thisBoard = PokePiece(thisBoard, sq.row + 1, sq.col + 1, thisPc, false);
+                    thisBoard = PokePiece(thisBoard, (int)sq.rank + 1, (int)sq.file + 1, thisPc, false);
                 }
             }
             return new HtmlString(thisBoard);

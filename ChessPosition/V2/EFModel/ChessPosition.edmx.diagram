@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="CorrMgrModel.Comment" Width="1.5" PointX="7.5" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CorrMgrModel.Game" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="CorrMgrModel.Ply" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CorrMgrModel.Tag" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CorrMgrModel.Tag" Width="1.5" PointX="5.125" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="CorrMgrModel.User" Width="1.5" PointX="0.75" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CorrMgrModel.Variation" Width="1.5" PointX="7.5" PointY="5.25" IsExpanded="true" />
         <AssociationConnector Association="CorrMgrModel.FK_Comments_Plies" ManuallyRouted="false" />
@@ -17,7 +17,6 @@
         <AssociationConnector Association="CorrMgrModel.FK_Tags_Games" ManuallyRouted="false" />
         <AssociationConnector Association="CorrMgrModel.FK_Plies_Variations" ManuallyRouted="false" />
         <AssociationConnector Association="CorrMgrModel.FK_Variations_Plies" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="CorrMgrModel.sysdiagram" Width="1.5" PointX="3.6784385087333797" PointY="6.7047308118570275" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

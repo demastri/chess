@@ -16,6 +16,7 @@ using System.Xml;
 #if useV2
 using ChessPosition.V2;
 using ChessPosition.V2.PGN;
+using ChessPosition.V2.Db;
 #else
 using ChessPosition;
 #endif
@@ -62,12 +63,14 @@ namespace PGNViewer
         {
             LoadGamesFromFile(curPGNFileLoc);
         }
-        private void LoadGamesFromDB(string connDetail)
+        private void LoadGamesFromDB()
         {
             updatingDisplay = true;
-            refGameList = new DbGameList(connDetail, Settings.AppSettings["MyName"]);
+            refGameList = new DbGameList(Settings.AppSettings["MyName"]);
             curGame = null;
             saveToolStripMenuItem.Enabled = true;
+            SaveAsToolStripMenuItem.Enabled = true;
+            SaveToDBToolStripMenuItem.Enabled = true;
 
             Redraw(true, false, false, false);
         }
@@ -82,6 +85,8 @@ namespace PGNViewer
 #endif
             curGame = null;
             saveToolStripMenuItem.Enabled = true;
+            SaveAsToolStripMenuItem.Enabled = true;
+            SaveToDBToolStripMenuItem.Enabled = true;
 
             Redraw(true, false, false, false);
         }
@@ -1668,7 +1673,28 @@ namespace PGNViewer
                 refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
             FileHasChanged = false;
         }
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                curPGNFileLoc = saveFileDialog1.FileName;
+                Settings.AppSettings.Add("MRUList", curPGNFileLoc);
+                UpdateMRUMenu();
+                refGameList.Save(curPGNFileLoc, Settings.AppSettings["MyName"]);
 
+                ReloadGamesFromFile();
+            }
+        }
+
+        private void LoadFromDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadGamesFromDB();
+        }
+
+        private void SaveToDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DbGameList.Save(refGameList, Settings.AppSettings["MyName"]);
+        }
         private bool CheckFileChanges()
         {
             // Confirm user wants to close

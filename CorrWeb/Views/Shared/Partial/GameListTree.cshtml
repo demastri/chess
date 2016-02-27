@@ -13,7 +13,7 @@
                 <ul>
                     @for(int i=0; i<Model.onMoveGameList[e].Count; i++)
                     {
-                        ChessPosition.Game g  = Model.onMoveGameList[e][i];
+                        ChessPosition.V2.Game g  = Model.onMoveGameList[e][i];
                         <li>
                             @Html.ActionLink(
                                 g.Tags["White"] + "-" + g.Tags["Black"],
@@ -32,7 +32,7 @@
                 <ul>
                     @for (int i = 0; i < Model.waitingGameList[e].Count; i++)
                     {
-                        ChessPosition.Game g = Model.waitingGameList[e][i];
+                        ChessPosition.V2.Game g = Model.waitingGameList[e][i];
                         <li>
                             @Html.ActionLink(
                                 g.Tags["White"] + "-" + g.Tags["Black"],
@@ -51,7 +51,7 @@
                 <ul>
                     @for (int i = 0; i < Model.completeGameList[e].Count; i++)
                     {
-                        ChessPosition.Game g = Model.completeGameList[e][i];
+                        ChessPosition.V2.Game g = Model.completeGameList[e][i];
                         <li>
                             @Html.ActionLink(
                                 g.Tags["White"] + "-" + g.Tags["Black"],
