@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="QueueCommon">
+      <HintPath>..\..\..\processwrappers\ProcessWrappers\bin\Debug\QueueCommon.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,12 +46,6 @@
     <Compile Include="ConnectionDetail.cs" />
     <Compile Include="HostWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\QueueMgt\QueueCommon\QueueCommon.csproj">
-      <Project>{2dfeaa97-e378-4005-8c70-da85919c78c6}</Project>
-      <Name>QueueCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

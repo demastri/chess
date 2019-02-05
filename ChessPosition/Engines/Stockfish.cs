@@ -11,6 +11,7 @@ namespace ChessPosition.Engines
     public class Stockfish : Engine
     {
 
+#if false
         public Stockfish()
         {
             //engineLoc = "C:\\Projects\\JPD\\BBRepos\\Chess\\engines\\stockfish\\stockfish_5_32bit.exe";
@@ -55,5 +56,6 @@ namespace ChessPosition.Engines
             base.Quit();
             myEngineProcess.WriteToClient("quit");
         }
+#endif
     }
 }

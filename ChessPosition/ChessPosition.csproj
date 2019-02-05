@@ -40,6 +40,12 @@
     <Reference Include="Parser">
       <HintPath>..\..\Compiler\Parser\bin\Debug\Parser.dll</HintPath>
     </Reference>
+    <Reference Include="ProcessWrappers">
+      <HintPath>..\..\processwrappers\ProcessWrappers\bin\Debug\ProcessWrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="QueueCommon">
+      <HintPath>..\..\processwrappers\ProcessWrappers\bin\Debug\QueueCommon.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -132,14 +138,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PipesCommsExamples\ProcessWrappers\ProcessWrappers.csproj">
-      <Project>{2009788c-625d-45f7-af04-dc21ec78d0e5}</Project>
-      <Name>ProcessWrappers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\QueueMgt\QueueCommon\QueueCommon.csproj">
-      <Project>{2dfeaa97-e378-4005-8c70-da85919c78c6}</Project>
-      <Name>QueueCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{1f22ef48-ecbb-4c1a-8f43-32fe5a7981b7}</Project>
       <Name>Utilities</Name>
@@ -176,6 +174,7 @@
     </Content>
     <Content Include="Parser\Grammars\PGNSchema.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="V2\EFModel\ChessPosition.edmx.sql" />
     <Content Include="V2\V2 TODO.txt" />
@@ -185,6 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

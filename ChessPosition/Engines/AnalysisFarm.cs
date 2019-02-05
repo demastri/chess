@@ -17,7 +17,7 @@ namespace ChessPosition
 
         List<Engine> engines;
         private System.Timers.Timer EngineManager;
-
+#if false
         RabbitMQWrapper myPositionQueue;
         RabbitMQWrapper myResultsQueue;
 
@@ -173,6 +173,7 @@ namespace ChessPosition
 
             ScheduleTask();
         }
+#endif
 
     }
 }

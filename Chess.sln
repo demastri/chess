@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrWeb", "CorrWeb\CorrWeb.csproj", "{FD60078F-AA3F-4B3E-B7F7-33C12FA9091C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrWeb.Tests", "CorrWeb.Tests\CorrWeb.Tests.csproj", "{502D1A3D-866E-4319-AE16-2313300FDDA1}"
@@ -14,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{1F22EF48-ECBB-4C1A-8F43-32FE5A7981B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old PGN Text Cleanup", "Old PGN Text Cleanup\Old PGN Text Cleanup.csproj", "{E360EFD3-C2B1-456B-B3DC-B3BF08EA274C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopulateAnalysisDB", "PopulateAnalysisDB\PopulateAnalysisDB.csproj", "{21483E98-8A20-4F90-BDB2-F0F178EAA722}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,16 @@ Global
 		{E360EFD3-C2B1-456B-B3DC-B3BF08EA274C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E360EFD3-C2B1-456B-B3DC-B3BF08EA274C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E360EFD3-C2B1-456B-B3DC-B3BF08EA274C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC6E49BF-C479-4D68-AD38-0A7C5A4BC2FF}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

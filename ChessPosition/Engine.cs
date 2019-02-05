@@ -10,6 +10,7 @@ namespace ChessPosition
 {
     public class Engine
     {
+#if false
         protected HostWrapper myEngineProcess;
         protected string engineLoc;
 
@@ -38,6 +39,7 @@ namespace ChessPosition
             { new Piece( PlayerEnum.Black, Piece.PieceType.Queen), -9 },
             { new Piece( PlayerEnum.Black, Piece.PieceType.King), -99 }
         };
+#endif
         public static Engine InitEngine(string engineName)
         {
             switch (engineName.ToLower())
@@ -45,10 +47,12 @@ namespace ChessPosition
                 case "":
                 case "none":
                     return new Engine();
+#if false
                 case "crafty":
                     return new Engines.Crafty();
                 case "stockfish":
                     return new Engines.Stockfish();
+#endif
             }
             return null;
         }
@@ -58,9 +62,12 @@ namespace ChessPosition
         }
         public virtual void Quit()
         {
+#if false
             myEngineProcess.Cleanup();
             running = false;
+#endif
         }
+#if false
         public virtual void Status()
         {
         }
@@ -125,11 +132,15 @@ namespace ChessPosition
             }
             return running ? HostWrapper.IsRunning : HostWrapper.IsEnding;
         }
+#endif
         public virtual void CheckProgress()
         {
+#if false
             if (myEngineProcess != null)
                 myEngineProcess.CheckProgress();
+#endif
         }
+#if false
         protected void RaiseAnalysisUpdate(int analysisID)
         {
             if (AnalysisUpdateEvent != null)
@@ -140,5 +151,6 @@ namespace ChessPosition
             if (AnalysisCompleteEvent != null)
                 AnalysisCompleteEvent(analysisID);
         }
+#endif
     }
 }

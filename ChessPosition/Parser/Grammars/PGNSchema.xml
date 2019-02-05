@@ -4,6 +4,8 @@
     <Token ID="1" Name="_" Regex="\s+" Emit="" Description="WhiteSpace" />
     <Token ID="2" Name="SemComment" Regex=";.*" Emit="%" Description="; some comment to eol"/>
     <Token ID="3" Name="BraceComment" Regex="{[^}]*}" Emit="%" Description="{ some enclosed comment }"/>
+    <Tokenxx ID="30" Name="BraceCommentOpen" Regex="{.*" Emit="%" Description="{ enclosed comment start"/>
+    <Tokenxx ID="31" Name="BraceCommentClose" Regex=".*}" Emit="%" Description=" enclosed comment end }"/>
     <Token ID="4" Name="Escape" Regex="\%.*" Emit="" Description="% Note to specific scanning tools, ignore to eol"/>
     <Token ID="5" Name="String" Regex="&quot;([^\\]|(\\.))*?\&quot;" Emit="%" Description="quote delim'd string including embedded escaped characters"/>
     <Token ID="7" Name="MoveNbrEnding" Regex="[\.\s]+" Emit="%" Description="Self terminating - for move numbers"/>
@@ -23,18 +25,20 @@
     <Token ID="20" Name="PieceMoveText" Regex="[RNBKQ]?[a-h]?[1-8]?x?[a-h][1-8](=[RNBKQ])?[\+#]?" Emit="%" Description="Literal '&gt;'"/>
     <Token ID="21" Name="CastleMoveText" Regex="O-O(-O)?[\+#]?" Emit="%" Description="Literal '&gt;'"/>
     <Token ID="22" Name="Annotation" Regex="[!?][!?]?" Emit="%" Description="Literal '&gt;'"/>
-    <Token ID="13" Name="Symbol" Regex="[A-Za-z0-9][A-Za-z0-9_+#=:-]*" Emit="%" Description="$ - self term - opens analysis glyph definition"/>
-
+    <Token ID="13" Name="Symbol" Regex="[A-Za-z0-9][A-Za-z0-9_+#=:-]*" Emit="%" Description="arbitrary word"/>
+    <Tokenxx ID="13" Name="BraceCommentText" Regex="[^}]*" Emit="%" Description="arbitrary word to eol"/>
   </Tokens>
   <Sentences>
 
     <Sentence ID="2002" Name="TagPair" Pattern="[_|]LBracket[_|]Symbol[_|]String[_|]RBracket"/>
     <Sentence ID="2000" Name="TagSection" Pattern="TagPair*"/>
+    <Sentencexx ID="2003" Name="MultiLineComment" Pattern="BraceCommentOpen[_|]BraceCommentText*[_|]BraceCommentClose"/>
 
     <Sentence ID="3010" Name="MoveNbr" Pattern="Integer[MoveNbrEnding|]"/>
 
     <Sentence ID="3012" Name="NAG" Pattern="NAGOpenInteger" />
     <Sentence ID="3008" Name="PlyText" Pattern="[MoveNbr|][_|][PieceMoveText|CastleMoveText][Annotation|][_|][NAG|]"/>
+    <Sentencexx ID="3011" Name="Comment" Pattern="[SemComment|BraceComment|MultiLineComment]" />
     <Sentence ID="3011" Name="Comment" Pattern="[SemComment|BraceComment]" />
     <Sentence ID="3000" Name="MoveText" Pattern="PlyText[_|]"/>
     <Sentence ID="3001" Name="MoveText" Pattern="Comment[_|]"/>

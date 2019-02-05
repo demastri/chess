@@ -11,6 +11,7 @@ namespace ChessPosition
 {
     public class AnalysisFarmClient
     {
+#if false
         /// <summary>
         /// 
         /// actually, the idea of an analysisfarm implies that even the client side is decoupled from the server (engine implementation)
@@ -125,5 +126,6 @@ namespace ChessPosition
             AnalysisRequest ar = new AnalysisRequest(System.Text.Encoding.Default.GetString(result));
             AnalysisCompleteEvent( ar );
         }
+#endif
     }
 }

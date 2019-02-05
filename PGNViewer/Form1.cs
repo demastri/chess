@@ -454,6 +454,7 @@ namespace PGNViewer
 
         private void EngineList_SelectedIndexChanged(object sender, EventArgs e)
         {
+#if false
             if (AnalysisEngine != null)
             {
                 AnalysisEngine.Quit();
@@ -461,15 +462,19 @@ namespace PGNViewer
             AnalysisEngine = ChessPosition.Engine.InitEngine(EngineList.Text);
             UpdateAnalysis();
             AnalysisEngine.AnalysisUpdateEvent += AnalysisEngine_AnalysisUpdate;
+#endif
         }
 
         void AnalysisEngine_AnalysisUpdate(int thisID)
         {
+#if false
             if (AnalysisEngine != null && AnalysisEngine.curAnalysisRequest.thisAnalysis != null)
                 AnalysisText.Text = AnalysisEngine.curAnalysisRequest.thisAnalysis.ToString();
+#endif
         }
         private void UpdateAnalysis()
         {
+#if false
             if (AnalysisEngine != null)
             {
                 AnalysisEngine.Stop();
@@ -478,6 +483,7 @@ namespace PGNViewer
                     AnalysisEngine.SetPostion(new ChessPosition.EngineParameters("stockfish", 50, -1), curGame.ToFEN());
                 }
             }
+#endif
         }
 
         private void timer1_Tick(object sender, EventArgs e)
