@@ -21,7 +21,7 @@ namespace ChessPosition
             try
             {
                 Parser p = new Parser(grammarFile);
-                List<Token> parseTokens = p.Tokenize(sr);
+                List<Token> parseTokens = p.Tokenize(sr, null);
                 //List<Token> parseTokens = p.Tokenize(corpusFile);
                 games = p.Compose(parseTokens);
                 // at this point, we have Sentences (Games) that conform to the Grammar
