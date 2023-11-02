@@ -1805,5 +1805,71 @@ namespace PGNViewer
             }
         }
 
+        private void preprocstrip_Click(object sender, EventArgs e)
+        {
+            string outText = "";
+            bool inGame = false;
+            // take the input file, and put all of the ""move" strings on one line
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                String name = openFileDialog1.FileName;
+                StreamReader s = new StreamReader(openFileDialog1.OpenFile());
+                string ss;
+                while ((ss = s.ReadLine()) != null)
+                {
+                    if (ss.Length == 0)
+                    {
+                        outText += "\n";
+                        if (inGame)
+                            outText += "\n";
+                        inGame = false;
+                    }
+                    else if (!inGame && ss[0] == '[')
+                    {
+                        inGame = false;
+                        outText += ss + "\n";
+                    }
+                    else
+                    {
+                        inGame = true;
+                        outText += ss + " ";
+                    }
+                }
+                Console.Write(outText);
+                string outFile = name + ".proc";
+                StreamWriter of = new StreamWriter(File.OpenWrite(outFile));
+                of.Write(outText);
+                of.Flush();
+                of.Close();
+            }
+        }
+
+        private void writeAsFENstrip_Click(object sender, EventArgs e)
+        {
+            string outFile = "M:\\Chess\\Data\\PGN\\Project Data\\proc.fen";
+            StreamWriter of = new StreamWriter(File.OpenWrite(outFile));
+            foreach (PGNGame g in refGameList.Games)
+            {
+                foreach (string s in g.Tags.Keys)
+                    of.WriteLine("[" + s + " \"" + g.Tags[s] + "\"]");
+                of.WriteLine();
+
+                g.ResetPosition();
+                of.WriteLine("start");
+                of.WriteLine(g.ToFEN());
+                while (!g.EndOfGame)
+                {
+                    Ply p = g.Plies[g.curPly];
+                    string outPGN = PGNPly.GeneratePGNSource(g.CurrentPosition, p, g.curPly, PGNGame.GameSaveOptions.MoveListOnly, false);
+                    of.WriteLine(outPGN);
+                    g.AdvancePosition();
+                    of.WriteLine(g.ToFEN());
+                }
+                of.WriteLine(g.TerminatorString);
+                of.WriteLine();
+            }
+            of.Flush();
+            of.Close();
+        }
     }
 }

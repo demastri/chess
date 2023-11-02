@@ -38,6 +38,7 @@
             this.SaveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.preprocstrip = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadFromDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveToDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -97,6 +98,7 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.capturedPieceDisplay = new System.Windows.Forms.TextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.writeAsFENstrip = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.corrGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tagEditorGrid)).BeginInit();
@@ -136,6 +138,8 @@
             this.SaveAsToolStripMenuItem,
             this.closeToolStripMenuItem1,
             this.toolStripSeparator4,
+            this.preprocstrip,
+            this.writeAsFENstrip,
             this.LoadFromDBToolStripMenuItem,
             this.SaveToDBToolStripMenuItem,
             this.toolStripSeparator3,
@@ -186,6 +190,13 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(179, 6);
+            // 
+            // preprocstrip
+            // 
+            this.preprocstrip.Name = "preprocstrip";
+            this.preprocstrip.Size = new System.Drawing.Size(182, 22);
+            this.preprocstrip.Text = "Preprocess File";
+            this.preprocstrip.Click += new System.EventHandler(this.preprocstrip_Click);
             // 
             // LoadFromDBToolStripMenuItem
             // 
@@ -763,6 +774,13 @@
             this.saveFileDialog1.DefaultExt = "pgn";
             this.saveFileDialog1.Filter = "PGN files (*.pgn)|*.pgn|All files (*.*)|*.*";
             // 
+            // writeAsFENstrip
+            // 
+            this.writeAsFENstrip.Name = "writeAsFENstrip";
+            this.writeAsFENstrip.Size = new System.Drawing.Size(182, 22);
+            this.writeAsFENstrip.Text = "Write As FEN";
+            this.writeAsFENstrip.Click += new System.EventHandler(this.writeAsFENstrip_Click);
+            // 
             // PGNViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -885,7 +903,8 @@
         private System.Windows.Forms.ToolStripMenuItem LoadFromDBToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveToDBToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-
+        private System.Windows.Forms.ToolStripMenuItem preprocstrip;
+        private System.Windows.Forms.ToolStripMenuItem writeAsFENstrip;
     }
 }
 
