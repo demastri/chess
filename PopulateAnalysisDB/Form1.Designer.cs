@@ -39,6 +39,15 @@
             this.prevGame = new System.Windows.Forms.Button();
             this.nextGame = new System.Windows.Forms.Button();
             this.GameLabel = new System.Windows.Forms.Label();
+            this.PullEndPos = new System.Windows.Forms.Button();
+            this.EndPosTag = new System.Windows.Forms.Label();
+            this.AnalyzePositions = new System.Windows.Forms.Button();
+            this.analysisTag = new System.Windows.Forms.Label();
+            this.rawCounts = new System.Windows.Forms.TextBox();
+            this.wtdCounts = new System.Windows.Forms.TextBox();
+            this.inclWWin = new System.Windows.Forms.CheckBox();
+            this.inclBWin = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textToDBButton
@@ -142,11 +151,107 @@
             this.GameLabel.TabIndex = 9;
             this.GameLabel.Text = "0 of 0";
             // 
+            // PullEndPos
+            // 
+            this.PullEndPos.Location = new System.Drawing.Point(417, 47);
+            this.PullEndPos.Name = "PullEndPos";
+            this.PullEndPos.Size = new System.Drawing.Size(103, 23);
+            this.PullEndPos.TabIndex = 10;
+            this.PullEndPos.Text = "EndPos <- DB";
+            this.PullEndPos.UseVisualStyleBackColor = true;
+            this.PullEndPos.Click += new System.EventHandler(this.PullEndPos_Click);
+            // 
+            // EndPosTag
+            // 
+            this.EndPosTag.AutoSize = true;
+            this.EndPosTag.Location = new System.Drawing.Point(526, 52);
+            this.EndPosTag.Name = "EndPosTag";
+            this.EndPosTag.Size = new System.Drawing.Size(89, 13);
+            this.EndPosTag.TabIndex = 11;
+            this.EndPosTag.Text = "0 positions stored";
+            // 
+            // AnalyzePositions
+            // 
+            this.AnalyzePositions.Location = new System.Drawing.Point(417, 81);
+            this.AnalyzePositions.Name = "AnalyzePositions";
+            this.AnalyzePositions.Size = new System.Drawing.Size(103, 23);
+            this.AnalyzePositions.TabIndex = 12;
+            this.AnalyzePositions.Text = "Analyze";
+            this.AnalyzePositions.UseVisualStyleBackColor = true;
+            this.AnalyzePositions.Click += new System.EventHandler(this.AnalyzePositions_Click);
+            // 
+            // analysisTag
+            // 
+            this.analysisTag.AutoSize = true;
+            this.analysisTag.Location = new System.Drawing.Point(526, 86);
+            this.analysisTag.Name = "analysisTag";
+            this.analysisTag.Size = new System.Drawing.Size(89, 13);
+            this.analysisTag.TabIndex = 13;
+            this.analysisTag.Text = "0 decisive games";
+            // 
+            // rawCounts
+            // 
+            this.rawCounts.Location = new System.Drawing.Point(377, 134);
+            this.rawCounts.Multiline = true;
+            this.rawCounts.Name = "rawCounts";
+            this.rawCounts.ReadOnly = true;
+            this.rawCounts.Size = new System.Drawing.Size(370, 130);
+            this.rawCounts.TabIndex = 14;
+            // 
+            // wtdCounts
+            // 
+            this.wtdCounts.Location = new System.Drawing.Point(377, 270);
+            this.wtdCounts.Multiline = true;
+            this.wtdCounts.Name = "wtdCounts";
+            this.wtdCounts.ReadOnly = true;
+            this.wtdCounts.Size = new System.Drawing.Size(370, 130);
+            this.wtdCounts.TabIndex = 15;
+            // 
+            // inclWWin
+            // 
+            this.inclWWin.AutoSize = true;
+            this.inclWWin.Location = new System.Drawing.Point(621, 47);
+            this.inclWWin.Name = "inclWWin";
+            this.inclWWin.Size = new System.Drawing.Size(61, 17);
+            this.inclWWin.TabIndex = 16;
+            this.inclWWin.Text = "Incl 1-0";
+            this.inclWWin.UseVisualStyleBackColor = true;
+            // 
+            // inclBWin
+            // 
+            this.inclBWin.AutoSize = true;
+            this.inclBWin.Location = new System.Drawing.Point(621, 62);
+            this.inclBWin.Name = "inclBWin";
+            this.inclBWin.Size = new System.Drawing.Size(61, 17);
+            this.inclBWin.TabIndex = 17;
+            this.inclBWin.Text = "Incl 0-1";
+            this.inclBWin.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Enabled = false;
+            this.checkBox1.Location = new System.Drawing.Point(684, 47);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(63, 17);
+            this.checkBox1.TabIndex = 18;
+            this.checkBox1.Text = "Incl 1/2";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.inclBWin);
+            this.Controls.Add(this.inclWWin);
+            this.Controls.Add(this.wtdCounts);
+            this.Controls.Add(this.rawCounts);
+            this.Controls.Add(this.analysisTag);
+            this.Controls.Add(this.AnalyzePositions);
+            this.Controls.Add(this.EndPosTag);
+            this.Controls.Add(this.PullEndPos);
             this.Controls.Add(this.GameLabel);
             this.Controls.Add(this.nextGame);
             this.Controls.Add(this.prevGame);
@@ -177,6 +282,15 @@
         private System.Windows.Forms.Button prevGame;
         private System.Windows.Forms.Button nextGame;
         private System.Windows.Forms.Label GameLabel;
+        private System.Windows.Forms.Button PullEndPos;
+        private System.Windows.Forms.Label EndPosTag;
+        private System.Windows.Forms.Button AnalyzePositions;
+        private System.Windows.Forms.Label analysisTag;
+        private System.Windows.Forms.TextBox rawCounts;
+        private System.Windows.Forms.TextBox wtdCounts;
+        private System.Windows.Forms.CheckBox inclWWin;
+        private System.Windows.Forms.CheckBox inclBWin;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

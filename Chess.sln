@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrWeb", "CorrWeb\CorrWeb.csproj", "{FD60078F-AA3F-4B3E-B7F7-33C12FA9091C}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old PGN Text Cleanup", "Old PGN Text Cleanup\Old PGN Text Cleanup.csproj", "{E360EFD3-C2B1-456B-B3DC-B3BF08EA274C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopulateAnalysisDB", "PopulateAnalysisDB\PopulateAnalysisDB.csproj", "{21483E98-8A20-4F90-BDB2-F0F178EAA722}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trimcomments", "trimcomments\trimcomments\trimcomments.csproj", "{ACEB176F-963A-4FA7-A222-87A043BECAB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessableToPGN", "ChessableToPGN\ChessableToPGN.csproj", "{B2B41D88-20C1-4F32-9621-2BC6F21517C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,14 @@ Global
 		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21483E98-8A20-4F90-BDB2-F0F178EAA722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACEB176F-963A-4FA7-A222-87A043BECAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACEB176F-963A-4FA7-A222-87A043BECAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACEB176F-963A-4FA7-A222-87A043BECAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACEB176F-963A-4FA7-A222-87A043BECAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2B41D88-20C1-4F32-9621-2BC6F21517C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2B41D88-20C1-4F32-9621-2BC6F21517C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2B41D88-20C1-4F32-9621-2BC6F21517C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2B41D88-20C1-4F32-9621-2BC6F21517C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
