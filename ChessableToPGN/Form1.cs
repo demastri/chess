@@ -132,12 +132,25 @@ namespace ChessableToPGN
         }
         private string BuildSANText(HtmlAgilityPack.HtmlNode n, bool isWhite)
         {
+
             HtmlAgilityPack.HtmlNode annotationNode = n.SelectSingleNode("./child::span[@class='annotation']");
             if (n.Attributes["data-san"] == null)
                 return "";
-            return n.Attributes["data-san"].Value + ((annotationNode == null || annotationNode.Attributes["data-original-title"]  == null) ? 
-                "" : GetAnnotationNAG(annotationNode.Attributes["data-original-title"].Value, isWhite));
+            // if this is a sub move, may need to extract the NAG from the comment text !!
+            if (annotationNode != null && annotationNode.Attributes["data-original-title"] != null)
+            {
+                return n.Attributes["data-san"].Value + GetAnnotationNAG(annotationNode.Attributes["data-original-title"].Value, isWhite);
+            }
+            return n.Attributes["data-san"].Value + GetAnnotationNAGFromMoveText(n.InnerText, isWhite, containsPromotion(n.Attributes["data-san"].Value));
         }
+
+        bool containsPromotion( String s )
+        {
+            int e = s.IndexOf("=");
+            int pp = (e >= 0 && e+1 < s.Length ? s.ToLower()[e+1] : -1);
+            return pp == 'q' || pp == 'n' || pp == 'r' || pp == 'b';
+        }
+
         private string GetNodeType(HtmlAgilityPack.HtmlNode n)
         {
             if (n.Name == "div" && n.Attributes["class"].Value.Contains("openingNum"))
@@ -158,6 +171,50 @@ namespace ChessableToPGN
                 return "move";
             }
             return "unknown";
+        }
+
+        String[] diacritics = { "??", "!?", "?!", "!!", "!", "?" };
+        int[] diacriticNumber = { 4, 5, 6, 3, 1, 2 };
+        String[] evals = { "-+", "+-", "+=", "=+", "±", "∓", "⩲", "⩱", "=" };
+        int[] evalNumber = { 19, 18, 14, 15, 16, 17, 14, 15, 10 };
+
+        private string GetAnnotationNAGFromMoveText(string moveText, bool isWhite, bool ispromo)
+        {
+            // want to strip off text that simply gets appended:
+            // checks, promotions, mates
+            // and then take any NAG symbols and translat them to their text counterparts
+            // ### promotion should not result in '=' eval
+            bool hasCheck = moveText.IndexOf("+") >= 0;
+            bool hasMate = moveText.IndexOf("#") >= 0;
+            String outDiacritic = "";
+            String outEval = "";
+            int index = 0;
+            foreach( String d in diacritics)
+            {
+                if (moveText.IndexOf(d) >= 0)
+                {
+                    outDiacritic = " $"+diacriticNumber[index]+" ";
+                    break;
+                }
+                index++;
+            }
+            index = 0;
+            foreach (String d in evals)
+            {
+                if (moveText.IndexOf(d) >= 0)
+                {
+                    if( evalNumber[index] == 10 && ispromo)
+                    {
+                        continue;
+                    }
+                    outEval = " $" + evalNumber[index] + " ";
+                    break;
+                }
+                index++;
+            }
+            
+
+            return outDiacritic+outEval;
         }
         private string GetAnnotationNAG(string s, bool isWhite)
         {
