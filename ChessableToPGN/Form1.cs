@@ -32,19 +32,52 @@ namespace ChessableToPGN
 
             HtmlAgilityPack.HtmlNodeCollection movesDiv = analysis.DocumentNode.SelectNodes("//div[@id=\"theOpeningMoves\"]/child::span");
 
-            string outText = GenerateStartText();
+            // cannot actually generate the start text until the moves have been processed...one of the moves will have the initial startFEN           
+            // would like to detect if the game starts at start position, and if not, put a FEN at the beginning of the PGN
+            // I can get the FEN associated with every move in the HTML, but that's the FEN AFTER the move has been played
+            // most opening and other courses start at the initial position, which is fine, but when it doesn't there's an issue:
+            // The first move is some arbitrary move in the non-starting position.  Where did the piece come from?  
+            // This code (intentionally) doesn't keep game state, and relies on the server to generate legal positions.  Even if it did, there's no
+            // state prior to the first move in the line.
+            // Most lines start with the first move made/highlighted, so the FEN in the "box" is already wrong for my purposes.
+            // Even for opening books, the position starts at move "n" where this line diverges (even if it has all the prior moves included).
+            // Hack is to have a toggle on the form to "Get FEN", and then remember to hit the << button before grabbing the html so the FEN IN THE BOX
+            // is valid.  The FEN in the moves will NEVER be the start position for the line, so we should never use it...
+            //  could actually partially check this.  The first move will be either b/w with a move nbr associated with it.  This should match the FEN in the box, so at least
+            //  I can flag when I've likely forgotten to hit the << on the page first...
+            // if first move in line is "ply 1", then no issue, no FEN needed
+            // if the first move ply is > 1 then get FEN and check that the ply matches, and add if it does.  If not, set an error dialog??
+            //  this way, don't have to set an ugly checkbox and as long as I remember to <<, there's no additional workflow
+
+
+            SetStartFEN("");
+            string moveText = "";
             outputNodeCount = 0;
             foreach (HtmlAgilityPack.HtmlNode n in movesDiv)
             {
-                outText += GetTextFromNode(n);
+                moveText += GetTextFromNode(n);
             }
-            outText += GenerateEndText();
-            outputPGN.Text = outText;
+            string startText = GenerateStartText(GetStartFEN());
+            String endText = GenerateEndText();
+
+            outputPGN.Text = startText + moveText + endText;
 
             GameTag.Text = ChapterHeader.Text + " - " + VariationHeader.Text;
         }
-        private string GenerateStartText()
+
+        String gameStartFEN = "";
+        private String GetStartFEN()
         {
+            return gameStartFEN;
+        }
+        private void SetStartFEN(String thisFEN)
+        {
+            if( thisFEN == "" || gameStartFEN == "")
+                gameStartFEN = thisFEN;
+        }
+        private string GenerateStartText(String StartFEN)
+        {
+            String FENline = StartFEN == "" ? "" : ("[FEN \""+StartFEN+"\"]" + Environment.NewLine);
             return "[Event \"LinePGNImport\"]" + Environment.NewLine
                 + "[Site \"?\"]" + Environment.NewLine
                 + "[Date \"????.??.??\"]" + Environment.NewLine
@@ -52,6 +85,7 @@ namespace ChessableToPGN
                 + "[White \"\"]" + Environment.NewLine
                 + "[Black \"\"]" + Environment.NewLine
                 + "[Result \"\"]" + Environment.NewLine
+                //+ FENline
                 + Environment.NewLine;
         }
         private string GenerateEndText()
@@ -111,6 +145,9 @@ namespace ChessableToPGN
                         isWhite = moveNode != null;
                         if (!isWhite)
                             moveNode = n.SelectSingleNode("./*[contains(@class, 'blackMove') and not(contains(@class, 'commentInMove')) ]");
+                        String thisFEN = moveNode.Attributes["data-fen"].Value;
+                        SetStartFEN(thisFEN);
+
                         outText += (isWhite ? moveNode.Attributes["data-move"].Value : "") + BuildSANText(moveNode, isWhite) + " ";
                         break;
                     case "commentMove":
@@ -189,6 +226,13 @@ namespace ChessableToPGN
             String outDiacritic = "";
             String outEval = "";
             int index = 0;
+
+            if( ispromo )
+            {
+                int firsteq = moveText.IndexOf("=");
+                moveText = moveText.Substring(0, firsteq) + moveText.Substring(firsteq + 1);
+            }
+
             foreach( String d in diacritics)
             {
                 if (moveText.IndexOf(d) >= 0)
@@ -203,10 +247,6 @@ namespace ChessableToPGN
             {
                 if (moveText.IndexOf(d) >= 0)
                 {
-                    if( evalNumber[index] == 10 && ispromo)
-                    {
-                        continue;
-                    }
                     outEval = " $" + evalNumber[index] + " ";
                     break;
                 }
