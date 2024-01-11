@@ -85,6 +85,7 @@ namespace ChessableToPGN
                 + "[White \"\"]" + Environment.NewLine
                 + "[Black \"\"]" + Environment.NewLine
                 + "[Result \"\"]" + Environment.NewLine
+                + (showStartFEN.Checked ? ("[FEN \""+gameStartFEN+"\"]" + Environment.NewLine) : "")
                 //+ FENline
                 + Environment.NewLine;
         }
