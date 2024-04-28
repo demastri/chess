@@ -59,8 +59,9 @@ namespace ChessableToPGN
             }
             string startText = GenerateStartText(GetStartFEN());
             String endText = GenerateEndText();
+            string chessBaseInternalBuffer = "                                        ";
 
-            outputPGN.Text = startText + moveText + endText;
+            outputPGN.Text = startText + moveText + endText + chessBaseInternalBuffer;
 
             GameTag.Text = ChapterHeader.Text + " - " + VariationHeader.Text;
         }

@@ -52,52 +52,47 @@
             // 
             // inputChessableHTML
             // 
-            this.inputChessableHTML.Location = new System.Drawing.Point(22, 203);
-            this.inputChessableHTML.Margin = new System.Windows.Forms.Padding(6);
+            this.inputChessableHTML.Location = new System.Drawing.Point(12, 110);
             this.inputChessableHTML.MaxLength = 999999;
             this.inputChessableHTML.Multiline = true;
             this.inputChessableHTML.Name = "inputChessableHTML";
             this.inputChessableHTML.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.inputChessableHTML.Size = new System.Drawing.Size(607, 333);
+            this.inputChessableHTML.Size = new System.Drawing.Size(333, 182);
             this.inputChessableHTML.TabIndex = 0;
             this.inputChessableHTML.TextChanged += new System.EventHandler(this.inputChessableHTML_TextChanged);
             // 
             // outputPGN
             // 
-            this.outputPGN.Location = new System.Drawing.Point(734, 147);
-            this.outputPGN.Margin = new System.Windows.Forms.Padding(6);
+            this.outputPGN.Location = new System.Drawing.Point(400, 80);
             this.outputPGN.Multiline = true;
             this.outputPGN.Name = "outputPGN";
             this.outputPGN.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.outputPGN.Size = new System.Drawing.Size(692, 829);
+            this.outputPGN.Size = new System.Drawing.Size(379, 451);
             this.outputPGN.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 174);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(9, 94);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(210, 25);
+            this.label1.Size = new System.Drawing.Size(112, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Input From Chessable:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(729, 116);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(398, 63);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 25);
+            this.label2.Size = new System.Drawing.Size(68, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Output PGN:";
             // 
             // GenPGN
             // 
-            this.GenPGN.Location = new System.Drawing.Point(644, 497);
-            this.GenPGN.Margin = new System.Windows.Forms.Padding(6);
+            this.GenPGN.Location = new System.Drawing.Point(351, 269);
             this.GenPGN.Name = "GenPGN";
-            this.GenPGN.Size = new System.Drawing.Size(73, 42);
+            this.GenPGN.Size = new System.Drawing.Size(40, 23);
             this.GenPGN.TabIndex = 4;
             this.GenPGN.Text = "Go";
             this.GenPGN.UseVisualStyleBackColor = true;
@@ -106,81 +101,72 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 137);
-            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label3.Location = new System.Drawing.Point(12, 74);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(128, 25);
+            this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Line Caption:";
             // 
             // VariationHeader
             // 
-            this.VariationHeader.Location = new System.Drawing.Point(161, 131);
-            this.VariationHeader.Margin = new System.Windows.Forms.Padding(6);
+            this.VariationHeader.Location = new System.Drawing.Point(88, 71);
             this.VariationHeader.Name = "VariationHeader";
-            this.VariationHeader.Size = new System.Drawing.Size(552, 29);
+            this.VariationHeader.Size = new System.Drawing.Size(303, 20);
             this.VariationHeader.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 83);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label4.Location = new System.Drawing.Point(12, 45);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(130, 25);
+            this.label4.Size = new System.Drawing.Size(70, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Chapter Title:";
             // 
             // ChapterHeader
             // 
-            this.ChapterHeader.Location = new System.Drawing.Point(161, 83);
-            this.ChapterHeader.Margin = new System.Windows.Forms.Padding(6);
+            this.ChapterHeader.Location = new System.Drawing.Point(88, 45);
             this.ChapterHeader.Name = "ChapterHeader";
-            this.ChapterHeader.Size = new System.Drawing.Size(552, 29);
+            this.ChapterHeader.Size = new System.Drawing.Size(303, 20);
             this.ChapterHeader.TabIndex = 8;
             // 
             // GameTag
             // 
-            this.GameTag.Location = new System.Drawing.Point(867, 33);
-            this.GameTag.Margin = new System.Windows.Forms.Padding(6);
+            this.GameTag.Location = new System.Drawing.Point(473, 18);
             this.GameTag.Name = "GameTag";
-            this.GameTag.Size = new System.Drawing.Size(350, 29);
+            this.GameTag.Size = new System.Drawing.Size(193, 20);
             this.GameTag.TabIndex = 10;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(728, 33);
-            this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label5.Location = new System.Drawing.Point(397, 18);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(111, 25);
+            this.label5.Size = new System.Drawing.Size(60, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Game Tag:";
             // 
             // variationURL
             // 
-            this.variationURL.Location = new System.Drawing.Point(161, 35);
-            this.variationURL.Margin = new System.Windows.Forms.Padding(6);
+            this.variationURL.Location = new System.Drawing.Point(88, 19);
             this.variationURL.Name = "variationURL";
-            this.variationURL.Size = new System.Drawing.Size(468, 29);
+            this.variationURL.Size = new System.Drawing.Size(257, 20);
             this.variationURL.TabIndex = 12;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(22, 35);
-            this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label6.Location = new System.Drawing.Point(12, 19);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(138, 25);
+            this.label6.Size = new System.Drawing.Size(76, 13);
             this.label6.TabIndex = 11;
             this.label6.Text = "Variation URL:";
             // 
             // getHTML
             // 
-            this.getHTML.Location = new System.Drawing.Point(644, 31);
-            this.getHTML.Margin = new System.Windows.Forms.Padding(6);
+            this.getHTML.Location = new System.Drawing.Point(351, 17);
             this.getHTML.Name = "getHTML";
-            this.getHTML.Size = new System.Drawing.Size(73, 42);
+            this.getHTML.Size = new System.Drawing.Size(40, 23);
             this.getHTML.TabIndex = 13;
             this.getHTML.Text = "Get";
             this.getHTML.UseVisualStyleBackColor = true;
@@ -191,19 +177,17 @@
             this.localWV.AllowExternalDrop = true;
             this.localWV.CreationProperties = null;
             this.localWV.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.localWV.Location = new System.Drawing.Point(28, 550);
-            this.localWV.Margin = new System.Windows.Forms.Padding(6);
+            this.localWV.Location = new System.Drawing.Point(15, 298);
             this.localWV.Name = "localWV";
-            this.localWV.Size = new System.Drawing.Size(588, 419);
+            this.localWV.Size = new System.Drawing.Size(321, 227);
             this.localWV.TabIndex = 14;
             this.localWV.ZoomFactor = 1D;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1331, 26);
-            this.button1.Margin = new System.Windows.Forms.Padding(6);
+            this.button1.Location = new System.Drawing.Point(726, 14);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 42);
+            this.button1.Size = new System.Drawing.Size(48, 23);
             this.button1.TabIndex = 15;
             this.button1.Text = "Clip V";
             this.button1.UseVisualStyleBackColor = true;
@@ -211,10 +195,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1232, 24);
-            this.button2.Margin = new System.Windows.Forms.Padding(6);
+            this.button2.Location = new System.Drawing.Point(672, 13);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 42);
+            this.button2.Size = new System.Drawing.Size(48, 23);
             this.button2.TabIndex = 16;
             this.button2.Text = "< Clip";
             this.button2.UseVisualStyleBackColor = true;
@@ -222,10 +205,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(629, 203);
-            this.button3.Margin = new System.Windows.Forms.Padding(6);
+            this.button3.Location = new System.Drawing.Point(343, 110);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(88, 42);
+            this.button3.Size = new System.Drawing.Size(48, 23);
             this.button3.TabIndex = 17;
             this.button3.Text = "<Paste";
             this.button3.UseVisualStyleBackColor = true;
@@ -234,20 +216,19 @@
             // showStartFEN
             // 
             this.showStartFEN.AutoSize = true;
-            this.showStartFEN.Checked = true;
-            this.showStartFEN.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showStartFEN.Location = new System.Drawing.Point(733, 79);
+            this.showStartFEN.Location = new System.Drawing.Point(400, 43);
+            this.showStartFEN.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.showStartFEN.Name = "showStartFEN";
-            this.showStartFEN.Size = new System.Drawing.Size(178, 29);
+            this.showStartFEN.Size = new System.Drawing.Size(102, 17);
             this.showStartFEN.TabIndex = 18;
             this.showStartFEN.Text = "Show Start FEN";
             this.showStartFEN.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1441, 991);
+            this.ClientSize = new System.Drawing.Size(786, 537);
             this.Controls.Add(this.showStartFEN);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -267,7 +248,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.outputPGN);
             this.Controls.Add(this.inputChessableHTML);
-            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.localWV)).EndInit();
