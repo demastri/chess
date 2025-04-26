@@ -78,7 +78,7 @@ class chessable:
         return name
 
     @classmethod
-    def getVariationDetail(cls, courseId: str, variationBs: bs4.element.Tag, profileName: str):
+    def getVariationDetailFromTag(cls, courseId: str, variationBs: bs4.element.Tag, profileName: str):
         name = variationBs.find('a', href=True).text
         href = variationBs.find('a', href=True)['href']
         tags = href.split('/')
@@ -86,6 +86,11 @@ class chessable:
         print("In GetVariationDetail '"+courseId+"-"+variationID +"-"+name)
         bs = chessable.getVariationHtml(variationID, courseId, profileName)
 
+        return [bs, variationID]
+
+    @classmethod
+    def getVariationDetailFromId(cls, courseId: str, variationID:str, profileName: str ):
+        bs = chessable.getVariationHtml(variationID, courseId, profileName)
         return [bs, variationID]
 
     @classmethod
