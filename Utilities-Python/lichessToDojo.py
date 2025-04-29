@@ -26,7 +26,7 @@ def processOTBClockTimes(line, fOut, tc, clocks):
     # so - games entered into cb have the emt tag as well, but are actually clock times...
     global replacedTimes
     curIndex = 0 # next char to write out.
-    matches = [(m.start(), m.end()) for m in re.finditer("\[%emt \d:\d\d:\d\d\]", line)]
+    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d\]", line)]
     print("Found "+str(len(matches))+" matches:")
 
 
@@ -64,7 +64,7 @@ replacedTimes = 0
 def processLichessClockTimes(line, fOut, tc, clocks):
     global replacedTimes
     curIndex = 0 # next char to write out.
-    matches = [(m.start(), m.end()) for m in re.finditer("\[%emt \d:\d\d:\d\d\]", line)]
+    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d\]", line)]
     print("Found "+str(len(matches))+" matches:")
 
 
