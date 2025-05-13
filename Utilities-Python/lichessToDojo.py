@@ -7,8 +7,8 @@ def main():
     if len(sys.argv) > 1:
         gameType = sys.argv[1]
 
-    gameInFile = "test.pgn"
-    gameOutFile = "somefileOut.pgn"
+    gameInFile = "./pgn/Source File In.pgn"
+    gameOutFile = "./pgn/Dojo File Out.pgn"
 
     fIn = open(gameInFile, "r")
     fOut = open(gameOutFile, "w")
@@ -26,7 +26,7 @@ def processOTBClockTimes(line, fOut, tc, clocks):
     # so - games entered into cb have the emt tag as well, but are actually clock times...
     global replacedTimes
     curIndex = 0 # next char to write out.
-    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d\]", line)]
+    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d]", line)]
     print("Found "+str(len(matches))+" matches:")
 
 
@@ -64,7 +64,7 @@ replacedTimes = 0
 def processLichessClockTimes(line, fOut, tc, clocks):
     global replacedTimes
     curIndex = 0 # next char to write out.
-    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d\]", line)]
+    matches = [(m.start(), m.end()) for m in re.finditer(r"\[%emt \d:\d\d:\d\d]", line)]
     print("Found "+str(len(matches))+" matches:")
 
 

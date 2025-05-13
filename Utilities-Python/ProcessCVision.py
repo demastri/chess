@@ -1,3 +1,4 @@
+
 def load_raw_pgn(path, fn):
     games = {}
     inGame = False
@@ -5,6 +6,8 @@ def load_raw_pgn(path, fn):
     index = -1
 
     seen72 = False  # made a mistake tagging image 71, and it's out-of-order.  First time we see game 72, make it 71
+    # there's also some issue around pgn 223, but we'll deal with that later
+    # 5/5/25 - exporting "for good" games 1-108 (Through 1st 5 groups - Mate)
 
     # '[' tag starts game
     # "*" ends game
@@ -53,7 +56,7 @@ def load_supplemental(path, fn):
             # print( "tag - ", end="")
             sections[line.strip()] = currentPosition
         # otherwise, validate the index, update the current indexed position difficulty
-        if is_integer(line[0]):
+        if line[0].isnumeric():
             # print( "difficulties - ", end="")
             words = line.split()
             thisPos = int(words[0][:-1])
@@ -124,14 +127,15 @@ def write_updated_pgn(path, fn, rawGames, processedGames, stars, sections):
 
 
 def main():
-    pgnPath = "./"
+    supplementalPath = "./data/"
+    pgnPath = "./PGN/"
     rawFn = "CTFS Diagrams Raw.pgn"
     processedFn = "CTFS Diagrams Processed.pgn"
     difficultyFn = "CTFS Diagrams Supplement.txt"
 
     rawGames = load_raw_pgn(pgnPath, rawFn)
     processedGames = load_raw_pgn(pgnPath, processedFn)
-    difficulties, sections = load_supplemental(pgnPath, difficultyFn)
+    difficulties, sections = load_supplemental(supplementalPath, difficultyFn)
     write_updated_pgn(pgnPath, processedFn, rawGames, processedGames, difficulties, sections)
 
 def is_integer(str_val):
@@ -140,6 +144,7 @@ def is_integer(str_val):
         return True
     except ValueError:
         return False
+
 
 if __name__ == "__main__":
     main()

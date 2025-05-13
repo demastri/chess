@@ -1,0 +1,3000 @@
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 1 - Difficulty: 1 Stars"]
+[Black "The Pin - Position 1"]
+[Round "1.1"]
+[Result "*"]
+[FEN "1q2r1k1/6p1/p6p/2P1P2P/2Pr4/1Q4N1/P5P1/1K2R3 b - - 0 1"]
+{ Ctfs 1 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 2 - Difficulty: 1 Stars"]
+[Black "The Pin - Position 2"]
+[Round "1.2"]
+[Result "*"]
+[FEN "2r1k2r/2q3bp/p2pB3/8/1p2P3/8/PPPQN1PP/2KR4 b k - 0 1"]
+{ Ctfs 2 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 3 - Difficulty: 1 Stars"]
+[Black "The Pin - Position 3"]
+[Round "1.3"]
+[Result "*"]
+[FEN "5k2/3n1p2/4p1rp/2q1PN2/1Q6/8/1P3PP1/4R1K1 w - - 0 1"]
+{ Ctfs 3 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 4 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 4"]
+[Round "1.4"]
+[Result "*"]
+[FEN "2rr2k1/Rb2qppp/1p6/1P6/2P5/5P2/5RPP/Q4NK1 w - - 0 1"]
+{ Ctfs 4 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 5 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 5"]
+[Round "1.5"]
+[Result "*"]
+[FEN "3r2k1/pp1rbppp/1nn1p3/4P3/3P1N2/qBQ1BP1P/P4P2/3R1RK1 w - - 0 1"]
+{ Ctfs 5 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 6 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 6"]
+[Round "1.6"]
+[Result "*"]
+[FEN "2kr2r1/bp1b1p1p/p3pn1Q/4q3/8/1NN2BP1/PPP2P1P/3R1RK1 w - - 0 1"]
+{ Ctfs 6 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 7 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 7"]
+[Round "1.7"]
+[Result "*"]
+[FEN "r1bq1r1k/1p3ppp/p2p1n2/8/2R1Pp1P/1P6/PBP1Q3/1K3BR1 w - - 0 1"]
+{ Ctfs 7 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 8 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 8"]
+[Round "1.8"]
+[Result "*"]
+[FEN "3q1r1k/ppp4p/3pRn2/5p1r/3Q4/2P3P1/PPB4P/4R1K1 w - - 0 1"]
+{ Ctfs 8 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 9 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 9"]
+[Round "1.9"]
+[Result "*"]
+[FEN "r5k1/pp2bppp/2p1pn2/3rN2q/5QP1/2BP4/PP2PP1P/R4RK1 b - - 0 1"]
+{ Ctfs 9 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 10 - Difficulty: 2 Stars"]
+[Black "The Pin - Position 10"]
+[Round "1.10"]
+[Result "*"]
+[FEN "rn2rk2/pp2qppB/2p5/8/3P2bN/2P1P3/PPQK3P/R6R w - - 0 1"]
+{ Ctfs 10 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 11 - Difficulty: 3 Stars"]
+[Black "The Pin - Position 11"]
+[Round "1.11"]
+[Result "*"]
+[FEN "1N2r2k/1bp2p2/1b3npB/1p6/7q/7P/BPQ2PP1/R4RK1 b - - 0 1"]
+{ Ctfs 11 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 12 - Difficulty: 3 Stars"]
+[Black "The Pin - Position 12"]
+[Round "1.12"]
+[Result "*"]
+[FEN "r4rk1/pp3pp1/4pq1B/2N4R/6Q1/P7/1P3PPP/n5K1 w - - 0 1"]
+{ Ctfs 12 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 13 - Difficulty: 4 Stars"]
+[Black "The Pin - Position 13"]
+[Round "1.13"]
+[Result "*"]
+[FEN "4k3/p2n1p2/4p3/3pP2Q/1B1P4/1P6/Pq4P1/2rR2K1 b - - 0 1"]
+{ Ctfs 13 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 14 - Difficulty: 4 Stars"]
+[Black "The Pin - Position 14"]
+[Round "1.14"]
+[Result "*"]
+[FEN "7r/1b1rkp2/pbnppq2/1p5p/5P1Q/1NP2BN1/PP4PP/3R1R1K w - - 0 1"]
+{ Ctfs 14 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 15 - Difficulty: 4 Stars"]
+[Black "The Pin - Position 15"]
+[Round "1.15"]
+[Result "*"]
+[FEN "5rnk/2pbrq1p/1p1p1pp1/p1nP4/P1P1PR1N/6RP/1PBB2P1/3Q2K1 w - - 0 1"]
+{ Ctfs 15 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 16 - Difficulty: 4 Stars"]
+[Black "The Pin - Position 16"]
+[Round "1.16"]
+[Result "*"]
+[FEN "3r2k1/pp3p1p/5bp1/1Pq5/3pQ2P/4P1P1/3R1PB1/2rR2K1 b - - 0 1"]
+{ Ctfs 16 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 17 - Difficulty: 4 Stars"]
+[Black "The Pin - Position 17"]
+[Round "1.17"]
+[Result "*"]
+[FEN "2r3k1/6bp/p3q1p1/1p1np1P1/1B2b1B1/P1P5/2P5/1K1R2QR b - - 0 1"]
+{ Ctfs 17 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 18 - Difficulty: 5 Stars"]
+[Black "The Pin - Position 18"]
+[Round "1.18"]
+[Result "*"]
+[FEN "1rbr2k1/p1qn1p1p/1p2p1p1/1B4N1/8/6P1/PPP1QP1P/R2R2K1 w - - 0 1"]
+{ Ctfs 18 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 19 - Difficulty: 1 Stars"]
+[Black "The Discovered Attack - Position 1"]
+[Round "2.1"]
+[Result "*"]
+[FEN "r3k2r/2pn4/b2ppq1p/pBp2pp1/P2P3P/2P1PPB1/3Q2P1/R3K2R w KQkq - 0 1"]
+{ Ctfs 19 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 20 - Difficulty: 1 Stars"]
+[Black "The Discovered Attack - Position 2"]
+[Round "2.2"]
+[Result "*"]
+[FEN "3r1rk1/1p1b2pp/p1n1p3/2R2pq1/1PNP4/P7/5PPP/1B1QR1K1 b - - 0 1"]
+{ Ctfs 20 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 21 - Difficulty: 1 Stars"]
+[Black "The Discovered Attack - Position 3"]
+[Round "2.3"]
+[Result "*"]
+[FEN "1r3b1R/p1kn1P2/B3p3/q2pP3/3P4/2p1Q1P1/P4P2/R3K3 b Q - 0 1"]
+{ Ctfs 21 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 22 - Difficulty: 1 Stars"]
+[Black "The Discovered Attack - Position 4"]
+[Round "2.4"]
+[Result "*"]
+[FEN "r1r3nk/p1q4p/4pppP/2B5/1p2P3/8/PPPR1PP1/2KR4 w - - 0 1"]
+{ Ctfs 22 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 23 - Difficulty: 2 Stars"]
+[Black "The Discovered Attack - Position 5"]
+[Round "2.5"]
+[Result "*"]
+[FEN "r4bk1/pp1b1p2/1n4pp/2p1r2q/8/5PB1/PP2NQPP/1BRR2K1 w - - 0 1"]
+{ Ctfs 23 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 24 - Difficulty: 3 Stars"]
+[Black "The Discovered Attack - Position 6"]
+[Round "2.6"]
+[Result "*"]
+[FEN "2r4k/1b3pbp/3ppp2/1pq4N/p1rNPPP1/3RQ3/PPP4P/1K4R1 b - - 0 1"]
+{ Ctfs 24 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 25 - Difficulty: 3 Stars"]
+[Black "The Discovered Attack - Position 7"]
+[Round "2.7"]
+[Result "*"]
+[FEN "3n2k1/p3bp1p/1p2p1pB/3bP1N1/q3BQ1P/2P2P2/P5PK/8 w - - 0 1"]
+{ Ctfs 25 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 26 - Difficulty: 3 Stars"]
+[Black "The Discovered Attack - Position 8"]
+[Round "2.8"]
+[Result "*"]
+[FEN "3r1k2/2p1Rpp1/7p/qn1N4/p1Q5/P5P1/1P3P1P/6K1 w - - 0 1"]
+{ Ctfs 26 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 27 - Difficulty: 3 Stars"]
+[Black "The Discovered Attack - Position 9"]
+[Round "2.9"]
+[Result "*"]
+[FEN "8/KQ5P/8/4q1b1/1B2B1n1/6pp/1Pp5/1k6 w - - 0 1"]
+{ Ctfs 27 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 28 - Difficulty: 4 Stars"]
+[Black "The Discovered Attack - Position 10"]
+[Round "2.10"]
+[Result "*"]
+[FEN "r5k1/p4ppp/2pb1n2/3p2q1/N7/1P1Br1Pb/PB3P1P/2RQR1K1 b - - 0 1"]
+{ Ctfs 28 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 29 - Difficulty: 4 Stars"]
+[Black "The Discovered Attack - Position 11"]
+[Round "2.11"]
+[Result "*"]
+[FEN "5k2/2q2p2/4p1pb/1Bp1P2r/3r1P1p/4Q3/PRP3PP/5RK1 b - - 0 1"]
+{ Ctfs 29 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 30 - Difficulty: 5 Stars"]
+[Black "The Discovered Attack - Position 12"]
+[Round "2.12"]
+[Result "*"]
+[FEN "r3nk2/1r2pp1p/1q4pb/2pP4/P7/R1N1R1PP/1P2QPK1/2B5 w - - 0 1"]
+{ Ctfs 30 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 31 - Difficulty: 1 Stars"]
+[Black "The Reloader - Position 1"]
+[Round "3.1"]
+[Result "*"]
+[FEN "2rq1r2/6bk/2npn1pp/p1p1pb2/Pp2N3/1BPPBN2/1PQ2PPP/1R2R1K1 w - - 0 1"]
+{ Ctfs 31 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 32 - Difficulty: 1 Stars"]
+[Black "The Reloader - Position 2"]
+[Round "3.2"]
+[Result "*"]
+[FEN "r4rk1/pp1n1pp1/q3p3/3pP1Bp/3P3P/1P4P1/P2Q2P1/R4RK1 w - - 0 1"]
+{ Ctfs 32 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 33 - Difficulty: 1 Stars"]
+[Black "The Reloader - Position 3"]
+[Round "3.3"]
+[Result "*"]
+[FEN "r2qr1k1/2pb2bp/p4np1/1pp3N1/5Q2/2N4P/PP2BPP1/3R1RK1 w - - 0 1"]
+{ Ctfs 33 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 34 - Difficulty: 1 Stars"]
+[Black "The Reloader - Position 4"]
+[Round "3.4"]
+[Result "*"]
+[FEN "r3kb1r/1bq2p1p/p2p1P2/1p2p3/n3P2B/P4N1B/1PP1Q2P/1K1R3R b kq - 0 1"]
+{ Ctfs 34 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 35 - Difficulty: 2 Stars"]
+[Black "The Reloader - Position 5"]
+[Round "3.5"]
+[Result "*"]
+[FEN "3qr1k1/5ppp/8/1Ppn4/3b4/5PP1/1PQ1B2P/2B2K1R b - - 0 1"]
+{ Ctfs 35 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 36 - Difficulty: 2 Stars"]
+[Black "The Reloader - Position 6"]
+[Round "3.6"]
+[Result "*"]
+[FEN "r3kn1r/pppq2bp/3n4/4p2p/4N1P1/4BP2/PPQ2P2/2KR1B1R w kq - 0 1"]
+{ Ctfs 36 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 37 - Difficulty: 2 Stars"]
+[Black "The Reloader - Position 7"]
+[Round "3.7"]
+[Result "*"]
+[FEN "2k5/ppp3q1/1P3n2/P3pPr1/3pPp1p/3P1BrP/2P2Q1K/R1R5 b - - 0 1"]
+{ Ctfs 37 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 38 - Difficulty: 3 Stars"]
+[Black "The Reloader - Position 8"]
+[Round "3.8"]
+[Result "*"]
+[FEN "2rr4/1b1q1pkp/1p4p1/p7/1nBPpN1P/2R1P3/1P3PP1/2RQ2K1 w - - 0 1"]
+{ Ctfs 38 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 39 - Difficulty: 3 Stars"]
+[Black "The Reloader - Position 9"]
+[Round "3.9"]
+[Result "*"]
+[FEN "r4rk1/1p3p1p/2bpp1p1/p7/2PN4/1P1QBPnq/P3B3/1R1R2K1 b - - 0 1"]
+{ Ctfs 39 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 40 - Difficulty: 3 Stars"]
+[Black "The Reloader - Position 10"]
+[Round "3.10"]
+[Result "*"]
+[FEN "r3r1k1/pp1q1pp1/5n1p/b2pn3/3Nb3/PP2B1PP/2P1NPBK/R2Q1R2 b - - 0 1"]
+{ Ctfs 40 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 41 - Difficulty: 4 Stars"]
+[Black "The Reloader - Position 11"]
+[Round "3.11"]
+[Result "*"]
+[FEN "1r4k1/2q1b2p/p3p1pP/1p3p2/1P3P2/P1N2QP1/5P2/3R2K1 w - - 0 1"]
+{ Ctfs 41 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 42 - Difficulty: 5 Stars"]
+[Black "The Reloader - Position 12"]
+[Round "3.12"]
+[Result "*"]
+[FEN "4rr1k/1q4pp/1p6/1Pn2P2/3RP1P1/P2n4/3BQ1KP/6NR b - - 0 1"]
+{ Ctfs 42 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 43 - Difficulty: 1 Stars"]
+[Black "Overloading - Position 1"]
+[Round "4.1"]
+[Result "*"]
+[FEN "6k1/1b3pp1/4p2p/p3P3/1p3P2/1P1B3P/P5P1/qQ2BK2 b - - 0 1"]
+{ Ctfs 43 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 44 - Difficulty: 1 Stars"]
+[Black "Overloading - Position 2"]
+[Round "4.2"]
+[Result "*"]
+[FEN "4r3/1br2ppk/p5np/1p1qPQ2/2nP4/P5N1/4R1PP/BB3R1K b - - 0 1"]
+{ Ctfs 44 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 45 - Difficulty: 1 Stars"]
+[Black "Overloading - Position 3"]
+[Round "4.3"]
+[Result "*"]
+[FEN "6r1/bp2kp2/3p1p2/PPq1pP1p/4P1r1/2PQ2P1/6PK/R2RB3 w - - 0 1"]
+{ Ctfs 45 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 46 - Difficulty: 1 Stars"]
+[Black "Overloading - Position 4"]
+[Round "4.4"]
+[Result "*"]
+[FEN "8/Rpr1q1k1/5np1/5p2/3Rp3/1Q6/1P3PPP/6K1 b - - 0 1"]
+{ Ctfs 46 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 47 - Difficulty: 2 Stars"]
+[Black "Overloading - Position 5"]
+[Round "4.5"]
+[Result "*"]
+[FEN "2k4r/pp3p2/1np3q1/2Q3p1/3R4/1P2P1P1/P4PB1/6K1 w - - 0 1"]
+{ Ctfs 47 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 48 - Difficulty: 2 Stars"]
+[Black "Overloading - Position 6"]
+[Round "4.6"]
+[Result "*"]
+[FEN "1k2r1r1/pbp5/3pP2Q/2p5/2P2p1N/5P2/P1q3PP/3R1RK1 b - - 0 1"]
+{ Ctfs 48 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 49 - Difficulty: 2 Stars"]
+[Black "Overloading - Position 7"]
+[Round "4.7"]
+[Result "*"]
+[FEN "3r2k1/ppqr2b1/1n1N2pp/2p5/5p1P/2PQ1N2/PP3PP1/3RR1K1 w - - 0 1"]
+{ Ctfs 49 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 50 - Difficulty: 2 Stars"]
+[Black "Overloading - Position 8"]
+[Round "4.8"]
+[Result "*"]
+[FEN "r7/pq2nkpp/2p1p3/2PpPp2/R2P1P2/R6P/2PBQ1PK/1r6 w - - 0 1"]
+{ Ctfs 50 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 51 - Difficulty: 2 Stars"]
+[Black "Overloading - Position 9"]
+[Round "4.9"]
+[Result "*"]
+[FEN "2r2rk1/1b1nqpp1/1p2p1np/b2pP1N1/3P1P2/pPNB4/P2BQ1PP/2R2RK1 w - - 0 1"]
+{ Ctfs 51 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 52 - Difficulty: 3 Stars"]
+[Black "Overloading - Position 10"]
+[Round "4.10"]
+[Result "*"]
+[FEN "r1b1r1k1/1p3ppp/pb1Pp3/1q6/8/5BB1/1PQ2PPP/2RR2K1 w - - 0 1"]
+{ Ctfs 52 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 53 - Difficulty: 3 Stars"]
+[Black "Overloading - Position 11"]
+[Round "4.11"]
+[Result "*"]
+[FEN "r4rk1/pp1nb1pp/2p5/2Ppnp2/1P6/2N1BPP1/1P2BP1P/R2R2K1 w - - 0 1"]
+{ Ctfs 53 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 54 - Difficulty: 3 Stars"]
+[Black "Overloading - Position 12"]
+[Round "4.12"]
+[Result "*"]
+[FEN "r6r/1p1bkpp1/p2Np2p/2n3b1/8/1B3N2/PPP2PPP/1K1RR3 w - - 0 1"]
+{ Ctfs 54 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 55 - Difficulty: 3 Stars"]
+[Black "Overloading - Position 13"]
+[Round "4.13"]
+[Result "*"]
+[FEN "3r2k1/pp3pp1/7p/2b5/5N2/2Qp1qP1/PP1R1P1P/6K1 b - - 0 1"]
+{ Ctfs 55 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 56 - Difficulty: 4 Stars"]
+[Black "Overloading - Position 14"]
+[Round "4.14"]
+[Result "*"]
+[FEN "6k1/4pp1p/6p1/1p6/1NqP1b2/rN1R1P1P/rPQ1B1P1/5K2 b - - 0 1"]
+{ Ctfs 56 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 57 - Difficulty: 4 Stars"]
+[Black "Overloading - Position 15"]
+[Round "4.15"]
+[Result "*"]
+[FEN "r4rk1/3B1ppp/1p1p3q/3Pp3/4PnR1/2P2P2/1P3P1P/R2Q3K b - - 0 1"]
+{ Ctfs 57 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 58 - Difficulty: 4 Stars"]
+[Black "Overloading - Position 16"]
+[Round "4.16"]
+[Result "*"]
+[FEN "2rr2k1/1pq2ppp/p2p4/3Qp3/2n1P3/2P5/PP1N1PPP/3RR1K1 w - - 0 1"]
+{ Ctfs 58 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 59 - Difficulty: 5 Stars"]
+[Black "Overloading - Position 17"]
+[Round "4.17"]
+[Result "*"]
+[FEN "3r1rk1/p4ppp/1pq2n2/3bR3/2BP3Q/1P3R2/PB4PP/6K1 w - - 0 1"]
+{ Ctfs 59 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 60 - Difficulty: 5 Stars"]
+[Black "Overloading - Position 18"]
+[Round "4.18"]
+[Result "*"]
+[FEN "4nrk1/Q5pp/1p4q1/2bb2P1/2r2P2/P4N1P/1B4B1/4RR1K w - - 0 1"]
+{ Ctfs 60 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 61 - Difficulty: 1 Stars"]
+[Black "Mate - Position 1"]
+[Round "5.1"]
+[Result "*"]
+[FEN "r3r3/2R5/1p4pk/1b1PP3/1P2PP2/6RB/5b1P/7K w - - 0 1"]
+{ Ctfs 61 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 62 - Difficulty: 1 Stars"]
+[Black "Mate - Position 2"]
+[Round "5.2"]
+[Result "*"]
+[FEN "rn3rk1/2qpb2p/p3pp2/3b4/Pp3P2/1N1BB3/1PP1Q1PP/R4R1K w - - 0 1"]
+{ Ctfs 62 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 63 - Difficulty: 1 Stars"]
+[Black "Mate - Position 3"]
+[Round "5.3"]
+[Result "*"]
+[FEN "3r1nrk/1b2b1pp/1q2p3/p1p1Pp2/PnB2N2/1N5R/1P1BQPPP/5RK1 w - - 0 1"]
+{ Ctfs 63 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 64 - Difficulty: 1 Stars"]
+[Black "Mate - Position 4"]
+[Round "5.4"]
+[Result "*"]
+[FEN "1r2kb1r/1p2pp2/p2p4/3Nn1B1/4P1q1/6Q1/PPP1N1Pn/2KR3R w k - 0 1"]
+{ Ctfs 64 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 65 - Difficulty: 1 Stars"]
+[Black "Mate - Position 5"]
+[Round "5.5"]
+[Result "*"]
+[FEN "4nrk1/1bqrbp1p/p2pp1p1/1p6/3BPP2/P1NB1R1Q/1PP3PP/R6K w - - 0 1"]
+{ Ctfs 65 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 66 - Difficulty: 1 Stars"]
+[Black "Mate - Position 6"]
+[Round "5.6"]
+[Result "*"]
+[FEN "4r1k1/1R2bpp1/p6p/2p1P3/q2nN1QP/2B3P1/5PK1/8 w - - 0 1"]
+{ Ctfs 66 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 67 - Difficulty: 1 Stars"]
+[Black "Mate - Position 7"]
+[Round "5.7"]
+[Result "*"]
+[FEN "4rnrk/p1qn3p/1p1p1pp1/2pPpN1Q/4P3/P1P1R2R/2P2PPP/2B3K1 w - - 0 1"]
+{ Ctfs 67 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 68 - Difficulty: 2 Stars"]
+[Black "Mate - Position 8"]
+[Round "5.8"]
+[Result "*"]
+[FEN "2krr3/pp4pp/2q5/3Nb3/1P6/2PQ4/P5P1/3R1R1K b - - 0 1"]
+{ Ctfs 68 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 69 - Difficulty: 2 Stars"]
+[Black "Mate - Position 9"]
+[Round "5.9"]
+[Result "*"]
+[FEN "r3k3/1p2bp1r/2p1pQ1p/p3P2P/P6R/4B1P1/1P1R1PK1/1q6 w q - 0 1"]
+{ Ctfs 69 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 70 - Difficulty: 2 Stars"]
+[Black "Mate - Position 10"]
+[Round "5.10"]
+[Result "*"]
+[FEN "r1b2r2/p1q3kp/1p2Rp2/5P2/3p1N1Q/3B4/P5PP/6K1 w - - 0 1"]
+{ Ctfs 70 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 71 - Difficulty: 2 Stars"]
+[Black "Mate - Position 11"]
+[Round "5.11"]
+[Result "*"]
+[FEN "1r2r1k1/2q1npPp/8/1B1p1bP1/1Q6/2P2P2/1P5P/2KRR3 b - - 0 1"]
+{ Ctfs 72 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 72 - Difficulty: 2 Stars"]
+[Black "Mate - Position 12"]
+[Round "5.12"]
+[Result "*"]
+[FEN "5rk1/2p3pp/2p3q1/P1B1P1b1/N2Pb3/6Q1/1P4PP/R5K1 b - - 0 1"]
+{ Ctfs 72 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 73 - Difficulty: 2 Stars"]
+[Black "Mate - Position 13"]
+[Round "5.13"]
+[Result "*"]
+[FEN "r5k1/3qbbp1/2p2p1p/1p2p3/rP1PP3/2Q1B1P1/3R1PBP/1R4K1 b - - 0 1"]
+{ Ctfs 73 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 74 - Difficulty: 2 Stars"]
+[Black "Mate - Position 14"]
+[Round "5.14"]
+[Result "*"]
+[FEN "4r1k1/pp3qpp/3b4/3b2P1/3P2Q1/2P1B2P/PP1N1P2/R5K1 b - - 0 1"]
+{ Ctfs 74 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 75 - Difficulty: 2 Stars"]
+[Black "Mate - Position 15"]
+[Round "5.15"]
+[Result "*"]
+[FEN "2r3k1/Q1R2p1p/4p1pb/4P3/3P4/5N2/Pr2qPPP/5RK1 b - - 0 1"]
+{ Ctfs 75 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 76 - Difficulty: 2 Stars"]
+[Black "Mate - Position 16"]
+[Round "5.16"]
+[Result "*"]
+[FEN "r4rk1/1p1q1pp1/5n1p/p1bP2R1/3p1B2/1B3Q2/PP3PPP/3R2K1 w - - 0 1"]
+{ Ctfs 76 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 77 - Difficulty: 2 Stars"]
+[Black "Mate - Position 17"]
+[Round "5.17"]
+[Result "*"]
+[FEN "r2r2k1/pb3pp1/2q2n1p/4b3/2P5/1NP1BB2/PP3PP1/R3QR1K b - - 0 1"]
+{ Ctfs 77 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 78 - Difficulty: 2 Stars"]
+[Black "Mate - Position 18"]
+[Round "5.18"]
+[Result "*"]
+[FEN "1r6/Q3pp1p/R2b2pk/3r1q2/2p5/2B1P3/1P3PPP/4R1K1 b - - 0 1"]
+{ Ctfs 78 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 79 - Difficulty: 2 Stars"]
+[Black "Mate - Position 19"]
+[Round "5.19"]
+[Result "*"]
+[FEN "r2q4/kp2p3/p1n1b3/3p4/5B2/2N3Q1/PPP2PP1/R3KB1r w Q - 0 1"]
+{ Ctfs 79 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 80 - Difficulty: 3 Stars"]
+[Black "Mate - Position 20"]
+[Round "5.20"]
+[Result "*"]
+[FEN "r1b2r1k/pp3ppp/4p3/1qb1P3/6QB/8/PP2NPPP/3R1RK1 w - - 0 1"]
+{ Ctfs 80 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 81 - Difficulty: 3 Stars"]
+[Black "Mate - Position 21"]
+[Round "5.21"]
+[Result "*"]
+[FEN "r1b2rk1/3nb1p1/pq2p2p/1pppP3/2nP4/P1PBBN2/1PQ3PP/R2N1RK1 w - - 0 1"]
+{ Ctfs 81 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 82 - Difficulty: 3 Stars"]
+[Black "Mate - Position 22"]
+[Round "5.22"]
+[Result "*"]
+[FEN "4r2k/1pp1r1p1/2n2q1p/p1P4b/4np2/P4N1P/1PQ1BPP1/2BRRK2 b - - 0 1"]
+{ Ctfs 82 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 83 - Difficulty: 3 Stars"]
+[Black "Mate - Position 23"]
+[Round "5.23"]
+[Result "*"]
+[FEN "3R4/pqr3kp/r3ppp1/4N2P/1P2pP2/2P3P1/5P2/3Q2K1 w - - 0 1"]
+{ Ctfs 83 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 84 - Difficulty: 3 Stars"]
+[Black "Mate - Position 24"]
+[Round "5.24"]
+[Result "*"]
+[FEN "r1b1kb1r/1N1npppp/p1q5/3NP3/8/8/P1PQ2PP/1R2KB1R w Kkq - 0 1"]
+{ Ctfs 84 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 85 - Difficulty: 3 Stars"]
+[Black "Mate - Position 25"]
+[Round "5.25"]
+[Result "*"]
+[FEN "r1b1q2k/1p4pp/p3p3/2b1p3/4PN2/P6Q/B4PPP/3R2K1 w - - 0 1"]
+{ Ctfs 85 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 86 - Difficulty: 3 Stars"]
+[Black "Mate - Position 26"]
+[Round "5.26"]
+[Result "*"]
+[FEN "r4r1k/pp2b1p1/1qn1pp1p/2p4P/4NP2/2B5/PPP1Q3/1K1R2R1 w - - 0 1"]
+{ Ctfs 86 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 87 - Difficulty: 3 Stars"]
+[Black "Mate - Position 27"]
+[Round "5.27"]
+[Result "*"]
+[FEN "r6r/p4k1p/2Q2p2/3n1q2/3p4/8/PP1B1P2/2K3RR w - - 0 1"]
+{ Ctfs 87 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 88 - Difficulty: 3 Stars"]
+[Black "Mate - Position 28"]
+[Round "5.28"]
+[Result "*"]
+[FEN "4br1k/2p3pp/p3rp2/4qNP1/2PpP2Q/3P1R2/P5P1/5RK1 w - - 0 1"]
+{ Ctfs 88 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 89 - Difficulty: 4 Stars"]
+[Black "Mate - Position 29"]
+[Round "5.29"]
+[Result "*"]
+[FEN "5rk1/pp2Rrpp/2p5/q2p4/P2Q4/2P5/1P3PPP/4R1K1 w - - 0 1"]
+{ Ctfs 89 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 90 - Difficulty: 4 Stars"]
+[Black "Mate - Position 30"]
+[Round "5.30"]
+[Result "*"]
+[FEN "2r1r1k1/2q2p1p/3p4/4bPPp/pp6/3QB3/PPP4P/1K1R3R b - - 0 1"]
+{ Ctfs 90 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 91 - Difficulty: 4 Stars"]
+[Black "Mate - Position 31"]
+[Round "5.31"]
+[Result "*"]
+[FEN "2r1k1r1/1p3p1p/2bQp3/p1B2pq1/1P6/8/1PP2RPP/4R2K w - - 0 1"]
+{ Ctfs 91 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 92 - Difficulty: 4 Stars"]
+[Black "Mate - Position 32"]
+[Round "5.32"]
+[Result "*"]
+[FEN "1R6/2b2p1k/2r1p1pB/q2p3p/3P3P/6P1/3Q1PK1/8 w - - 0 1"]
+{ Ctfs 92 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 93 - Difficulty: 4 Stars"]
+[Black "Mate - Position 33"]
+[Round "5.33"]
+[Result "*"]
+[FEN "r3rbk1/1p1n2p1/1qp1p2p/p3PpN1/Pn1P3P/2N3P1/1P2QPK1/2BR3R w - - 0 1"]
+{ Ctfs 93 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 94 - Difficulty: 4 Stars"]
+[Black "Mate - Position 34"]
+[Round "5.34"]
+[Result "*"]
+[FEN "r4rk1/pp3p1p/1qnp2p1/2p5/2P1P3/2BPnN2/P1P3PP/R2Q1RK1 w - - 0 1"]
+{ Ctfs 94 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 95 - Difficulty: 4 Stars"]
+[Black "Mate - Position 35"]
+[Round "5.35"]
+[Result "*"]
+[FEN "r1b4k/pp4pp/2p2r2/q4P2/3Pp3/1QN1P2P/PP1K1P2/R5R1 w - - 0 1"]
+{ Ctfs 95 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 96 - Difficulty: 4 Stars"]
+[Black "Mate - Position 36"]
+[Round "5.36"]
+[Result "*"]
+[FEN "8/q5kp/2p1bpp1/4p3/3n4/2Q1P1P1/P2R1PBP/1rN3K1 b - - 0 1"]
+{ Ctfs 96 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 97 - Difficulty: 4 Stars"]
+[Black "Mate - Position 37"]
+[Round "5.37"]
+[Result "*"]
+[FEN "r4r1k/pp1q2p1/6Qp/2bpPp2/8/8/PPPB2RP/5R1K w - - 0 1"]
+{ Ctfs 97 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 98 - Difficulty: 4 Stars"]
+[Black "Mate - Position 38"]
+[Round "5.38"]
+[Result "*"]
+[FEN "5rk1/6pp/7q/Q3p3/4Pn2/1P6/P2R2PP/4N1K1 b - - 0 1"]
+{ Ctfs 98 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 99 - Difficulty: 4 Stars"]
+[Black "Mate - Position 39"]
+[Round "5.39"]
+[Result "*"]
+[FEN "8/5q1k/p1bQ4/4pr2/2P5/1p4R1/1B4P1/6K1 b - - 0 1"]
+{ Ctfs 99 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 100 - Difficulty: 4 Stars"]
+[Black "Mate - Position 40"]
+[Round "5.40"]
+[Result "*"]
+[FEN "7k/pp4pp/3p3r/4p2r/4Pn2/3R1QPq/PP3P1P/2R2N1K b - - 0 1"]
+{ Ctfs 100 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 101 - Difficulty: 4 Stars"]
+[Black "Mate - Position 41"]
+[Round "5.41"]
+[Result "*"]
+[FEN "4r2k/5p2/1q3r2/3RPN2/6PP/p1Q5/1PP5/1K6 b - - 0 1"]
+{ Ctfs 101 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 102 - Difficulty: 4 Stars"]
+[Black "Mate - Position 42"]
+[Round "5.42"]
+[Result "*"]
+[FEN "r5k1/2p3pp/4r3/7P/3p3R/1PbP4/2PB1PP1/3K1R2 b - - 0 1"]
+{ Ctfs 102 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 103 - Difficulty: 4 Stars"]
+[Black "Mate - Position 43"]
+[Round "5.43"]
+[Result "*"]
+[FEN "r3q2k/pp2np1p/2pr1p1B/4b3/3p3R/5Q1P/PPB2PP1/R5K1 w - - 0 1"]
+{ Ctfs 103 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 104 - Difficulty: 4 Stars"]
+[Black "Mate - Position 44"]
+[Round "5.44"]
+[Result "*"]
+[FEN "r5k1/pp1b2p1/2n1p1qp/3pPr2/2pP3Q/P1P1BN1R/2P2PP1/2K4R b - - 0 1"]
+{ Ctfs 104 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 105 - Difficulty: 4 Stars"]
+[Black "Mate - Position 45"]
+[Round "5.45"]
+[Result "*"]
+[FEN "2rqr3/pp2bp1k/2b1pnNB/8/3P4/P1nQ2R1/1P3PPP/R5K1 w - - 0 1"]
+{ Ctfs 105 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 106 - Difficulty: 5 Stars"]
+[Black "Mate - Position 46"]
+[Round "5.46"]
+[Result "*"]
+[FEN "5rk1/R4pnp/2p1b1p1/1p4N1/5R2/4PBKP/PQ3PP1/2r3q1 w - - 0 1"]
+{ Ctfs 106 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 107 - Difficulty: 5 Stars"]
+[Black "Mate - Position 47"]
+[Round "5.47"]
+[Result "*"]
+[FEN "r4rk1/1p3pp1/3p1b1p/pN6/P1p1PBK1/5nP1/BPP1N2q/R4Q2 b - - 0 1"]
+{ Ctfs 107 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 108 - Difficulty: 5 Stars"]
+[Black "Mate - Position 48"]
+[Round "5.48"]
+[Result "*"]
+[FEN "r3n3/1bqr1pb1/2p4k/1pP5/1P2Q3/7P/1B3PP1/2R1R1K1 w - - 0 1"]
+{ Ctfs 108 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 109 - Difficulty: 1 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 1"]
+[Round "6.1"]
+[Result "*"]
+[FEN "4r3/p5bk/1p6/4Bp1q/P1PPn1p1/3Q4/3N1PP1/4R1K1 b - - 0 1"]
+{ Ctfs 109 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 110 - Difficulty: 1 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 2"]
+[Round "6.2"]
+[Result "*"]
+[FEN "4r3/1Q4pk/2p4p/3p1p1P/2pP1P2/P1K1P3/1PR2P2/1q6 b - - 0 1"]
+{ Ctfs 110 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 111 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 3"]
+[Round "6.3"]
+[Result "*"]
+[FEN "1q2r1k1/5ppp/p2p2n1/5NQP/Pp2r3/1B6/1P3PP1/3R2K1 w - - 0 1"]
+{ Ctfs 111 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 112 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 4"]
+[Round "6.4"]
+[Result "*"]
+[FEN "2r2k2/4RP2/p1b1QP1p/1pb3p1/5qP1/1P5P/P1PR4/1K6 b - - 0 1"]
+{ Ctfs 112 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 113 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 5"]
+[Round "6.5"]
+[Result "*"]
+[FEN "3r2k1/p4p2/1p2pqp1/1Pp2n1p/2P2P1P/P2NP1P1/4Q1K1/2R5 b - - 0 1"]
+{ Ctfs 113 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 114 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 6"]
+[Round "6.6"]
+[Result "*"]
+[FEN "2r5/1p4pk/5pb1/pPPQ3p/2P5/PK5P/1B3RP1/1q6 b - - 0 1"]
+{ Ctfs 114 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 115 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 7"]
+[Round "6.7"]
+[Result "*"]
+[FEN "1r3bk1/8/q2P3p/p1p1pBp1/1rN1Pn2/2R2P2/1PQ4R/4K3 b - - 0 1"]
+{ Ctfs 115 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 116 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 8"]
+[Round "6.8"]
+[Result "*"]
+[FEN "2kr4/pp3p2/1bbp1q2/1Pp2P1p/2B5/2P1B1rP/P2Q1RP1/3R3K b - - 0 1"]
+{ Ctfs 116 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 117 - Difficulty: 2 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 9"]
+[Round "6.9"]
+[Result "*"]
+[FEN "3r1k2/pbQq1p1p/1p2p1p1/8/3P4/1B2P2P/P4PP1/2R3K1 w - - 0 1"]
+{ Ctfs 117 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 118 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 10"]
+[Round "6.10"]
+[Result "*"]
+[FEN "r3r1k1/1p4bn/p2p1qp1/2pP1b1n/P1B1N3/3N1P2/1P1Q1BKP/4RR2 b - - 0 1"]
+{ Ctfs 118 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 119 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 11"]
+[Round "6.11"]
+[Result "*"]
+[FEN "7k/1p3p1p/3q1pr1/2p2Q2/1n2B3/6P1/3P1P1P/4R1K1 w - - 0 1"]
+{ Ctfs 119 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 120 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 12"]
+[Round "6.12"]
+[Result "*"]
+[FEN "rr6/1b2k1pp/4pp2/2nn4/2NN4/R3PB2/5PPP/1R4K1 w - - 0 1"]
+{ Ctfs 120 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 121 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 13"]
+[Round "6.13"]
+[Result "*"]
+[FEN "3rk2r/p1bpqp2/1pp3p1/4n2p/2PR1B1P/4P3/PPQ1BPP1/5RK1 w k - 0 1"]
+{ Ctfs 121 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 122 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 14"]
+[Round "6.14"]
+[Result "*"]
+[FEN "r1q1kr2/1p1bbp2/1n2p1p1/3pP1Np/p1nP1P2/P1N4R/1PB3PP/R1BQ3K w q - 0 1"]
+{ Ctfs 122 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 123 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 15"]
+[Round "6.15"]
+[Result "*"]
+[FEN "b2q1rk1/7p/p2p1bp1/1p4B1/1n2p1Q1/1P5P/P4PP1/1NR1R1K1 w - - 0 1"]
+{ Ctfs 123 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 124 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 16"]
+[Round "6.16"]
+[Result "*"]
+[FEN "r5r1/p4p1p/2p1kn2/1p2p3/4P2P/1PK1NP2/P1PRb1P1/7R b - - 0 1"]
+{ Ctfs 124 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 125 - Difficulty: 3 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 17"]
+[Round "6.17"]
+[Result "*"]
+[FEN "r1b2rk1/4b2p/2nqpp2/1p1p4/p1nP1N1P/P4NP1/1PB2P2/R1BQR1K1 w - - 0 1"]
+{ Ctfs 125 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 126 - Difficulty: 4 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 18"]
+[Round "6.18"]
+[Result "*"]
+[FEN "r4rk1/1p2qp1p/p1nRb2Q/4pp2/8/2N2B2/PPP3PP/2KR4 w - - 0 1"]
+{ Ctfs 126 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 127 - Difficulty: 4 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 19"]
+[Round "6.19"]
+[Result "*"]
+[FEN "4Rrk1/p4pp1/1pQ5/8/2P2P2/1P4P1/r1q4P/3R2K1 w - - 0 1"]
+{ Ctfs 127 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 128 - Difficulty: 4 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 20"]
+[Round "6.20"]
+[Result "*"]
+[FEN "rq2kb1r/1b4pp/p3p3/4B3/4n3/2p3Q1/PPP1B1PP/2KR3R w kq - 0 1"]
+{ Ctfs 128 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 129 - Difficulty: 4 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 21"]
+[Round "6.21"]
+[Result "*"]
+[FEN "2rr2bk/p5pp/2p1n3/4Nq2/3PNp2/4nP2/B2R2PP/R3Q2K w - - 0 1"]
+{ Ctfs 129 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 130 - Difficulty: 4 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 22"]
+[Round "6.22"]
+[Result "*"]
+[FEN "r3k2r/pb3ppp/1pp5/b3pqB1/2B5/1R6/P1P1QPPP/5RK1 w kq - 0 1"]
+{ Ctfs 130 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 131 - Difficulty: 5 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 23"]
+[Round "6.23"]
+[Result "*"]
+[FEN "2br1r1k/4bqp1/p1p3Qp/2N2P2/2P5/3B4/P5PP/4RR1K w - - 0 1"]
+{ Ctfs 131 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 132 - Difficulty: 5 Stars"]
+[Black "Gain of Tempo/Intermediate Move - Position 24"]
+[Round "6.24"]
+[Result "*"]
+[FEN "Q3n2k/7r/3pb3/4pn2/P4bpq/3P2N1/4PPB1/1RB2RK1 w - - 0 1"]
+{ Ctfs 132 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 133 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 1"]
+[Round "7.1"]
+[Result "*"]
+[FEN "r1b2rk1/ppqnppbp/2p3p1/4N3/2BP4/7P/PPP2PP1/R1BQR1K1 w - - 0 1"]
+{ Ctfs 133 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 134 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 2"]
+[Round "7.2"]
+[Result "*"]
+[FEN "1r4k1/1q3ppp/8/4R3/1p3Q2/6P1/3N1PbP/6K1 w - - 0 1"]
+{ Ctfs 134 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 135 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 3"]
+[Round "7.3"]
+[Result "*"]
+[FEN "r2q1rk1/pb2bp1p/2n2np1/2pp2B1/8/2NB2N1/PPP2PPP/R2QR1K1 w - - 0 1"]
+{ Ctfs 135 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 136 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 4"]
+[Round "7.4"]
+[Result "*"]
+[FEN "4k2r/1pqrbppp/p4n2/4RQN1/4R3/3BP3/1PP1K1PP/8 w k - 0 1"]
+{ Ctfs 136 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 137 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 5"]
+[Round "7.5"]
+[Result "*"]
+[FEN "6k1/2p2rp1/pb2p2p/1p1r1n2/4N3/1PP2PBP/P3R1P1/4RK2 b - - 0 1"]
+{ Ctfs 137 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 138 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 6"]
+[Round "7.6"]
+[Result "*"]
+[FEN "2k1r3/p1pr1pb1/1p1P2np/2p1P1p1/6P1/1P3N1P/PB1R1P1K/3R4 w - - 0 1"]
+{ Ctfs 138 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 139 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 7"]
+[Round "7.7"]
+[Result "*"]
+[FEN "4r2k/6p1/3bq1Qp/4p3/4P3/1n1N1P2/1B4PP/3R3K w - - 0 1"]
+{ Ctfs 139 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 140 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 8"]
+[Round "7.8"]
+[Result "*"]
+[FEN "3r2k1/1p3p2/p1p1p2p/2P1b1p1/N3P3/5P1P/PP3P1q/1Q1R1K2 b - - 0 1"]
+{ Ctfs 140 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 141 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 9"]
+[Round "7.9"]
+[Result "*"]
+[FEN "1n2r1k1/1Q3pbp/p3p1p1/8/3P1B2/5NPP/P5q1/3RK3 b - - 0 1"]
+{ Ctfs 141 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 142 - Difficulty: 1 Stars"]
+[Black "The X-ray Attack - Position 10"]
+[Round "7.10"]
+[Result "*"]
+[FEN "3R4/p5pk/3np1qp/2Nr4/3Prp1P/6P1/P1Q2PK1/3R4 b - - 0 1"]
+{ Ctfs 142 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 143 - Difficulty: 2 Stars"]
+[Black "The X-ray Attack - Position 11"]
+[Round "7.11"]
+[Result "*"]
+[FEN "r3k2r/q4p2/p7/1pbpN2p/4n1pP/1P4B1/1PP2PP1/R2QR1K1 w kq - 0 1"]
+{ Ctfs 143 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 144 - Difficulty: 2 Stars"]
+[Black "The X-ray Attack - Position 12"]
+[Round "7.12"]
+[Result "*"]
+[FEN "3r1bk1/p4p2/4n1p1/r3P1Np/1p2KB1P/1P4P1/P1R2P2/4R3 b - - 0 1"]
+{ Ctfs 144 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 145 - Difficulty: 2 Stars"]
+[Black "The X-ray Attack - Position 13"]
+[Round "7.13"]
+[Result "*"]
+[FEN "6k1/5p1p/1p1p2p1/3Pq3/P1P5/3nr3/2BQ2PP/5RK1 b - - 0 1"]
+{ Ctfs 145 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 146 - Difficulty: 2 Stars"]
+[Black "The X-ray Attack - Position 14"]
+[Round "7.14"]
+[Result "*"]
+[FEN "r1b2rk1/pp3ppp/2n2n2/8/2B5/4BN2/Pq3PPP/2RQ1RK1 w - - 0 1"]
+{ Ctfs 146 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 147 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 15"]
+[Round "7.15"]
+[Result "*"]
+[FEN "2br4/4kp2/p2p4/4qP1B/1p1QP3/1Pr5/P1P5/1KNR4 w - - 0 1"]
+{ Ctfs 147 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 148 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 16"]
+[Round "7.16"]
+[Result "*"]
+[FEN "rn4k1/pp1q1p1p/4r1p1/4b1B1/8/5B1P/P4PP1/2RQ1RK1 w - - 0 1"]
+{ Ctfs 148 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 149 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 17"]
+[Round "7.17"]
+[Result "*"]
+[FEN "3q2k1/b1r2ppp/p1nr4/3p4/Q2P1N2/4P1P1/1P1B1R1P/2R4K w - - 0 1"]
+{ Ctfs 149 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 150 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 18"]
+[Round "7.18"]
+[Result "*"]
+[FEN "2r4k/1p4r1/2q3n1/PQ4n1/P2B1p2/8/6P1/3RR1K1 b - - 0 1"]
+{ Ctfs 150 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 151 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 19"]
+[Round "7.19"]
+[Result "*"]
+[FEN "4q3/pb5k/1ppnr1pp/3p1p2/PP1Q4/4P1P1/2R2PBP/2R3K1 w - - 0 1"]
+{ Ctfs 151 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 152 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 20"]
+[Round "7.20"]
+[Result "*"]
+[FEN "r1b4r/ppq1kpb1/4pp1p/1B2n3/3NN2Q/8/PPP2PPP/3RR1K1 w - - 0 1"]
+{ Ctfs 152 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 153 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 21"]
+[Round "7.21"]
+[Result "*"]
+[FEN "3r1rk1/p4p1p/3N1p2/2PQ4/8/3n4/2q2PPP/R4RK1 w - - 0 1"]
+{ Ctfs 153 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 154 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 22"]
+[Round "7.22"]
+[Result "*"]
+[FEN "r3r3/1p2qk1p/2pp2pb/p2b1p2/4p1P1/1P2P2P/PQ3PBN/B1RR2K1 w - - 0 1"]
+{ Ctfs 154 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 155 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 23"]
+[Round "7.23"]
+[Result "*"]
+[FEN "r1b3k1/pp3pbp/q3pnp1/6N1/4PB2/1BNn3P/PP3PP1/3Q1RK1 w - - 0 1"]
+{ Ctfs 155 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 156 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 24"]
+[Round "7.24"]
+[Result "*"]
+[FEN "5rk1/2q1b1rp/pp1p2pQ/3Pp3/2P1N1P1/5P1R/PP6/1K5R w - - 0 1"]
+{ Ctfs 156 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 157 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 25"]
+[Round "7.25"]
+[Result "*"]
+[FEN "3qr2k/1b1r3p/p3Pb2/3p4/3B4/2P1Q1R1/2P3PP/7K w - - 0 1"]
+{ Ctfs 157 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 158 - Difficulty: 3 Stars"]
+[Black "The X-ray Attack - Position 26"]
+[Round "7.26"]
+[Result "*"]
+[FEN "5r1k/3rq2p/3Nb1p1/4p3/1p2P3/2nR1B2/1Q3PP1/4R1K1 b - - 0 1"]
+{ Ctfs 158 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 159 - Difficulty: 4 Stars"]
+[Black "The X-ray Attack - Position 27"]
+[Round "7.27"]
+[Result "*"]
+[FEN "3r1k2/1b1nRpp1/p6p/1p3Nq1/1P1P1Q2/3B4/P4PPP/6K1 w - - 0 1"]
+{ Ctfs 159 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 160 - Difficulty: 4 Stars"]
+[Black "The X-ray Attack - Position 28"]
+[Round "7.28"]
+[Result "*"]
+[FEN "2rq1rk1/R1p1n1b1/1p1pb2p/1P1Np2n/2P1Npp1/1Q1P2P1/1B2PPBP/R5K1 w - - 0 1"]
+{ Ctfs 160 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 161 - Difficulty: 4 Stars"]
+[Black "The X-ray Attack - Position 29"]
+[Round "7.29"]
+[Result "*"]
+[FEN "6k1/1p3pq1/p2p3r/4n1p1/4PpP1/P4P2/1P2Q1K1/3R1R2 b - - 0 1"]
+{ Ctfs 161 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 162 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 30"]
+[Round "7.30"]
+[Result "*"]
+[FEN "3r2k1/pb3pp1/3bpn1p/2qrN3/8/3B2B1/PPP1QPPP/3RR1K1 w - - 0 1"]
+{ Ctfs 162 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 163 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 31"]
+[Round "7.31"]
+[Result "*"]
+[FEN "r1q1r1k1/pb1nbppp/1pp1pn2/4N1B1/2PP4/2N2B2/PP2QPPP/R3R1K1 w - - 0 1"]
+{ Ctfs 163 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 164 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 32"]
+[Round "7.32"]
+[Result "*"]
+[FEN "r4r1k/bbp2ppp/8/1p1nN2N/1n1P3q/1B5P/1P3PP1/R1BQR1K1 w - - 0 1"]
+{ Ctfs 164 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 165 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 33"]
+[Round "7.33"]
+[Result "*"]
+[FEN "2Q1R3/6pk/7p/1q3r2/r2p4/1p1n1P2/1P3N1P/4RK2 w - - 0 1"]
+{ Ctfs 165 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 166 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 34"]
+[Round "7.34"]
+[Result "*"]
+[FEN "1qb5/6k1/2p1n1p1/2Pp1pP1/pN1PpP1p/2Q1P2P/r3BK2/6R1 b - - 0 1"]
+{ Ctfs 166 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 167 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 35"]
+[Round "7.35"]
+[Result "*"]
+[FEN "5rk1/pp3ppp/4P3/5R2/1q1P4/4Q2P/6P1/7K w - - 0 1"]
+{ Ctfs 167 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 168 - Difficulty: 5 Stars"]
+[Black "The X-ray Attack - Position 36"]
+[Round "7.36"]
+[Result "*"]
+[FEN "4qrk1/pb4p1/4pn1p/1pb1N3/2p1P3/P1N2QPB/1P3P1P/3R2K1 w - - 0 1"]
+{ Ctfs 168 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 169 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 1"]
+[Round "8.1"]
+[Result "*"]
+[FEN "r4rnk/1p1q1pbp/n1ppb1p1/p3p3/P1PPPP2/1PN1B1PP/4N1B1/R2Q1RK1 w - - 0 1"]
+{ Ctfs 169 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 170 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 2"]
+[Round "8.2"]
+[Result "*"]
+[FEN "4r1k1/pp3pp1/3p3p/3P1B1P/8/3Q2b1/PPP2qP1/1K3R2 w - - 0 1"]
+{ Ctfs 170 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 171 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 3"]
+[Round "8.3"]
+[Result "*"]
+[FEN "6k1/2p1q2p/3p1Rpb/p1pP1p2/2P5/1PQ4P/PB3PPK/4r3 w - - 0 1"]
+{ Ctfs 171 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 172 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 4"]
+[Round "8.4"]
+[Result "*"]
+[FEN "3rr1k1/1p3p1p/2p2Pp1/p7/5Q2/q7/6BP/4RR1K w - - 0 1"]
+{ Ctfs 172 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 173 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 5"]
+[Round "8.5"]
+[Result "*"]
+[FEN "3r4/p3qpk1/1p1r1bpp/2pb4/7N/2P3P1/PPQR1PBP/3R2K1 b - - 0 1"]
+{ Ctfs 173 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 174 - Difficulty: 1 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 6"]
+[Round "8.6"]
+[Result "*"]
+[FEN "3r2k1/p4p1p/1p6/3n1p2/1P1b2P1/Pq5P/3B1PB1/2Q1R1K1 w - - 0 1"]
+{ Ctfs 174 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 175 - Difficulty: 2 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 7"]
+[Round "8.7"]
+[Result "*"]
+[FEN "8/3bkp2/3p2np/1p1Pp1p1/4P1P1/PR3P1P/2B1K3/r3N3 w - - 0 1"]
+{ Ctfs 175 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 176 - Difficulty: 2 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 8"]
+[Round "8.8"]
+[Result "*"]
+[FEN "r7/3nr1k1/3q3p/3p1ppQ/p1pPp2n/2P1P2P/1PN2PP1/R1N2RK1 b - - 0 1"]
+{ Ctfs 176 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 177 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 9"]
+[Round "8.9"]
+[Result "*"]
+[FEN "q4rk1/1pp1bppp/8/8/3B4/2P5/2P1BPPP/rRK1Q2R b - - 0 1"]
+{ Ctfs 177 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 178 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 10"]
+[Round "8.10"]
+[Result "*"]
+[FEN "6k1/1p3pp1/p3bn1p/2Q5/PNP5/1P2R2P/2B2PPK/2q1r3 b - - 0 1"]
+{ Ctfs 178 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 179 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 11"]
+[Round "8.11"]
+[Result "*"]
+[FEN "r1b2rk1/ppq4p/4pPp1/3p2B1/7Q/2bBR3/P1P2PPP/5RK1 w - - 0 1"]
+{ Ctfs 179 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 180 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 12"]
+[Round "8.12"]
+[Result "*"]
+[FEN "4r1k1/p4Npq/2p1p2p/7P/2pPQ3/b1P1KR2/Pr3PP1/4R3 b - - 0 1"]
+{ Ctfs 180 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 181 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 13"]
+[Round "8.13"]
+[Result "*"]
+[FEN "6k1/2q2pbp/p2N1np1/4p3/1P2P3/P1r1BP2/3R2PP/3Q2K1 w - - 0 1"]
+{ Ctfs 181 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 182 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 14"]
+[Round "8.14"]
+[Result "*"]
+[FEN "N3r1k1/ppB2ppp/2p5/8/6b1/2b2n2/P1P1B1PP/2RK3R b - - 0 1"]
+{ Ctfs 182 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 183 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 15"]
+[Round "8.15"]
+[Result "*"]
+[FEN "r2q1rk1/pp2ppb1/3pn1pQ/3R4/2P3B1/4BR2/PP4PP/6K1 w - - 0 1"]
+{ Ctfs 183 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 184 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 16"]
+[Round "8.16"]
+[Result "*"]
+[FEN "2b2rk1/1p2q2p/r3p1p1/p1p1N3/P7/4R3/1PQ2PPP/3R2K1 w - - 0 1"]
+{ Ctfs 184 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 185 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 17"]
+[Round "8.17"]
+[Result "*"]
+[FEN "5r1k/2rqnpbp/ppb1pBp1/3pP3/P2P1NP1/4QN2/1P3P1P/R5RK w - - 0 1"]
+{ Ctfs 185 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 186 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 18"]
+[Round "8.18"]
+[Result "*"]
+[FEN "1r5k/6pp/r4p2/q1P1pP2/ppQn4/PP4P1/6BP/3RR1K1 w - - 0 1"]
+{ Ctfs 186 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 187 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 19"]
+[Round "8.19"]
+[Result "*"]
+[FEN "1k5r/p1p2pp1/B1p1pnb1/2b1B1Pp/5P2/2N2K1P/PPPr4/R4R2 b - - 0 1"]
+{ Ctfs 187 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 188 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 20"]
+[Round "8.20"]
+[Result "*"]
+[FEN "3r1rk1/pp2bpp1/2p1pn1P/4N1p1/3q4/3Q4/PPPB1P2/2KR3R w - - 0 1"]
+{ Ctfs 188 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 189 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 21"]
+[Round "8.21"]
+[Result "*"]
+[FEN "2r4k/6pp/1q6/1B1p4/3n1Q1P/PR4P1/P7/1K6 w - - 0 1"]
+{ Ctfs 189 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 190 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 22"]
+[Round "8.22"]
+[Result "*"]
+[FEN "r1b1kb1r/5pp1/p3pq1p/3p4/5P2/2N5/PPPQ2PP/2KR1B1R w kq - 0 1"]
+{ Ctfs 190 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 191 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 23"]
+[Round "8.23"]
+[Result "*"]
+[FEN "r1bq2k1/ppp4r/3P1nn1/1P2p3/PbN1PpP1/2N5/4BBP1/2RQ1RK1 b - - 0 1"]
+{ Ctfs 191 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 192 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 24"]
+[Round "8.24"]
+[Result "*"]
+[FEN "4n1k1/1b1q1pb1/p2p2pp/1pp5/P4Q2/6N1/BPP2PPP/R5K1 w - - 0 1"]
+{ Ctfs 192 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 193 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 25"]
+[Round "8.25"]
+[Result "*"]
+[FEN "N4k1r/pp1b1pbp/8/4n1B1/3q4/8/PP3Pp1/R2QR1K1 w - - 0 1"]
+{ Ctfs 193 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 194 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 26"]
+[Round "8.26"]
+[Result "*"]
+[FEN "2b2rk1/6bp/p1p4q/3pp2r/N7/1P1B1PP1/P3Q2P/2R2RK1 b - - 0 1"]
+{ Ctfs 194 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 195 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 27"]
+[Round "8.27"]
+[Result "*"]
+[FEN "r2q1rk1/1b2bppp/pn2pn2/1p4B1/3P4/1BN2N2/PP2QPPP/3RR1K1 w - - 0 1"]
+{ Ctfs 195 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 196 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 28"]
+[Round "8.28"]
+[Result "*"]
+[FEN "r3r2k/1b2bp2/4pp1B/4P3/1ppN2P1/7R/PpP4P/1K4R1 w - - 0 1"]
+{ Ctfs 196 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 197 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 29"]
+[Round "8.29"]
+[Result "*"]
+[FEN "3Q4/3n1pkp/p3p1p1/4P3/3q4/5R2/r5PP/1r2NR1K b - - 0 1"]
+{ Ctfs 197 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 198 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 30"]
+[Round "8.30"]
+[Result "*"]
+[FEN "2r1k2r/1p1bbp2/1n2pp1p/2q5/p2NQ3/1B2RN2/PPP2PPP/2KR4 w k - 0 1"]
+{ Ctfs 198 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 199 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 31"]
+[Round "8.31"]
+[Result "*"]
+[FEN "r5r1/1p2qk2/p1p1b1p1/3pPp2/3P2Q1/3BP1RP/PP3R1K/8 w - - 0 1"]
+{ Ctfs 199 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 200 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 32"]
+[Round "8.32"]
+[Result "*"]
+[FEN "1k1r4/1b1r1p2/2p1pP1P/pp6/2pb4/P1N3P1/1P1R1PB1/3R2K1 w - - 0 1"]
+{ Ctfs 200 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 201 - Difficulty: 3 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 33"]
+[Round "8.33"]
+[Result "*"]
+[FEN "1k2r2r/1p3pbp/pBpqn3/5B2/QPPp4/6P1/P4P1P/1R1R2K1 w - - 0 1"]
+{ Ctfs 201 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 202 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 34"]
+[Round "8.34"]
+[Result "*"]
+[FEN "1r2r1k1/p2p1ppp/3p4/3b1Q2/6nq/P1B1P2P/3P1PP1/R3KB1R b KQ - 0 1"]
+{ Ctfs 202 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 203 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 35"]
+[Round "8.35"]
+[Result "*"]
+[FEN "2r1k2r/pp2bp1B/4p1p1/1bnpP3/1q6/4BN2/PP3PPP/1QRR2K1 w k - 0 1"]
+{ Ctfs 203 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 204 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 36"]
+[Round "8.36"]
+[Result "*"]
+[FEN "3r1rk1/p3p2p/1p6/2p1b2q/3P1B2/2PQ1RP1/P4P2/R5K1 w - - 0 1"]
+{ Ctfs 204 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 205 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 37"]
+[Round "8.37"]
+[Result "*"]
+[FEN "r3b1k1/pp3pbp/4q1p1/3Nn3/4P3/4B3/PPQ1B1PP/3R2K1 w - - 0 1"]
+{ Ctfs 205 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 206 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 38"]
+[Round "8.38"]
+[Result "*"]
+[FEN "r4rk1/pp2b1p1/4p2p/q4p1P/3B2n1/3Q1N2/PPP2P2/1K1R2R1 w - - 0 1"]
+{ Ctfs 206 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 207 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 39"]
+[Round "8.39"]
+[Result "*"]
+[FEN "r1q1r1k1/1b4p1/pp1p2P1/2pPbp2/2P3B1/2N5/PP1Q1P2/3RR1K1 w - - 0 1"]
+{ Ctfs 207 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 208 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 40"]
+[Round "8.40"]
+[Result "*"]
+[FEN "2rr3k/pb3q1p/1p1p1n2/1P2pP2/PBPpP1p1/1N1Qb1P1/2R3BP/5R1K b - - 0 1"]
+{ Ctfs 208 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 209 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 41"]
+[Round "8.41"]
+[Result "*"]
+[FEN "4rbk1/1brq3p/ppn3p1/3p1NP1/4P2Q/P1BP4/1P1NK3/6RR w - - 0 1"]
+{ Ctfs 209 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 210 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 42"]
+[Round "8.42"]
+[Result "*"]
+[FEN "r1r2bk1/ppq2ppp/2bp1n1B/4pP2/3NP3/2NQ4/PPP4P/2KR2R1 w - - 0 1"]
+{ Ctfs 210 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 211 - Difficulty: 4 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 43"]
+[Round "8.43"]
+[Result "*"]
+[FEN "r5k1/q6p/2Q3nB/4p1N1/p2b3P/5RP1/bP3P2/6K1 w - - 0 1"]
+{ Ctfs 211 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 212 - Difficulty: 5 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 44"]
+[Round "8.44"]
+[Result "*"]
+[FEN "2r2rk1/5ppp/p3p3/Np1b4/1P1N3q/P3PPn1/1B4P1/2RRQ1K1 b - - 0 1"]
+{ Ctfs 212 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 213 - Difficulty: 5 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 45"]
+[Round "8.45"]
+[Result "*"]
+[FEN "2rr2k1/3bbppp/p2ppn2/5PB1/1pqNP1PP/5Q2/PPPRN3/1K5R b - - 0 1"]
+{ Ctfs 213 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 214 - Difficulty: 5 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 46"]
+[Round "8.46"]
+[Result "*"]
+[FEN "r3rbk1/1p1b1ppp/p2p4/2p1PP2/2P5/1qBQ2P1/1PN4P/4RRK1 w - - 0 1"]
+{ Ctfs 214 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 215 - Difficulty: 5 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 47"]
+[Round "8.47"]
+[Result "*"]
+[FEN "3r1rkb/3N1p1p/p2Q3P/5P2/1pP1P1P1/4K3/PP2B1q1/R7 b - - 0 1"]
+{ Ctfs 215 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 216 - Difficulty: 5 Stars"]
+[Black "Opening and Closing Lines of Communication - Position 48"]
+[Round "8.48"]
+[Result "*"]
+[FEN "1r3kr1/p3q1b1/3p2Q1/2p2p2/2P2N2/4Pn2/PB6/K2R3R w - - 0 1"]
+{ Ctfs 216 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 217 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 1"]
+[Round "9.1"]
+[Result "*"]
+[FEN "r1b3k1/p4ppp/2pp1q2/4r3/8/3B3Q/1PP2PPP/R4RK1 w - - 0 1"]
+{ Ctfs 217 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 218 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 2"]
+[Round "9.2"]
+[Result "*"]
+[FEN "r1b2rk1/1p5p/p2p4/2pPb3/P3N1Pq/4B2P/1P4K1/R2QR3 b - - 0 1"]
+{ Ctfs 218 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 219 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 3"]
+[Round "9.3"]
+[Result "*"]
+[FEN "4r1k1/1b1p3p/3p1pp1/p2P1q2/3Q4/PP6/1B2rPPP/1R3RK1 b - - 0 1"]
+{ Ctfs 219 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 220 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 4"]
+[Round "9.4"]
+[Result "*"]
+[FEN "r5rk/pq3pp1/1p2pn1p/2b5/7B/3B1P2/PPPQ1P1P/3R2RK w - - 0 1"]
+{ Ctfs 220 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 221 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 5"]
+[Round "9.5"]
+[Result "*"]
+[FEN "5rk1/r2nbppp/nq2p3/pp1pN2b/8/PP1P2PP/1BPN1PB1/1R2QRK1 w - - 0 1"]
+{ Ctfs 221 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 222 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 6"]
+[Round "9.6"]
+[Result "*"]
+[FEN "2r2rk1/b1q2ppp/p7/3p4/3Nn3/PP1Q1RPb/1BP4P/R4B1K b - - 0 1"]
+{ Ctfs 222 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 223 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 7"]
+[Round "9.7"]
+[Result "*"]
+[FEN "6k1/p1qbRnpp/8/3p4/8/P1P5/2Q3PP/7K w - - 0 1"]
+{ Ctfs 223 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 224 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 8"]
+[Round "9.8"]
+[Result "*"]
+[FEN "5r1k/3r3p/3p2q1/p2Pp2n/PpR1P3/1P1Q1pPp/5P1N/R6K b - - 0 1"]
+{ Ctfs 224 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 225 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 9"]
+[Round "9.9"]
+[Result "*"]
+[FEN "1k1r4/1p2qpp1/1Qp3p1/6P1/P3P2P/1n6/NP3P2/1K2R3 b - - 0 1"]
+{ Ctfs 225 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 226 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 10"]
+[Round "9.10"]
+[Result "*"]
+[FEN "4r1k1/pppR2p1/2n1p1rp/5qN1/1P2R2P/8/P1Q2PP1/6K1 w - - 0 1"]
+{ Ctfs 226 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 227 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 11"]
+[Round "9.11"]
+[Result "*"]
+[FEN "r5k1/1p1b2p1/6p1/3pb1B1/p3n2P/1q3PP1/2R1N1K1/2RQ4 b - - 0 1"]
+{ Ctfs 227 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 228 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 12"]
+[Round "9.12"]
+[Result "*"]
+[FEN "1r1r2k1/p1q3bp/2P3p1/3ppp2/4n3/B2Q2P1/P3PPBP/2RR2K1 w - - 0 1"]
+{ Ctfs 228 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 229 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 13"]
+[Round "9.13"]
+[Result "*"]
+[FEN "4r1rk/pp5p/2p1qp2/3p2n1/3P2R1/3BP1RP/PPQ2P2/1K6 w - - 0 1"]
+{ Ctfs 229 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 230 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 14"]
+[Round "9.14"]
+[Result "*"]
+[FEN "4r1k1/1p3pb1/pq1r1np1/1NB1n2p/4P2P/5P2/PPP1B1P1/1K4QR b - - 0 1"]
+{ Ctfs 230 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 231 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 15"]
+[Round "9.15"]
+[Result "*"]
+[FEN "r2r2k1/pQq2ppp/4pn2/8/N2R4/1P2P2P/P4PP1/3R2K1 b - - 0 1"]
+{ Ctfs 231 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 232 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 16"]
+[Round "9.16"]
+[Result "*"]
+[FEN "7k/5Bp1/5b1p/5Q2/4P1P1/4PK2/Pq6/2r4R b - - 0 1"]
+{ Ctfs 232 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 233 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 17"]
+[Round "9.17"]
+[Result "*"]
+[FEN "b2q1rk1/5pp1/4pnB1/p1b3N1/1p6/4P2Q/PP1B1PPP/5RK1 w - - 0 1"]
+{ Ctfs 233 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 234 - Difficulty: 1 Stars"]
+[Black "Candidate Moves - Position 18"]
+[Round "9.18"]
+[Result "*"]
+[FEN "2qr2k1/1pb2pp1/p1p5/8/4nP1p/1Q2P2P/PP2NPK1/3R1B2 b - - 0 1"]
+{ Ctfs 234 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 235 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 19"]
+[Round "9.19"]
+[Result "*"]
+[FEN "8/5pk1/2bQ1np1/p3p3/1pP1P2p/1P3P1P/2BN1qPK/8 b - - 0 1"]
+{ Ctfs 235 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 236 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 20"]
+[Round "9.20"]
+[Result "*"]
+[FEN "6k1/1p2b1pp/p3b3/5p2/3p4/1P4P1/PR2PPBP/2r2NK1 b - - 0 1"]
+{ Ctfs 236 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 237 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 21"]
+[Round "9.21"]
+[Result "*"]
+[FEN "1q2r1k1/5pp1/1p6/p2Nn1pP/3R2b1/P1Q3P1/1P3PB1/6K1 w - - 0 1"]
+{ Ctfs 237 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 238 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 22"]
+[Round "9.22"]
+[Result "*"]
+[FEN "1r2q1k1/1p3pp1/p1p1n1np/4Q3/1P4RP/2B1P1P1/P4PBK/8 w - - 0 1"]
+{ Ctfs 238 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 239 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 23"]
+[Round "9.23"]
+[Result "*"]
+[FEN "4r2k/1p1q2p1/p3b3/2r4p/5QBP/2B5/5RP1/3N3K w - - 0 1"]
+{ Ctfs 239 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 240 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 24"]
+[Round "9.24"]
+[Result "*"]
+[FEN "4r2k/1p4p1/p3q3/2r4p/5Q1P/2B5/5RP1/3N3K w - - 0 1"]
+{ Ctfs 240 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 241 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 25"]
+[Round "9.25"]
+[Result "*"]
+[FEN "r1b1r1k1/n1R2p1p/1B2p1pP/1qNpP3/1Q3P2/1P6/1P4P1/1K5R w - - 0 1"]
+{ Ctfs 241 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 242 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 26"]
+[Round "9.26"]
+[Result "*"]
+[FEN "4r1k1/1p3pp1/2p2bp1/3B4/Q5P1/P2RP2P/qr3P2/3R2K1 b - - 0 1"]
+{ Ctfs 242 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 243 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 27"]
+[Round "9.27"]
+[Result "*"]
+[FEN "1R6/r4p1k/4p1p1/3n3p/3q4/Q3PPP1/P2N1K1P/8 w - - 0 1"]
+{ Ctfs 243 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 244 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 28"]
+[Round "9.28"]
+[Result "*"]
+[FEN "r3k2r/1pq1nppp/p3p3/nP1pP3/b2p1P2/P2B1N2/2P3PP/R1B1QRK1 w kq - 0 1"]
+{ Ctfs 244 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 245 - Difficulty: 2 Stars"]
+[Black "Candidate Moves - Position 29"]
+[Round "9.29"]
+[Result "*"]
+[FEN "4r1k1/pp3rp1/2p2b1P/4n3/2P1Q3/1P1p4/q2B1P2/3KN1RR w - - 0 1"]
+{ Ctfs 245 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 246 - Difficulty: 3 Stars"]
+[Black "Candidate Moves - Position 30"]
+[Round "9.30"]
+[Result "*"]
+[FEN "r4rk1/3qbppp/pn1p4/1p3N2/3pP3/1P5P/1P2QPPB/2R2RK1 w - - 0 1"]
+{ Ctfs 246 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 247 - Difficulty: 3 Stars"]
+[Black "Candidate Moves - Position 31"]
+[Round "9.31"]
+[Result "*"]
+[FEN "3rbbk1/1p3ppp/q3p3/P3P3/3NBP2/P1r3P1/4Q2P/3R1R1K b - - 0 1"]
+{ Ctfs 247 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 248 - Difficulty: 3 Stars"]
+[Black "Candidate Moves - Position 32"]
+[Round "9.32"]
+[Result "*"]
+[FEN "8/p5k1/r2p1nP1/r3pQ1p/1pq1P3/1N2RP2/1PP2R2/1K6 b - - 0 1"]
+{ Ctfs 248 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 249 - Difficulty: 3 Stars"]
+[Black "Candidate Moves - Position 33"]
+[Round "9.33"]
+[Result "*"]
+[FEN "2rr1k2/1b2pp1R/3P2p1/1p6/p3P3/1B6/PP4PP/5R1K b - - 0 1"]
+{ Ctfs 249 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 250 - Difficulty: 3 Stars"]
+[Black "Candidate Moves - Position 34"]
+[Round "9.34"]
+[Result "*"]
+[FEN "r1b1k2r/1p3pp1/pNn4p/8/3p4/PN4bB/1qPQ4/R2K3R b kq - 0 1"]
+{ Ctfs 250 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 251 - Difficulty: 4 Stars"]
+[Black "Candidate Moves - Position 35"]
+[Round "9.35"]
+[Result "*"]
+[FEN "5rrk/pp4b1/2pBP1Rp/7Q/3p1q2/5n1P/PPP5/6RK b - - 0 1"]
+{ Ctfs 251 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 252 - Difficulty: 4 Stars"]
+[Black "Candidate Moves - Position 36"]
+[Round "9.36"]
+[Result "*"]
+[FEN "3r1r2/1p3qpk/pNppn2p/P3p3/2P1Pn2/2Q1RNPP/1P3P1K/3R4 b - - 0 1"]
+{ Ctfs 252 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 253 - Difficulty: 1 Stars"]
+[Black "Openings - Position 1"]
+[Round "10.1"]
+[Result "*"]
+[FEN "r3k2r/pp1n1ppp/2pqb1n1/3p4/3P2PP/2NBPQ2/PP2NP2/R3K2R b KQkq - 0 1"]
+{ Ctfs 253 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 254 - Difficulty: 1 Stars"]
+[Black "Openings - Position 2"]
+[Round "10.2"]
+[Result "*"]
+[FEN "r1b1k2r/2pq2bp/2pp1Bpn/p3p3/4P3/2NQ1N2/PPP2PPP/R3K2R w KQkq - 0 1"]
+{ Ctfs 254 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 255 - Difficulty: 1 Stars"]
+[Black "Openings - Position 3"]
+[Round "10.3"]
+[Result "*"]
+[FEN "r2qr1k1/p2n1pbp/b2p1np1/2pP4/Pp2P3/1P4P1/1B1NNPBP/R2QR1K1 b - - 0 1"]
+{ Ctfs 255 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 256 - Difficulty: 2 Stars"]
+[Black "Openings - Position 4"]
+[Round "10.4"]
+[Result "*"]
+[FEN "r2r2k1/pp3ppp/2n2q2/8/1P1p2b1/5NP1/P2QPPBP/2R2RK1 b - - 0 1"]
+{ Ctfs 256 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 257 - Difficulty: 2 Stars"]
+[Black "Openings - Position 5"]
+[Round "10.5"]
+[Result "*"]
+[FEN "r3kb1r/1p1b1ppp/1q2p3/pN1pnn2/3P4/P4N2/1P2BPPP/R1BQ1RK1 w kq - 0 1"]
+{ Ctfs 257 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 258 - Difficulty: 2 Stars"]
+[Black "Openings - Position 6"]
+[Round "10.6"]
+[Result "*"]
+[FEN "r2qr1k1/1p1b1pb1/1n1p1np1/p1pP3p/P3PP2/2N3QP/1P1NB1P1/R1B2RK1 b - - 0 1"]
+{ Ctfs 258 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 259 - Difficulty: 2 Stars"]
+[Black "Openings - Position 7"]
+[Round "10.7"]
+[Result "*"]
+[FEN "2r1qrk1/1p1n1pbp/2b1p1p1/p1p3B1/1n6/PQNP1NP1/1P2PPBP/2RR2K1 b - - 0 1"]
+{ Ctfs 259 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 260 - Difficulty: 2 Stars"]
+[Black "Openings - Position 8"]
+[Round "10.8"]
+[Result "*"]
+[FEN "r1b1kb1r/ppp1npp1/2p4p/4P3/3N4/2N5/PPP2PPP/R1BR2K1 w kq - 0 1"]
+{ Ctfs 260 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 261 - Difficulty: 3 Stars"]
+[Black "Openings - Position 9"]
+[Round "10.9"]
+[Result "*"]
+[FEN "r1q1k2r/pp2ppb1/2p2np1/3nN2p/2BP2bP/3Q2N1/PPP2PP1/R1B1R1K1 w kq - 0 1"]
+{ Ctfs 261 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 262 - Difficulty: 3 Stars"]
+[Black "Openings - Position 10"]
+[Round "10.10"]
+[Result "*"]
+[FEN "r3kb1r/pb2pppp/1qp2n2/8/3Q1B2/2N5/PPP2PPP/2KR1B1R w kq - 0 1"]
+{ Ctfs 262 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 263 - Difficulty: 3 Stars"]
+[Black "Openings - Position 11"]
+[Round "10.11"]
+[Result "*"]
+[FEN "r2q1rk1/pb2bp1p/1pn1pnp1/4N1B1/3P3Q/2NB4/PP3PPP/R4RK1 w - - 0 1"]
+{ Ctfs 263 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 264 - Difficulty: 3 Stars"]
+[Black "Openings - Position 12"]
+[Round "10.12"]
+[Result "*"]
+[FEN "r1br2k1/pp2bppp/2n1p3/4P1B1/q1B1Q3/2P2N2/P4PPP/R4RK1 w - - 0 1"]
+{ Ctfs 264 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 265 - Difficulty: 3 Stars"]
+[Black "Openings - Position 13"]
+[Round "10.13"]
+[Result "*"]
+[FEN "r3r1k1/bp2qppp/p1n5/3p4/N3n1b1/PP1QPN2/1B2BPPP/2RR2K1 b - - 0 1"]
+{ Ctfs 265 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 266 - Difficulty: 3 Stars"]
+[Black "Openings - Position 14"]
+[Round "10.14"]
+[Result "*"]
+[FEN "r1b1rbk1/1pqn1ppp/p1npp3/5P2/3NP3/P1N1B1Q1/1PP1B1PP/R4RK1 w - - 0 1"]
+{ Ctfs 266 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 267 - Difficulty: 3 Stars"]
+[Black "Openings - Position 15"]
+[Round "10.15"]
+[Result "*"]
+[FEN "r1b2rk1/ppp2ppp/5n2/1N2nq2/8/1Q2PP2/PP1B2PP/R3KB1R b KQ - 0 1"]
+{ Ctfs 267 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 268 - Difficulty: 3 Stars"]
+[Black "Openings - Position 16"]
+[Round "10.16"]
+[Result "*"]
+[FEN "r1bqk1nr/pp1pppbp/2n3p1/8/2PN4/1P6/PB2PPPP/RN1QKB1R b KQkq - 0 1"]
+{ Ctfs 268 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 269 - Difficulty: 4 Stars"]
+[Black "Openings - Position 17"]
+[Round "10.17"]
+[Result "*"]
+[FEN "r1bqk2r/ppppnpbp/2n3p1/3N2B1/2Pp4/5N2/PP2PPPP/R2QKB1R w KQkq - 0 1"]
+{ Ctfs 269 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 270 - Difficulty: 4 Stars"]
+[Black "Openings - Position 18"]
+[Round "10.18"]
+[Result "*"]
+[FEN "r2qr1k1/pp3pp1/1bp1b1np/3np3/8/1BPP1NNP/PPQB1PP1/3RR1K1 b - - 0 1"]
+{ Ctfs 270 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 271 - Difficulty: 5 Stars"]
+[Black "Openings - Position 19"]
+[Round "10.19"]
+[Result "*"]
+[FEN "r2qr1k1/1pp2pp1/2n1bn1p/p1b1p3/B3P1P1/2P2N1P/PP2QP2/R1B1KN1R b KQ - 0 1"]
+{ Ctfs 271 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 272 - Difficulty: 5 Stars"]
+[Black "Openings - Position 20"]
+[Round "10.20"]
+[Result "*"]
+[FEN "rq2k2r/1b1n1pp1/p3pb1p/1p6/3NP3/1BN5/PP2QPPP/R2R2K1 w kq - 0 1"]
+{ Ctfs 272 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 273 - Difficulty: 5 Stars"]
+[Black "Openings - Position 21"]
+[Round "10.21"]
+[Result "*"]
+[FEN "r1bq1rk1/p4ppp/2p1pn2/1p2Q3/2P1n3/P3BN2/1P2PPPP/R3KB1R w KQ - 0 1"]
+{ Ctfs 273 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 274 - Difficulty: 5 Stars"]
+[Black "Openings - Position 22"]
+[Round "10.22"]
+[Result "*"]
+[FEN "rnbq1rk1/pp2bppp/8/2ppPN2/8/3B4/PPP2PPP/R1BQK2R w KQ - 0 1"]
+{ Ctfs 274 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 275 - Difficulty: 5 Stars"]
+[Black "Openings - Position 23"]
+[Round "10.23"]
+[Result "*"]
+[FEN "r1b1rnk1/pp2b1p1/2pp1p2/q5P1/2PP3Q/2N1PN2/PP3PP1/2KR3R w - - 0 1"]
+{ Ctfs 275 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 276 - Difficulty: 5 Stars"]
+[Black "Openings - Position 24"]
+[Round "10.24"]
+[Result "*"]
+[FEN "r2r2k1/pp3pb1/2n3p1/q1pP2N1/6b1/2P1B3/P2Q1PP1/2R1KB1R b K - 0 1"]
+{ Ctfs 276 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 277 - Difficulty: 1 Stars"]
+[Black "Endings - Position 1"]
+[Round "11.1"]
+[Result "*"]
+[FEN "6k1/p5pp/8/8/2NR4/2np4/r4PPP/4K3 b - - 0 1"]
+{ Ctfs 277 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 278 - Difficulty: 1 Stars"]
+[Black "Endings - Position 2"]
+[Round "11.2"]
+[Result "*"]
+[FEN "5rk1/1p4p1/p2Qp1P1/P3P3/1P5p/8/3pq1PK/3R4 b - - 0 1"]
+{ Ctfs 278 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 279 - Difficulty: 1 Stars"]
+[Black "Endings - Position 3"]
+[Round "11.3"]
+[Result "*"]
+[FEN "8/1Q6/6pk/3nNq2/4p2P/6P1/5P1K/8 w - - 0 1"]
+{ Ctfs 279 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 280 - Difficulty: 1 Stars"]
+[Black "Endings - Position 4"]
+[Round "11.4"]
+[Result "*"]
+[FEN "3q4/1p4k1/1PbBp1p1/4P3/5Q1r/2R5/5PP1/6K1 w - - 0 1"]
+{ Ctfs 280 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 281 - Difficulty: 1 Stars"]
+[Black "Endings - Position 5"]
+[Round "11.5"]
+[Result "*"]
+[FEN "4q3/6bk/6p1/5p1p/p2p1P1P/3N1QP1/1P1K4/8 b - - 0 1"]
+{ Ctfs 281 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 282 - Difficulty: 1 Stars"]
+[Black "Endings - Position 6"]
+[Round "11.6"]
+[Result "*"]
+[FEN "7R/3R4/8/8/1p1b3r/1P6/K1bk4/8 b - - 0 1"]
+{ Ctfs 282 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 283 - Difficulty: 1 Stars"]
+[Black "Endings - Position 7"]
+[Round "11.7"]
+[Result "*"]
+[FEN "6k1/pp1R3p/8/2P5/6NP/PP2b1P1/3p2K1/1r6 b - - 0 1"]
+{ Ctfs 283 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 284 - Difficulty: 2 Stars"]
+[Black "Endings - Position 8"]
+[Round "11.8"]
+[Result "*"]
+[FEN "6k1/pp3ppp/1b6/6P1/3pPP2/PQ3NP1/1P4K1/1q6 w - - 0 1"]
+{ Ctfs 284 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 285 - Difficulty: 2 Stars"]
+[Black "Endings - Position 9"]
+[Round "11.9"]
+[Result "*"]
+[FEN "4q2k/p1P3pp/8/5p2/P1P5/4P1P1/3QK2P/2r5 b - - 0 1"]
+{ Ctfs 285 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 286 - Difficulty: 2 Stars"]
+[Black "Endings - Position 10"]
+[Round "11.10"]
+[Result "*"]
+[FEN "1R6/p1B3bk/2P1r2p/5rp1/8/8/5PPP/1R4K1 w - - 0 1"]
+{ Ctfs 286 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 287 - Difficulty: 2 Stars"]
+[Black "Endings - Position 11"]
+[Round "11.11"]
+[Result "*"]
+[FEN "3r3k/5R2/3p2pp/3Bp1P1/2P4P/8/3b1PK1/8 w - - 0 1"]
+{ Ctfs 287 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 288 - Difficulty: 2 Stars"]
+[Black "Endings - Position 12"]
+[Round "11.12"]
+[Result "*"]
+[FEN "5k2/1B1bp3/3p2p1/1p1P2P1/pP1K1P2/P7/8/8 w - - 0 1"]
+{ Ctfs 288 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 289 - Difficulty: 3 Stars"]
+[Black "Endings - Position 13"]
+[Round "11.13"]
+[Result "*"]
+[FEN "2N5/1p5R/k7/2p5/8/1KP2n2/P5p1/8 w - - 0 1"]
+{ Ctfs 289 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 290 - Difficulty: 3 Stars"]
+[Black "Endings - Position 14"]
+[Round "11.14"]
+[Result "*"]
+[FEN "8/P3R3/6R1/7p/r6k/8/r5P1/6K1 b - - 0 1"]
+{ Ctfs 290 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 291 - Difficulty: 3 Stars"]
+[Black "Endings - Position 15"]
+[Round "11.15"]
+[Result "*"]
+[FEN "6k1/6pp/1b2N3/8/2p5/P2p2P1/1Pn2rBP/2R2NK1 b - - 0 1"]
+{ Ctfs 291 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 292 - Difficulty: 3 Stars"]
+[Black "Endings - Position 16"]
+[Round "11.16"]
+[Result "*"]
+[FEN "8/5pk1/8/4PPK1/1r6/8/1p6/1R6 b - - 0 1"]
+{ Ctfs 292 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 293 - Difficulty: 4 Stars"]
+[Black "Endings - Position 17"]
+[Round "11.17"]
+[Result "*"]
+[FEN "1n6/1P3p2/8/3k2pp/3N2PP/8/5K2/8 b - - 0 1"]
+{ Ctfs 293 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 294 - Difficulty: 4 Stars"]
+[Black "Endings - Position 18"]
+[Round "11.18"]
+[Result "*"]
+[FEN "2R2rk1/3Pqp1p/5bp1/3Qp3/8/6P1/B4P1P/6K1 w - - 0 1"]
+{ Ctfs 294 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 295 - Difficulty: 4 Stars"]
+[Black "Endings - Position 19"]
+[Round "11.19"]
+[Result "*"]
+[FEN "R7/3k1p2/P5p1/6P1/5P2/r7/4K3/8 w - - 0 1"]
+{ Ctfs 295 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 296 - Difficulty: 4 Stars"]
+[Black "Endings - Position 20"]
+[Round "11.20"]
+[Result "*"]
+[FEN "3R4/r4p1k/5B2/1K2P1pp/7P/1P4P1/8/4b3 w - - 0 1"]
+{ Ctfs 296 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 297 - Difficulty: 4 Stars"]
+[Black "Endings - Position 21"]
+[Round "11.21"]
+[Result "*"]
+[FEN "7k/1pp4p/2r2p1P/p2P4/P3P1K1/1P3p2/1BP4R/5r2 b - - 0 1"]
+{ Ctfs 297 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 298 - Difficulty: 4 Stars"]
+[Black "Endings - Position 22"]
+[Round "11.22"]
+[Result "*"]
+[FEN "4k3/3R4/4P3/6N1/1n3PK1/p7/8/5r2 w - - 0 1"]
+{ Ctfs 298 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 299 - Difficulty: 4 Stars"]
+[Black "Endings - Position 23"]
+[Round "11.23"]
+[Result "*"]
+[FEN "5k2/1p2qp2/1Q2n1p1/P2Bp1P1/K3P3/6P1/8/8 w - - 0 1"]
+{ Ctfs 299 _ }
+
+*
+
+[Event "Chess Tactics From Scratch"]
+[White "Test Position 300 - Difficulty: 5 Stars"]
+[Black "Endings - Position 24"]
+[Round "11.24"]
+[Result "*"]
+[FEN "7r/P5k1/6p1/3b1p2/5q2/3B1P2/1PP2Q1p/1K5R w - - 0 1"]
+{ Ctfs 300 _ }
+
+*
+
