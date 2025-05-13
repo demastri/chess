@@ -1,6 +1,3 @@
-from pandas.core.computation.ops import isnumeric
-from prompt_toolkit.utils import to_int
-
 def load_raw_pgn(path, fn):
     games = {}
     inGame = False
@@ -30,6 +27,8 @@ def load_raw_pgn(path, fn):
             if index == -1:
                 print("No index for completed game...")
             else:
+                if index in games.keys():
+                    print("Index "+str(index)+" already loaded...skipping")
                 games[index] = thisGame
             thisGame = []
             index = -1
@@ -54,7 +53,7 @@ def load_supplemental(path, fn):
             # print( "tag - ", end="")
             sections[line.strip()] = currentPosition
         # otherwise, validate the index, update the current indexed position difficulty
-        if line[0].isnumeric():
+        if is_integer(line[0]):
             # print( "difficulties - ", end="")
             words = line.split()
             thisPos = int(words[0][:-1])
@@ -106,13 +105,18 @@ def write_updated_pgn(path, fn, rawGames, processedGames, stars, sections):
         read += 1
 
         if i not in processedGames:
-            file.write("[Event \"Chess Tactics From Scratch\"]\n") # should be first by standard
-            file.write("[White \"Test Position "+str(i)+" - Difficulty: "+str(stars[i-1])+" Stars\"]\n")
-            file.write("[Black \""+thisTag+" - Position "+str(thisOffset)+"\"]\n")
-            file.write("[Round \"" + str(tagIndex)+ "."+str(thisOffset)+"\"]\n")
-            file.writelines(rawGames[i]) # includes only Result and FEN
-            file.write("\n")
-            written += 1
+            if i in rawGames.keys():
+                file.write("[Event \"Chess Tactics From Scratch\"]\n") # should be first by standard
+                file.write("[White \"Test Position "+str(i)+" - Difficulty: "+str(stars[i-1])+" Stars\"]\n")
+                file.write("[Black \""+thisTag+" - Position "+str(thisOffset)+"\"]\n")
+                file.write("[Round \"" + str(tagIndex)+ "."+str(thisOffset)+"\"]\n")
+                for line in rawGames[i]:
+                    # includes Result, FEN and comment index, replace avoids chessbase eating the index as move time...
+                    file.write(line.replace(" }", " _ }"))
+                file.write("\n")
+                written += 1
+            else:
+                print( "Index "+str(i)+" skipped")
 
     print(str(read) + " games read")
     print( str(written) + " games written")
@@ -120,7 +124,7 @@ def write_updated_pgn(path, fn, rawGames, processedGames, stars, sections):
 
 
 def main():
-    pgnPath = "M:/Chess/Data/PGN/"
+    pgnPath = "./"
     rawFn = "CTFS Diagrams Raw.pgn"
     processedFn = "CTFS Diagrams Processed.pgn"
     difficultyFn = "CTFS Diagrams Supplement.txt"
@@ -130,6 +134,12 @@ def main():
     difficulties, sections = load_supplemental(pgnPath, difficultyFn)
     write_updated_pgn(pgnPath, processedFn, rawGames, processedGames, difficulties, sections)
 
+def is_integer(str_val):
+    try:
+        int(str_val)
+        return True
+    except ValueError:
+        return False
 
 if __name__ == "__main__":
     main()
