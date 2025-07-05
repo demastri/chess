@@ -108,9 +108,8 @@ def findTimeControl(fIn, fOut, gameType):
 
     for line in fIn:
         if line.startswith("[TimeControl \""):
-            sub = line[14:-2]
-            tcs = TimeControl.parseTimeControlString("3600", gameType)
-            print(TimeControl.generateCompleteTimeControlString(TimeControl.parseTimeControlString("3600", "OTB")))
+            sub = line.strip()[14:-2]
+            tcs = TimeControl.parseTimeControlString(sub, gameType)
             fOut.write("[TimeControl \"" + TimeControl.generateCompleteTimeControlString(tcs) + "\"]\n")
             return tcs
         fOut.write(line)
@@ -197,7 +196,7 @@ class TimeControl:
                 return tc, curAdder
         return None, 0
 
-if __name__ == "__main__":
+def testTimeControls():
     thisStr = "[TC \"234\"]"
     print(thisStr[5:-4])
 
@@ -207,4 +206,6 @@ if __name__ == "__main__":
     print(TimeControl.generateCompleteTimeControlString(TimeControl.parseTimeControlString("3600+5", "OTB")))
     print(TimeControl.generateCompleteTimeControlString(TimeControl.parseTimeControlString("40/3600d5:1800+30", "OTB")))
 
+if __name__ == "__main__":
+    # testTimeControls()
     main()
