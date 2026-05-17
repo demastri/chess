@@ -1,0 +1,173 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.topbar{background:#1e4d2b;color:rgba(255,255,255,0.75);font-size:11px;padding:5px 16px;display:flex;justify-content:space-between;align-items:center}
+.nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:8px}
+.nav-logo{width:34px;height:34px;background:#1e4d2b;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.brand-title{font-size:12px;font-weight:500;color:#1e4d2b;line-height:1.1}
+.brand-sub{font-size:9px;color:var(--color-text-secondary);letter-spacing:0.06em;text-transform:uppercase}
+.nl{padding:4px 9px;font-size:11px;font-weight:500;color:var(--color-text-secondary);border-radius:4px}
+.nl.active{color:#1e4d2b;background:#e8f0ea}
+.nav-btn{padding:5px 12px;border-radius:5px;border:0.5px solid #1e4d2b;color:#1e4d2b;font-size:10px;font-weight:500;background:transparent}
+.announce{background:#c9a84c;color:#2a1a00;font-size:10px;font-weight:500;padding:5px 16px;text-align:center}
+.hero{background:#1e4d2b;padding:40px 16px 32px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;right:-1%;bottom:-10%;font-size:180px;opacity:0.05;pointer-events:none;line-height:1;color:#fff}
+.hero-inner{display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start;position:relative;z-index:1}
+.eyebrow{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#e8c96e;margin-bottom:8px}
+.hero-title{font-size:28px;font-weight:500;color:#fff;line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.hero-title span{color:#e8c96e}
+.hero-desc{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.65;margin-bottom:16px;max-width:340px}
+.hero-btns{display:flex;gap:8px}
+.btn-gold{padding:7px 14px;background:#c9a84c;border-radius:5px;font-size:10px;font-weight:500;color:#1a0e00;cursor:pointer;border:none;display:inline-block}
+.btn-ow{padding:7px 14px;background:transparent;border-radius:5px;font-size:10px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;border:0.5px solid rgba(255,255,255,0.3)}
+.hero-stats{display:flex;gap:24px;margin-top:20px;padding-top:16px;border-top:0.5px solid rgba(255,255,255,0.12)}
+.sv{font-size:18px;font-weight:500;color:#e8c96e;line-height:1}
+.sl{font-size:9px;color:rgba(255,255,255,0.45);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
+.hcard{background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px;color:#fff;margin-bottom:8px}
+.cey{font-size:8px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#e8c96e;margin-bottom:8px}
+.ei{display:flex;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.ei:last-of-type{border-bottom:none;padding-bottom:0}
+.ed{width:34px;text-align:center;background:rgba(201,168,76,0.15);border-radius:4px;padding:3px;flex-shrink:0}
+.em{font-size:7px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#e8c96e}
+.edy{font-size:14px;font-weight:500;color:#fff;line-height:1}
+.en{font-size:10px;font-weight:500;line-height:1.3;margin-bottom:1px}
+.emt{font-size:8.5px;color:rgba(255,255,255,0.45)}
+.sec{padding:28px 16px;background:var(--color-background-primary)}
+.sec-alt{padding:28px 16px;background:var(--color-background-secondary)}
+.sec-ey{font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#2d6b3c;margin-bottom:4px}
+.sec-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.sec-hdr h2{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.sec-link{font-size:10px;color:var(--color-text-secondary)}
+.ng{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden}
+.ni{height:72px;background:#1e4d2b;display:flex;align-items:center;justify-content:center;font-size:22px;opacity:0.6}
+.nb{padding:10px}
+.nbg{display:inline-flex;padding:2px 6px;border-radius:100px;font-size:8px;font-weight:500;background:#e8f0ea;color:#27500a;margin-bottom:5px}
+.nbg-nat{background:#faeeda;color:#633806}
+.nt{font-size:11px;font-weight:500;color:var(--color-text-primary);line-height:1.35;margin-bottom:4px}
+.nx{font-size:9.5px;color:var(--color-text-secondary);line-height:1.5}
+.sw{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed}
+thead{background:#1e4d2b;color:#fff}
+th{padding:7px 10px;text-align:left;font-size:8px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;overflow:hidden}
+tbody tr{border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child{border-bottom:none}
+td{padding:7px 10px;color:var(--color-text-primary);overflow:hidden}
+.rk{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--color-text-secondary)}
+.pts{font-weight:500;font-family:var(--font-mono)}
+.ptsg{color:#9a7a2a}
+.pn{font-weight:500;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc{font-size:8.5px;color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tu{color:#2d6b3c;font-size:8px}
+.td2{color:#b03a2e;font-size:8px}
+.te{color:var(--color-text-secondary);font-size:8px}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:12px}
+.cn{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.cl{font-size:8.5px;color:var(--color-text-secondary);margin-top:1px}
+.cu{font-size:9.5px;color:var(--color-text-secondary);margin-top:7px;line-height:1.5}
+.cm{font-size:8.5px;color:var(--color-text-tertiary);margin-top:8px;display:flex;gap:10px}
+.mb{padding:2px 6px;border-radius:100px;font-size:8px;font-weight:500;background:#e8f0ea;color:#27500a}
+.cta{background:#1e4d2b;padding:28px 16px;text-align:center}
+.ftr{background:#1e1c18;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.ft{font-size:9px;color:rgba(255,255,255,0.35)}
+</style>
+<div>
+<h2 class="sr-only">Wisconsin Chess Association homepage mockup with wischess.org domain</h2>
+<div class="topbar">
+  <span>Wisconsin Chess Association — USCF Affiliate WI-001</span>
+  <span style="display:flex;gap:16px"><span>info@wischess.org</span><span>Facebook</span><span>US Chess</span><span>Member Login</span></span>
+</div>
+<div class="announce">State Championship Registration Now Open — Early Bird Deadline June 15th. <span style="text-decoration:underline;cursor:pointer">Register Now »</span></div>
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">&#9823;</div>
+    <div><div class="brand-title">Wisconsin Chess</div><div class="brand-sub">Association</div></div>
+  </div>
+  <div style="display:flex;gap:2px">
+    <div class="nl active">Home</div><div class="nl">Events</div><div class="nl">WI Tour</div><div class="nl">News</div><div class="nl">Clubs</div><div class="nl">Board</div><div class="nl">Resources</div>
+  </div>
+  <div class="nav-btn">Register for Event</div>
+</div>
+<div class="hero">
+  <div class="hero-bg">&#9823;</div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">&#11041; Wisconsin Chess Association</div>
+      <div class="hero-title">Chess is Alive<br>in <span>Wisconsin</span></div>
+      <div class="hero-desc">The WCA connects over 800 rated players across 20+ clubs statewide. Find tournaments, track WI Tour standings, and connect with your local chess community.</div>
+      <div class="hero-btns">
+        <div class="btn-gold">View Event Calendar</div>
+        <div class="btn-ow">WI Tour Standings</div>
+      </div>
+      <div class="hero-stats">
+        <div><div class="sv">800+</div><div class="sl">Rated Members</div></div>
+        <div><div class="sv">22</div><div class="sl">Active Clubs</div></div>
+        <div><div class="sv">40+</div><div class="sl">Annual Events</div></div>
+        <div><div class="sv">1946</div><div class="sl">Est.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="hcard">
+        <div class="cey">Upcoming Events</div>
+        <div class="ei"><div class="ed"><div class="em">JUN</div><div class="edy">7</div></div><div><div class="en">WI Tour — Madison Open</div><div class="emt">Madison, WI · G/90</div></div></div>
+        <div class="ei"><div class="ed"><div class="em">JUN</div><div class="edy">21</div></div><div><div class="en">State Scholastic Championship</div><div class="emt">Monona Terrace · G/30</div></div></div>
+        <div class="ei"><div class="ed"><div class="em">JUL</div><div class="edy">12</div></div><div><div class="en">WI Tour — Milwaukee City Champ</div><div class="emt">Milwaukee, WI · G/90</div></div></div>
+        <div style="margin-top:8px;font-size:8.5px;font-weight:500;color:#e8c96e">View Full Calendar →</div>
+      </div>
+      <div class="hcard" style="margin-bottom:0">
+        <div class="cey">WI Tour Leader</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#e8c96e;flex-shrink:0">MJ</div>
+          <div style="flex:1"><div style="font-size:10px;font-weight:500">Marcus Johansson</div><div style="font-size:8.5px;color:rgba(255,255,255,0.45)">Madison Chess Club</div></div>
+          <div style="text-align:right"><div style="font-size:16px;font-weight:500;color:#e8c96e;font-family:var(--font-mono)">310</div><div style="font-size:7.5px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.05em">pts</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:8.5px;font-weight:500;color:#e8c96e">Full Standings →</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-hdr"><div><div class="sec-ey">Latest</div><h2>News &amp; Articles</h2></div><div class="sec-link">All News →</div></div>
+  <div class="ng">
+    <div class="nc"><div class="ni">&#9819;</div><div class="nb"><div class="nbg">Wisconsin</div><div class="nt">Priya Nair Wins Midwest Invitational</div><div class="nx">Madison native goes 6.5/7, defeating two GMs in the process.</div></div></div>
+    <div class="nc"><div class="ni" style="font-size:18px">&#128203;</div><div class="nb"><div class="nbg nbg-nat">National</div><div class="nt">USCF Announces Rule Updates for 2025–26</div><div class="nx">Changes to clock handling and touch-move clarifications effective September 2025.</div></div></div>
+    <div class="nc"><div class="ni" style="font-size:18px">&#127979;</div><div class="nb"><div class="nbg">Wisconsin</div><div class="nt">WCA Launches Free After-School Chess Initiative</div><div class="nx">Partnering with 18 MUSD schools to bring chess to 1,200+ students fall 2025.</div></div></div>
+  </div>
+</div>
+<div class="sec-alt">
+  <div class="sec-hdr"><div><div class="sec-ey">Current Season</div><h2>WI Tour — Top 5</h2></div><div class="sec-link">Full Standings →</div></div>
+  <div class="sw">
+    <table>
+      <thead><tr><th style="width:40px">#</th><th style="width:140px">Player</th><th style="width:120px">Club</th><th style="width:52px;text-align:center">Rating</th><th style="width:52px;text-align:center">Events</th><th style="width:80px;text-align:center">Tour Points</th><th style="width:44px;text-align:center">Trend</th></tr></thead>
+      <tbody>
+        <tr><td><div class="rk">1 &#129351;</div></td><td><div class="pn">Marcus Johansson</div><div class="pc">Madison Chess Club</div></td><td><div class="pc">Madison Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:9px">2241</td><td style="text-align:center">6</td><td style="text-align:center"><span class="pts ptsg">310</span></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+        <tr><td><div class="rk">2 &#129352;</div></td><td><div class="pn">Priya Nair</div><div class="pc">Milwaukee Chess Society</div></td><td><div class="pc">Milwaukee Chess Society</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:9px">2188</td><td style="text-align:center">7</td><td style="text-align:center"><span class="pts">290</span></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+        <tr><td><div class="rk">3 &#129353;</div></td><td><div class="pn">Kevin Schraeder</div><div class="pc">Fox Valley Chess Club</div></td><td><div class="pc">Fox Valley Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:9px">2155</td><td style="text-align:center">6</td><td style="text-align:center"><span class="pts">265</span></td><td style="text-align:center"><span class="te">—</span></td></tr>
+        <tr><td><div class="rk">4</div></td><td><div class="pn">Amelia Torres</div><div class="pc">Madison Chess Club</div></td><td><div class="pc">Madison Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:9px">2102</td><td style="text-align:center">8</td><td style="text-align:center"><span class="pts">250</span></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+        <tr><td><div class="rk">5</div></td><td><div class="pn">Daniel Przybylski</div><div class="pc">Green Bay Chess Club</div></td><td><div class="pc">Green Bay Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:9px">2078</td><td style="text-align:center">7</td><td style="text-align:center"><span class="pts">235</span></td><td style="text-align:center"><span class="td2">&#9660;</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:16px"><div class="btn-gold">View All Standings &amp; Schedule</div></div>
+</div>
+<div class="sec">
+  <div class="sec-hdr"><div><div class="sec-ey">Local Updates</div><h2>Club News</h2></div><div class="sec-link">All Clubs →</div></div>
+  <div class="cg">
+    <div class="cc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="cn">Madison Chess Club</div><div class="cl">&#128205; Madison · Tues &amp; Thurs</div></div><span class="mb">87 members</span></div><div class="cu">New Tuesday rapid series starting June 3rd. Beginners welcome — free instruction 6–6:30 PM.</div><div class="cm"><span>&#9200; 6:30 PM</span><span>&#128197; May 20</span></div></div>
+    <div class="cc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="cn">Milwaukee Chess Society</div><div class="cl">&#128205; Milwaukee · Wednesdays</div></div><span class="mb">112 members</span></div><div class="cu">Summer tournament schedule posted. June rated event on the 14th. New club champion crowned!</div><div class="cm"><span>&#9200; 7:00 PM</span><span>&#128197; May 18</span></div></div>
+    <div class="cc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="cn">Fox Valley Chess Club</div><div class="cl">&#128205; Appleton · Mondays</div></div><span class="mb">54 members</span></div><div class="cu">50th Anniversary Jubilee Tournament open. Space limited to 60 players. Club shirts available.</div><div class="cm"><span>&#9200; 6:00 PM</span><span>&#128197; May 15</span></div></div>
+  </div>
+</div>
+<div class="cta">
+  <div style="font-size:8px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#e8c96e;margin-bottom:6px">Get Involved</div>
+  <div style="font-size:18px;font-weight:500;color:#fff;margin-bottom:8px">Join the Wisconsin Chess Community</div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.6);max-width:380px;margin:0 auto 16px">Whether you're a beginner or seasoned player, the WCA has a place for you.</div>
+  <div style="display:flex;gap:8px;justify-content:center"><div class="btn-gold">Find a Club Near You</div><div class="btn-ow">Become a Member</div></div>
+</div>
+<div class="ftr">
+  <span class="ft">© 2025 Wisconsin Chess Association — wischess.org</span>
+  <span class="ft">USCF Affiliate WI-001</span>
+</div>
+</div>

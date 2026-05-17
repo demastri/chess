@@ -1,0 +1,170 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.topbar{background:#1e4d2b;color:rgba(255,255,255,0.75);font-size:11px;padding:5px 16px;display:flex;justify-content:space-between}
+.nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:8px}
+.nav-logo{width:34px;height:34px;background:#1e4d2b;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.brand-title{font-size:12px;font-weight:500;color:#1e4d2b;line-height:1.1}
+.brand-sub{font-size:9px;color:var(--color-text-secondary);letter-spacing:0.06em;text-transform:uppercase}
+.nl{padding:4px 9px;font-size:11px;font-weight:500;color:var(--color-text-secondary);border-radius:4px}
+.nl.active{color:#1e4d2b;background:#e8f0ea}
+.nav-btn{padding:5px 12px;border-radius:5px;border:0.5px solid #1e4d2b;color:#1e4d2b;font-size:10px;font-weight:500;background:transparent}
+.announce{background:#c9a84c;color:#2a1a00;font-size:10px;font-weight:500;padding:5px 16px;text-align:center}
+.ph{background:#1e4d2b;padding:28px 16px 24px;position:relative;overflow:hidden}
+.ph-bg{position:absolute;right:5%;top:50%;transform:translateY(-50%);font-size:100px;opacity:0.05;pointer-events:none;color:#fff}
+.ph-ey{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#e8c96e;margin-bottom:6px}
+.ph-title{font-size:22px;font-weight:500;color:#fff;letter-spacing:-0.02em;margin-bottom:6px}
+.ph-title span{color:#e8c96e}
+.ph-desc{font-size:11px;color:rgba(255,255,255,0.6);max-width:500px;line-height:1.6}
+.stats-bar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:16px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sc{background:var(--color-background-secondary);border-radius:8px;padding:12px;text-align:center}
+.sv{font-size:18px;font-weight:500;color:#1e4d2b;line-height:1;margin-bottom:3px}
+.sl{font-size:8.5px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-secondary)}
+.body{padding:20px 16px;background:var(--color-background-primary)}
+.layout{display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:start}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.fl{font-size:9px;font-weight:500;color:var(--color-text-secondary);margin-right:4px}
+.fb{padding:4px 10px;border-radius:100px;font-size:9px;font-weight:500;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-primary);cursor:pointer}
+.fb.active{background:#1e4d2b;border-color:#1e4d2b;color:#fff}
+.tw{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed}
+thead{background:#1e4d2b;color:#fff}
+th{padding:7px 8px;text-align:left;font-size:7.5px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;white-space:nowrap}
+tbody tr{border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child{border-bottom:none}
+td{padding:7px 8px;color:var(--color-text-primary)}
+.rk{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--color-text-secondary)}
+.pn{font-size:10px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc{font-size:8px;color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pts{font-family:var(--font-mono);font-weight:500;font-size:10px}
+.ptsg{color:#9a7a2a}
+.pb{height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;margin-top:3px}
+.pbf{height:100%;background:#1e4d2b;border-radius:2px}
+.tu{color:#2d6b3c;font-size:8px}
+.td2{color:#b03a2e;font-size:8px}
+.te{color:var(--color-text-secondary);font-size:8px}
+.sidebar-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.sc-hdr{background:#1e4d2b;color:#fff;padding:7px 12px;font-size:8px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
+.sch-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:9px}
+.sch-item:last-child{border-bottom:none}
+.sch-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sch-name{flex:1;color:var(--color-text-primary);font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sch-pts{font-size:9px;font-weight:500}
+.pts-box{background:var(--color-background-secondary);border-radius:8px;padding:12px;margin-bottom:10px}
+.pts-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:9px}
+.pts-row:last-child{border-bottom:none}
+.awards-card{background:#1e4d2b;border-radius:10px;padding:12px}
+.aw-ey{font-size:8px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#e8c96e;margin-bottom:10px}
+.aw-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.aw-row:last-child{margin-bottom:0}
+.aw-name{font-size:9.5px;font-weight:500;color:#fff}
+.aw-prize{font-size:8.5px;color:rgba(255,255,255,0.5)}
+.note{font-size:8.5px;color:var(--color-text-secondary);margin-top:10px}
+.ftr{background:#1e1c18;padding:14px 16px;display:flex;justify-content:space-between}
+.ft{font-size:9px;color:rgba(255,255,255,0.35)}
+</style>
+<div>
+<h2 class="sr-only">Wisconsin Chess Association WI Tour standings page with wischess.org domain</h2>
+<div class="topbar">
+  <span>Wisconsin Chess Association — USCF Affiliate WI-001</span>
+  <span style="display:flex;gap:16px"><span>info@wischess.org</span><span>Facebook</span><span>US Chess</span><span>Member Login</span></span>
+</div>
+<div class="announce">State Championship Registration Now Open — Early Bird Deadline June 15th. <span style="text-decoration:underline">Register Now »</span></div>
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">&#9823;</div>
+    <div><div class="brand-title">Wisconsin Chess</div><div class="brand-sub">Association</div></div>
+  </div>
+  <div style="display:flex;gap:2px">
+    <div class="nl">Home</div><div class="nl">Events</div><div class="nl active">WI Tour</div><div class="nl">News</div><div class="nl">Clubs</div><div class="nl">Board</div><div class="nl">Resources</div>
+  </div>
+  <div class="nav-btn">Register for Event</div>
+</div>
+<div class="ph">
+  <div class="ph-bg">&#127942;</div>
+  <div style="position:relative;z-index:1">
+    <div class="ph-ey">Wisconsin Chess Association</div>
+    <div class="ph-title">WI Tour — <span>2024–25 Season</span></div>
+    <div class="ph-desc">The WI Tour tracks player performance across sanctioned events statewide. Points accumulate throughout the season — the top scorer wins the WI Tour Trophy.</div>
+  </div>
+</div>
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="sc"><div class="sv">2024–25</div><div class="sl">Season</div></div>
+    <div class="sc"><div class="sv">8/12</div><div class="sl">Events complete</div></div>
+    <div class="sc"><div class="sv">40+</div><div class="sl">Active players</div></div>
+    <div class="sc"><div class="sv">310 pts</div><div class="sl">Leader: Johansson</div></div>
+  </div>
+</div>
+<div class="body">
+  <div class="layout">
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div style="font-size:15px;font-weight:500;color:var(--color-text-primary)">Season standings</div>
+        <div class="filters" style="margin-bottom:0">
+          <span class="fl">Filter:</span>
+          <div class="fb active">All players</div>
+          <div class="fb">Top 10</div>
+          <div class="fb">Madison</div>
+          <div class="fb">Milwaukee</div>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:36px">#</th><th style="width:130px">Player</th><th style="width:110px">Club</th><th style="width:44px;text-align:center">Rating</th><th style="width:40px;text-align:center">Evts</th><th style="width:32px;text-align:center">Wins</th><th style="width:66px;text-align:center">Points</th><th style="width:60px">Progress</th><th style="width:36px;text-align:center">Trend</th></tr></thead>
+          <tbody>
+            <tr><td><div class="rk">1 &#129351;</div></td><td><div class="pn">Marcus Johansson</div></td><td><div class="pc">Madison Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">2241</td><td style="text-align:center">6</td><td style="text-align:center">4</td><td style="text-align:center"><span class="pts ptsg">310</span></td><td><div class="pb"><div class="pbf" style="width:69%"></div></div></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+            <tr><td><div class="rk">2 &#129352;</div></td><td><div class="pn">Priya Nair</div></td><td><div class="pc">Milwaukee Chess Society</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">2188</td><td style="text-align:center">7</td><td style="text-align:center">3</td><td style="text-align:center"><span class="pts">290</span></td><td><div class="pb"><div class="pbf" style="width:64%"></div></div></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+            <tr><td><div class="rk">3 &#129353;</div></td><td><div class="pn">Kevin Schraeder</div></td><td><div class="pc">Fox Valley Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">2155</td><td style="text-align:center">6</td><td style="text-align:center">3</td><td style="text-align:center"><span class="pts">265</span></td><td><div class="pb"><div class="pbf" style="width:59%"></div></div></td><td style="text-align:center"><span class="te">—</span></td></tr>
+            <tr><td><div class="rk">4</div></td><td><div class="pn">Amelia Torres</div></td><td><div class="pc">Madison Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">2102</td><td style="text-align:center">8</td><td style="text-align:center">2</td><td style="text-align:center"><span class="pts">250</span></td><td><div class="pb"><div class="pbf" style="width:56%"></div></div></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+            <tr><td><div class="rk">5</div></td><td><div class="pn">Daniel Przybylski</div></td><td><div class="pc">Green Bay Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">2078</td><td style="text-align:center">7</td><td style="text-align:center">2</td><td style="text-align:center"><span class="pts">235</span></td><td><div class="pb"><div class="pbf" style="width:52%"></div></div></td><td style="text-align:center"><span class="td2">&#9660;</span></td></tr>
+            <tr><td><div class="rk">6</div></td><td><div class="pn">Sarah Holmberg</div></td><td><div class="pc">Wausau Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">1984</td><td style="text-align:center">5</td><td style="text-align:center">2</td><td style="text-align:center"><span class="pts">210</span></td><td><div class="pb"><div class="pbf" style="width:47%"></div></div></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+            <tr><td><div class="rk">7</div></td><td><div class="pn">James Okonkwo</div></td><td><div class="pc">Racine Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">1947</td><td style="text-align:center">6</td><td style="text-align:center">1</td><td style="text-align:center"><span class="pts">195</span></td><td><div class="pb"><div class="pbf" style="width:43%"></div></div></td><td style="text-align:center"><span class="te">—</span></td></tr>
+            <tr><td><div class="rk">8</div></td><td><div class="pn">Ling Wei</div></td><td><div class="pc">Madison Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">1921</td><td style="text-align:center">6</td><td style="text-align:center">1</td><td style="text-align:center"><span class="pts">185</span></td><td><div class="pb"><div class="pbf" style="width:41%"></div></div></td><td style="text-align:center"><span class="td2">&#9660;</span></td></tr>
+            <tr><td><div class="rk">9</div></td><td><div class="pn">Erik Sundqvist</div></td><td><div class="pc">Fox Valley Chess Club</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">1898</td><td style="text-align:center">5</td><td style="text-align:center">1</td><td style="text-align:center"><span class="pts">170</span></td><td><div class="pb"><div class="pbf" style="width:38%"></div></div></td><td style="text-align:center"><span class="te">—</span></td></tr>
+            <tr><td><div class="rk">10</div></td><td><div class="pn">Natasha Brennan</div></td><td><div class="pc">Milwaukee Chess Society</div></td><td style="text-align:center;font-family:var(--font-mono);font-size:8.5px">1876</td><td style="text-align:center">7</td><td style="text-align:center">1</td><td style="text-align:center"><span class="pts">160</span></td><td><div class="pb"><div class="pbf" style="width:36%"></div></div></td><td style="text-align:center"><span class="tu">&#9650;</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">* Points calculated from best-scored events. Max 10 events count toward final standings. Last updated: May 28, 2025.</div>
+    </div>
+    <div>
+      <div class="sidebar-card">
+        <div class="sc-hdr">2024–25 Tour Schedule</div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Racine Winter Open</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Madison Holiday Classic</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Green Bay Invitational</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Fox Valley Open</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Milwaukee Winter Open</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Wausau Spring Classic</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#2d6b3c"></div><div class="sch-name">Kenosha Open</div><div class="sch-pts" style="color:#2d6b3c">&#10003;</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#c9a84c"></div><div class="sch-name">Madison Open</div><div class="sch-pts" style="color:#9a7a2a">40 pts</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#c9a84c"></div><div class="sch-name">Milwaukee City Championship</div><div class="sch-pts" style="color:#9a7a2a">50 pts</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#c9a84c"></div><div class="sch-name">Eau Claire Summer Open</div><div class="sch-pts" style="color:#9a7a2a">40 pts</div></div>
+        <div class="sch-item"><div class="sch-dot" style="background:#c9a84c"></div><div class="sch-name">WI State Championship</div><div class="sch-pts" style="color:#9a7a2a">100 pts</div></div>
+      </div>
+      <div class="pts-box">
+        <div style="font-size:9px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:8px">How points work</div>
+        <div class="pts-row"><span style="color:var(--color-text-primary)">State Championship</span><span style="font-weight:500;color:#1e4d2b">100 pts</span></div>
+        <div class="pts-row"><span style="color:var(--color-text-primary)">Premier Tour Events</span><span style="font-weight:500;color:#1e4d2b">50 pts</span></div>
+        <div class="pts-row"><span style="color:var(--color-text-primary)">Standard Tour Events</span><span style="font-weight:500;color:#1e4d2b">40 pts</span></div>
+        <div class="pts-row"><span style="color:var(--color-text-primary)">Associate Events</span><span style="font-weight:500;color:#1e4d2b">20 pts</span></div>
+        <div class="pts-row"><span style="color:var(--color-text-primary)">Blitz / Quick Events</span><span style="font-weight:500;color:#1e4d2b">10 pts</span></div>
+      </div>
+      <div class="awards-card">
+        <div class="aw-ey">Year-end awards</div>
+        <div class="aw-row"><div style="font-size:14px;flex-shrink:0">&#129351;</div><div><div class="aw-name">WI Tour Champion</div><div class="aw-prize">Trophy + $300 + State entry</div></div></div>
+        <div class="aw-row"><div style="font-size:14px;flex-shrink:0">&#129352;</div><div><div class="aw-name">Runner-Up</div><div class="aw-prize">Trophy + $150</div></div></div>
+        <div class="aw-row"><div style="font-size:14px;flex-shrink:0">&#129353;</div><div><div class="aw-name">Third Place</div><div class="aw-prize">Trophy + $75</div></div></div>
+        <div class="aw-row"><div style="font-size:14px;flex-shrink:0">&#11088;</div><div><div class="aw-name">Best Junior</div><div class="aw-prize">Trophy + $100</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ftr">
+  <span class="ft">© 2025 Wisconsin Chess Association — wischess.org</span>
+  <span class="ft">USCF Affiliate WI-001</span>
+</div>
+</div>
